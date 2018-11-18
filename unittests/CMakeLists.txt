@@ -1,0 +1,13 @@
+
+file(GLOB UNITTEST_SRC
+    "*.h"
+    "*.cpp"
+)
+
+add_executable(unittest ${UNITTEST_SRC})
+
+target_link_libraries(unittest gtest gmock)
+
+set_target_properties(unittest PROPERTIES
+            CXX_STANDARD 17
+            CXX_EXTENSIONS OFF)

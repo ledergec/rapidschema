@@ -1,0 +1,6 @@
+[submodule "rapidjson"]
+	path = extern/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "googletest"]
+	path = extern/googletest
+	url = https://github.com/google/googletest.git
