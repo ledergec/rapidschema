@@ -109,12 +109,5 @@ int main() {
                 }
                 )", &nested_example);
 
-    using IntStringBool = JsonTypeSet<int, std::string, bool>;
-    static_assert(IntStringBool::Unique(), "IntStringBool::Unique() should return true");
-    static_assert(IntStringBool::Contains<float>(), "IntStringBool contains float");
-    static_assert(IntStringBool::Contains<std::nullptr_t>() == false, "IntStringBool does not contain nullptr_t");
-
-    using IntFloatBool = JsonTypeSet<int, float, bool>;
-    static_assert(IntFloatBool::Unique() == false, "IntFloatBool::Unique() should return false");
     return 0;
 }
