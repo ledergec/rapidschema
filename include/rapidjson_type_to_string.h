@@ -5,8 +5,9 @@
 #ifndef RAPIDJSON_VALUEPARSER_H
 #define RAPIDJSON_VALUEPARSER_H
 
+#include <string>
+
 #include "rapidjson/document.h"
-#include "transformresult.h"
 
 namespace rapidoson {
 
@@ -30,6 +31,7 @@ namespace rapidoson {
                 assert(false);
         }
     }
+
 }  // rapidjson
 
 #endif //RAPIDJSON_VALUEPARSER_H

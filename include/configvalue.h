@@ -9,7 +9,7 @@
 
 #include "combined_constraint.h"
 #include "config.h"
-#include "valueparser.h"
+#include "rapidjson_type_to_string.h"
 
 namespace rapidjson {
     namespace internal {

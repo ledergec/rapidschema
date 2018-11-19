@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
-TEST(SquareRootTest, PositiveNos) { 
+#include "configvalue.h"
+
+TEST(ConfigValueTest, PositiveNos) {
   ASSERT_EQ(6, 3+3);
 }
  

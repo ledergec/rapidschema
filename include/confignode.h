@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "config.h"
-#include "valueparser.h"
+#include "rapidjson_type_to_string.h"
 
 namespace rapidoson {
 
