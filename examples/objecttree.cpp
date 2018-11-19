@@ -18,6 +18,7 @@
 #include "variant.h"
 
 using namespace rapidjson;
+using namespace rapidoson;
 
 class ConfigExample : public ConfigNode {
 public:

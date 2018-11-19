@@ -7,7 +7,7 @@
 
 #include "to_json_type.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
     template <typename... Ss>
     struct TypeSet {

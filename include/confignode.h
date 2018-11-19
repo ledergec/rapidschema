@@ -11,7 +11,7 @@
 #include "config.h"
 #include "valueparser.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
     class ConfigNode : public Config {
     public:
@@ -20,7 +20,7 @@ namespace rapidjson {
                 , sub_configs_(sub_configs) {}
 
     protected:
-        TransformResult ParseInternal(const Value & document) override {
+        TransformResult ParseInternal(const rapidjson::Value & document) override {
             if (document.IsObject() == false) {
                 return TransformResult(false, GetName(), std::string("Unexpected type ").append(TypeToString(document.GetType())));
             }

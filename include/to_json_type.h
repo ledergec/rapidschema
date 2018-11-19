@@ -8,7 +8,7 @@
 #include <string>
 #include <type_traits>
 
-namespace rapidjson {
+namespace rapidoson {
 
     enum struct JsonType {
         STRING,

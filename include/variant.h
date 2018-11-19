@@ -11,7 +11,7 @@
 #include "type_set.h"
 #include "configvalue.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
     template<typename... ConfigValues>
     class Variant : public Config {
@@ -20,7 +20,7 @@ namespace rapidjson {
                 : Config(name) {}
 
     protected:
-        TransformResult ParseInternal(const Value& document) override;
+        TransformResult ParseInternal(const rapidjson::Value& document) override;
         TransformResult ValidateInternal() const override;
     };
 
@@ -28,12 +28,12 @@ namespace rapidjson {
 
         template <typename V, typename... Ts>
         struct ParseHelper {
-            static TransformResult ParseType(const Value& document, V* v);
+            static TransformResult ParseType(const rapidjson::Value& document, V* v);
         };
 
         template <typename V, typename T, typename... Ts>
         struct ParseHelper<V, T, Ts...> {
-            TransformResult ParseType(const Value &document, V *v) {
+            TransformResult ParseType(const rapidjson::Value &document, V *v) {
                 ConfigValue<T> value;
                 auto res = value.Parse(document);
                 if (res.Success()) {
@@ -47,7 +47,7 @@ namespace rapidjson {
 
         template <typename V>
         struct ParseHelper<V> {
-            TransformResult ParseType(const Value &document, V *v) {
+            TransformResult ParseType(const rapidjson::Value &document, V *v) {
                 (void) document;
                 (void) v;
                 return TransformResult(false, "", "No type matched");
@@ -64,12 +64,12 @@ namespace rapidjson {
     protected:
     static_assert(TypeSet<Ts...>::Unique(), "JsonTypes must be unique");
 
-        TransformResult ParseInternal(const Value& document) override {
+        TransformResult ParseInternal(const rapidjson::Value& document) override {
             return internal::ParseHelper<std::variant<Ts...>, Ts...>::ParseType(document, &data_);
         }
 
         template <typename U>
-        TransformResult ParseType(const Value& document) {
+        TransformResult ParseType(const rapidjson::Value& document) {
         }
 
         TransformResult ValidateInternal() const override;

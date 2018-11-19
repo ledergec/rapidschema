@@ -10,7 +10,7 @@
 #include "rapidjson/document.h"
 #include "transformresult.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
     template<typename T, typename... Constraints>
     class CombinedConstraint {

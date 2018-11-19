@@ -10,7 +10,7 @@
 #include "rapidjson/document.h"
 #include "transformresult.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
     class Config {
     public:
@@ -18,7 +18,7 @@ namespace rapidjson {
                 : name_(name) {}
 
         virtual ~Config() = default;
-        virtual TransformResult Parse(const Value& document) {
+        virtual TransformResult Parse(const rapidjson::Value& document) {
             auto res = ParseInternal(document);
             return AugmentResult(res);
         }
@@ -33,7 +33,7 @@ namespace rapidjson {
         }
 
     protected:
-        virtual TransformResult ParseInternal(const Value& document) = 0;
+        virtual TransformResult ParseInternal(const rapidjson::Value& document) = 0;
         virtual TransformResult ValidateInternal() const = 0;
     private:
         TransformResult AugmentResult(TransformResult &res) const {

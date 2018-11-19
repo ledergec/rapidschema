@@ -8,23 +8,23 @@
 #include "rapidjson/document.h"
 #include "transformresult.h"
 
-namespace rapidjson {
+namespace rapidoson {
 
-    std::string TypeToString(Type type) {
+    std::string TypeToString(rapidjson::Type type) {
         switch (type) {
-            case kArrayType:
+            case rapidjson::kArrayType:
                 return "array";
-            case kFalseType:
+            case rapidjson::kFalseType:
                 return "false";
-            case kTrueType:
+            case rapidjson::kTrueType:
                 return "true";
-            case kObjectType:
+            case rapidjson::kObjectType:
                 return "object";
-            case kNullType:
+            case rapidjson::kNullType:
                 return "null";
-            case kStringType:
+            case rapidjson::kStringType:
                 return "string";
-            case kNumberType:
+            case rapidjson::kNumberType:
                 return "number";
             default:
                 assert(false);

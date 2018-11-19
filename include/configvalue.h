@@ -12,7 +12,6 @@
 #include "valueparser.h"
 
 namespace rapidjson {
-
     namespace internal {
         template<typename ValueType>
         struct TypeHelper<ValueType, std::string> {
@@ -30,6 +29,9 @@ namespace rapidjson {
             }
         };
     }
+}
+
+namespace rapidoson {
 
     template<typename T, typename ...Constraints>
     class ConfigValue : public Config {
@@ -46,7 +48,7 @@ namespace rapidjson {
         }
 
     protected:
-        TransformResult ParseInternal(const Value& document) override {
+        TransformResult ParseInternal(const rapidjson::Value& document) override {
             if (document.Is<T>() == false) {
                 return TransformResult(false, GetName(), std::string("Unexpected type ").append(TypeToString(document.GetType())));
             }

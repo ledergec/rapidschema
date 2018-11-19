@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace rapidjson {
+namespace rapidoson {
 
     class TransformResult {
     public:
