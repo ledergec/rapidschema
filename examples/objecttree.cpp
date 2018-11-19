@@ -14,7 +14,7 @@
 #include "confignode.h"
 #include "configvalue.h"
 #include "string_constraints.h"
-#include "type_set.h"
+#include "json_type_set.h"
 #include "variant.h"
 
 using namespace rapidjson;
@@ -109,12 +109,12 @@ int main() {
                 }
                 )", &nested_example);
 
-    using IntStringBool = TypeSet<int, std::string, bool>;
+    using IntStringBool = JsonTypeSet<int, std::string, bool>;
     static_assert(IntStringBool::Unique(), "IntStringBool::Unique() should return true");
     static_assert(IntStringBool::Contains<float>(), "IntStringBool contains float");
     static_assert(IntStringBool::Contains<std::nullptr_t>() == false, "IntStringBool does not contain nullptr_t");
 
-    using IntFloatBool = TypeSet<int, float, bool>;
+    using IntFloatBool = JsonTypeSet<int, float, bool>;
     static_assert(IntFloatBool::Unique() == false, "IntFloatBool::Unique() should return false");
     return 0;
 }

@@ -8,7 +8,7 @@
 #include <string>
 #include <variant>
 
-#include "type_set.h"
+#include "json_type_set.h"
 #include "configvalue.h"
 
 namespace rapidoson {
@@ -62,7 +62,7 @@ namespace rapidoson {
                 : Config(name) {}
 
     protected:
-    static_assert(TypeSet<Ts...>::Unique(), "JsonTypes must be unique");
+    static_assert(JsonTypeSet<Ts...>::Unique(), "JsonTypes must be unique");
 
         TransformResult ParseInternal(const rapidjson::Value& document) override {
             return internal::ParseHelper<std::variant<Ts...>, Ts...>::ParseType(document, &data_);

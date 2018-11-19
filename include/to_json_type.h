@@ -2,20 +2,15 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_JSON_TYPE_H
-#define RAPIDJSON_JSON_TYPE_H
+#ifndef RAPIDJSON_TO_JSON_TYPE_H
+#define RAPIDJSON_TO_JSON_TYPE_H
 
 #include <string>
 #include <type_traits>
 
-namespace rapidoson {
+#include "json_type.h"
 
-    enum struct JsonType {
-        STRING,
-        NUMBER,
-        BOOLEAN,
-        NULLTYPE
-    };
+namespace rapidoson {
 
     template <typename T>
     struct ToJsonType;
@@ -57,4 +52,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_JSON_TYPE_H
+#endif //RAPIDJSON_TO_JSON_TYPE_H
