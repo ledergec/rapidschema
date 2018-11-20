@@ -41,6 +41,8 @@ namespace rapidoson {
     template<typename T, typename ...Constraints>
     class ConfigValue : public Config {
     public:
+        ConfigValue() = default;
+
         ConfigValue(const std::string& name)
                 : Config(name) {}
 
@@ -50,6 +52,11 @@ namespace rapidoson {
 
         const T& Get() {
             return t_;
+        }
+
+        template <typename Constraint>
+        Constraint & GetConstraint() {
+            return checker_.template Get<Constraint>();
         }
 
     protected:
@@ -67,11 +74,12 @@ namespace rapidoson {
         }
 
         TransformResult ValidateInternal() const override {
-            return CombinedConstraint<T, Constraints...>::Check(t_);
+            return checker_.Check(t_);
         }
 
     private:
         T t_;
+        CombinedConstraint<T, Constraints...> checker_;
     };
 
 }  // rapidjson

@@ -14,10 +14,14 @@ namespace rapidoson {
 
     class Config {
     public:
+        Config()
+            : name_("") {}
+
         Config(const std::string& name)
-                : name_(name) {}
+            : name_(name) {}
 
         virtual ~Config() = default;
+
         virtual TransformResult Parse(const rapidjson::Value& document) {
             auto res = ParseInternal(document);
             return AugmentResult(res);
@@ -30,6 +34,10 @@ namespace rapidoson {
 
         const std::string& GetName() {
             return name_;
+        }
+
+        void SetName(const std::string& name) {
+            name_ = name;
         }
 
     protected:

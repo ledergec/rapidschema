@@ -19,12 +19,18 @@ namespace rapidoson {
         TestLeafConstraints<int32_t, MultipleOf<3, int32_t>>(5, false, "Expected: MultipleOf 3. Actual: 5");
     }
 
-//    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
-//        TestLeafConstraints<float, MultipleOf<2, float>>(2.0);
-//    }
-//
-//    TEST(MultipleOfTest, GivenMultipleOfDouble_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
-//        TestLeafConstraints<double, MultipleOf<2, double>>(32.0);
-//    }
+    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
+        TestLeafConstraints<float, MultipleOf<2, float>>(2.0);
+    }
+
+    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValueWithLargeEps_ThenParsedCorrectly) {
+        ConfigValue<float, MultipleOf<2, float>> value;
+        value.GetConstraint<MultipleOf<2, float>>().SetEps(2);
+        TestValueConstraints<float, MultipleOf<2, float>>(&value, 3.0f);
+    }
+
+    TEST(MultipleOfTest, GivenMultipleOfDouble_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
+        TestLeafConstraints<double, MultipleOf<2, double>>(32.0);
+    }
 
 }
