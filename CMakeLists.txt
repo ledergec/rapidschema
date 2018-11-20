@@ -5,10 +5,12 @@ option(test "Build all tests." OFF) # Makes boolean 'test' available.
 project (rapidoson)
 
 include_directories(extern/rapidjson/include)
+include_directories(extern/fmt/include)
 include_directories(include)
 
 add_subdirectory(extern/googletest)
 add_subdirectory(extern/rapidjson)
+add_subdirectory(extern/fmt)
 add_subdirectory(examples)
 add_subdirectory(unittests)
 

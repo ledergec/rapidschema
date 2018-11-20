@@ -6,7 +6,7 @@ file(GLOB UNITTEST_SRC
 
 add_executable(unittest ${UNITTEST_SRC})
 
-target_link_libraries(unittest gtest gmock)
+target_link_libraries(unittest gtest gmock fmt)
 
 set_target_properties(unittest PROPERTIES
             CXX_STANDARD 17

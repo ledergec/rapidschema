@@ -6,10 +6,15 @@
 #define RAPIDJSON_CONFIGVALUE_H
 
 #include <string>
+#include <fmt/format.h>
+
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 #include "combined_constraint.h"
 #include "config.h"
 #include "rapidjson_type_to_string.h"
+#include "type_name.h"
 
 namespace rapidjson {
     namespace internal {
@@ -50,7 +55,10 @@ namespace rapidoson {
     protected:
         TransformResult ParseInternal(const rapidjson::Value& document) override {
             if (document.Is<T>() == false) {
-                return TransformResult(false, GetName(), std::string("Unexpected type ").append(TypeToString(document.GetType())));
+                rapidjson::StringBuffer buffer;
+                rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+                document.Accept(writer);
+                return TransformResult(false, GetName(), fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString()));
             }
 
             t_ = document.Get<T>();

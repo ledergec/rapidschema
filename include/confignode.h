@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include <fmt/format.h>
+
 #include "config.h"
 #include "rapidjson_type_to_string.h"
 
@@ -22,7 +24,8 @@ namespace rapidoson {
     protected:
         TransformResult ParseInternal(const rapidjson::Value & document) override {
             if (document.IsObject() == false) {
-                return TransformResult(false, GetName(), std::string("Unexpected type ").append(TypeToString(document.GetType())));
+                return TransformResult(false, GetName(), fmt::format("Expected object but was: {} ",
+                        JsonTypeToString(document.GetType())));
             }
 
             for (auto config : sub_configs_) {
