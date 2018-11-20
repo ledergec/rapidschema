@@ -39,7 +39,7 @@ namespace rapidoson {
                 }
             }
 
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
 
         TransformResult ValidateInternal() const override {
@@ -50,7 +50,7 @@ namespace rapidoson {
                 }
             }
 
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
 
     private:

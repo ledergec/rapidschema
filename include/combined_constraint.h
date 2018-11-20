@@ -23,7 +23,7 @@ namespace rapidoson {
     public:
         static TransformResult Check(const T& t) {
             (void) t;
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
     };
 

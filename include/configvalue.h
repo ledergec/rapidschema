@@ -63,7 +63,7 @@ namespace rapidoson {
 
             t_ = document.Get<T>();
 
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
 
         TransformResult ValidateInternal() const override {

@@ -38,7 +38,7 @@ namespace rapidoson {
                 auto res = value.Parse(document);
                 if (res.Success()) {
                     *v = value.Get();
-                    return TransformResult::TRUE;
+                    return TransformResult::TRUE();
                 } else {
                     return ParseHelper<V, Ts...>::ParseType(document, v);
                 }

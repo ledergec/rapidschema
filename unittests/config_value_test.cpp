@@ -45,11 +45,4 @@ namespace rapidoson {
         TestLeafConstraints<int32_t>(std::numeric_limits<int32_t>::max());
     }
 
-    TEST(ConfigValueInt32Test, GivenMinimumConstraint_WhenParsingValueInRange_ThenParsedCorrectly) {
-        TestLeafConstraints<int32_t, Minimum<int32_t, 3>>(3);
-    }
-
-    TEST(ConfigValueInt32Test, GivenMinimumConstraint_WhenParsingValueOutOfRange_ThenParsingFails) {
-        TestLeafConstraints<int32_t, Minimum<int32_t, 3>>(2, false, "Expected: >= 3. Actual: 2");
-    }
 }

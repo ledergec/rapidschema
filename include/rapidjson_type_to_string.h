@@ -11,7 +11,7 @@
 
 namespace rapidoson {
 
-    std::string JsonTypeToString(rapidjson::Type type) {
+    static std::string JsonTypeToString(rapidjson::Type type) {
         switch (type) {
             case rapidjson::kArrayType:
                 return "array";

@@ -28,14 +28,16 @@ namespace rapidoson {
             return message_;
         }
 
-        static TransformResult TRUE;
+        static TransformResult TRUE() {
+            static TransformResult TRUE(true, "", "");
+            return TRUE;
+        };
     private:
         bool success_;
         std::string path_;
         std::string message_;
     };
 
-    TransformResult TransformResult::TRUE(true, "", "");
 }  // rapidjson
 
 #endif //RAPIDJSON_TRANSFORMRESULT_H

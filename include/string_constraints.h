@@ -22,7 +22,7 @@ namespace rapidoson {
                         "",
                         std::string("std::string \"").append(str).append("\" is shorter than ").append(std::to_string(MinLen)));
             }
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
     };
 
@@ -36,7 +36,7 @@ namespace rapidoson {
                         "",
                         std::string("std::string \"").append(str).append("\" exeeds maximum length ").append(std::to_string(MaxLen)));
             }
-            return TransformResult::TRUE;
+            return TransformResult::TRUE();
         }
     };
 
