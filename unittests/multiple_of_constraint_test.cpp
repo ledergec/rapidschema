@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "configvalue.h"
-#include "int_constraints.h"
-#include "string_constraints.h"
+#include "multiple_of_constraint.h"
 #include "test_utils.h"
 
 namespace rapidoson {
@@ -21,12 +20,6 @@ namespace rapidoson {
 
     TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
         TestLeafConstraints<float, MultipleOf<2, float>>(2.0);
-    }
-
-    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValueWithLargeEps_ThenParsedCorrectly) {
-        ConfigValue<float, MultipleOf<2, float>> value;
-        value.GetConstraint<MultipleOf<2, float>>().SetEps(2);
-        TestValueConstraints<float, MultipleOf<2, float>>(&value, 3.0f);
     }
 
     TEST(MultipleOfTest, GivenMultipleOfDouble_WhenParsingNoMultipleValue_ThenParsedCorrectly) {

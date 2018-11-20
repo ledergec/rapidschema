@@ -34,19 +34,14 @@ namespace rapidoson {
     template<uint32_t Mul, typename T>
     class MultipleOf<Mul, T, typename std::enable_if<std::is_floating_point<T>::value>::type> {
     public:
-        MultipleOf()
-            : eps_(1e-8) {}
-
-        void SetEps(T eps) {
-            eps_ = eps;
-        }
+        MultipleOf() {}
 
         TransformResult Check(const T& n) const {
             auto lower_diff = n - std::floor(n / Mul) * Mul;
             auto upper_diff = std::ceil(n / Mul) * Mul - n;
             auto diff = std::min(lower_diff, upper_diff);
 
-            if (diff > eps_) {
+            if (diff > 1e-10) {
                 return TransformResult(
                         false,
                         "",
@@ -54,44 +49,8 @@ namespace rapidoson {
             }
             return TransformResult::TRUE();
         }
-
-    private:
-        T eps_;
     };
 
-    template<typename T, T Min, class Enabled = void>
-    class Minimum;
-
-    template<typename T, T Min>
-    class Minimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
-    public:
-        TransformResult Check(const T& n) const {
-            if (n < Min) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: >= {}. Actual: {}", Min, n));
-            }
-            return TransformResult::TRUE();
-        }
-    };
-
-    template<typename T, T Max, class Enabled = void>
-    class Maximum;
-
-    template<typename T, T Max>
-    class Maximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
-    public:
-        TransformResult Check(const T& n) const {
-            if (n > Max) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: <= {}. Actual: {}", Max, n));
-            }
-            return TransformResult::TRUE();
-        }
-    };
 }  // rapidjson
 
 #endif //RAPIDJSON_STRING_CONSTRAINTS_H

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "configvalue.h"
-#include "int_constraints.h"
+#include "range_constraints.h"
 #include "string_constraints.h"
 #include "test_utils.h"
 
