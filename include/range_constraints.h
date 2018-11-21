@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_STRING_CONSTRAINTS_H
-#define RAPIDJSON_STRING_CONSTRAINTS_H
+#ifndef RAPIDJSON_RANGE_CONSTRAINTS_H
+#define RAPIDJSON_RANGE_CONSTRAINTS_H
 
 #include <string>
 
@@ -82,4 +82,4 @@ namespace rapidoson {
         }
     };}  // rapidjson
 
-#endif //RAPIDJSON_STRING_CONSTRAINTS_H
+#endif //RAPIDJSON_RANGE_CONSTRAINTS_H

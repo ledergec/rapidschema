@@ -7,6 +7,7 @@
 
 #include <string>
 #include <type_traits>
+#include <iostream>
 
 #include "rapidjson/document.h"
 #include "transformresult.h"
@@ -18,6 +19,7 @@ namespace rapidoson {
         template<typename T, std::size_t I, typename... Constraints>
         struct TupleChecker {
             static TransformResult CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
+                std::cout << "Checking constraint: " << I << std::endl;
                 auto result = std::get<I>(tuple).Check(t);
                 if (result.Success() == false) {
                     return result;

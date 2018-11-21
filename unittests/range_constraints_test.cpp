@@ -2,7 +2,6 @@
 
 #include "configvalue.h"
 #include "range_constraints.h"
-#include "string_constraints.h"
 #include "test_utils.h"
 
 namespace rapidoson {
