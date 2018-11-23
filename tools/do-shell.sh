@@ -1,0 +1,1 @@
+docker exec -it rapidoson-dev-container bash
