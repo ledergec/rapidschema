@@ -1,29 +1,33 @@
 #include <gtest/gtest.h>
 
-#include "configvalue.h"
 #include "multiple_of_constraint.h"
-#include "test_utils.h"
 
 namespace rapidoson {
 
-    TEST(MultipleOfTest, GivenMultipleOf_WhenParsingEqualValue_ThenParsedCorrectly) {
-        TestLeafConstraints<int32_t, MultipleOf<3, int32_t>>(3);
+    TEST(MultipleOfTest, GivenMultipleOf_WhenCheckingEqualValue_ThenParsedCorrectly) {
+        MultipleOf<3, int32_t> multiple_of;
+        ASSERT_TRUE(multiple_of.Check(3).Success());
     }
 
-    TEST(MultipleOfTest, GivenMultipleOf_WhenParsingZeroValue_ThenParsedCorrectly) {
-        TestLeafConstraints<int32_t, MultipleOf<3, int32_t>>(0);
+    TEST(MultipleOfTest, GivenMultipleOf_WhenCheckingZeroValue_ThenParsedCorrectly) {
+        MultipleOf<3, int32_t> multiple_of;
+        ASSERT_TRUE(multiple_of.Check(0).Success());
     }
 
-    TEST(MultipleOfTest, GivenMultipleOf_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
-        TestLeafConstraints<int32_t, MultipleOf<3, int32_t>>(5, false, "Expected: MultipleOf 3. Actual: 5");
+    TEST(MultipleOfTest, GivenMultipleOf_WhenCheckingNoMultipleValue_ThenParsedCorrectly) {
+        MultipleOf<3, int32_t> multiple_of;
+        ASSERT_FALSE(multiple_of.Check(5).Success());
+        ASSERT_EQ(multiple_of.Check(5).GetMessage(), "Expected: MultipleOf 3. Actual: 5");
     }
 
-    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
-        TestLeafConstraints<float, MultipleOf<2, float>>(2.0);
+    TEST(MultipleOfTest, GivenMultipleOfFloat_WhenCheckingNoMultipleValue_ThenParsedCorrectly) {
+        MultipleOf<2, float> multiple_of;
+        ASSERT_TRUE(multiple_of.Check(2.0).Success());
     }
 
-    TEST(MultipleOfTest, GivenMultipleOfDouble_WhenParsingNoMultipleValue_ThenParsedCorrectly) {
-        TestLeafConstraints<double, MultipleOf<2, double>>(32.0);
+    TEST(MultipleOfTest, GivenMultipleOfDouble_WhenCheckingNoMultipleValue_ThenParsedCorrectly) {
+        MultipleOf<2, double> multiple_of;
+        ASSERT_TRUE(multiple_of.Check(32.0).Success());
     }
 
 }
