@@ -14,6 +14,8 @@ RUN         apt-get update \
 ENTRYPOINT [ "sh", "-c", "echo $HOME" ]
 
 RUN useradd -d /home/dev -ms /bin/bash -g root -G sudo -p dev dev
+RUN adduser dev sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 ENV HOME /home/dev
 USER dev
 WORKDIR /home/dev
