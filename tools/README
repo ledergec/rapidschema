@@ -1,0 +1,5 @@
+On the host connections to the xserver must be allowed by running:
+
+https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/
+
+sudo xhost +
