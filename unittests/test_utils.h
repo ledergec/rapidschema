@@ -5,18 +5,18 @@
 #ifndef RAPIDJSON_TEST_UTILS_H
 #define RAPIDJSON_TEST_UTILS_H
 
-#include <string>
-#include <variant>
 #include <iostream>
+#include <string>
 #include <type_traits>
+#include <variant>
 
 #include <rapidjson/document.h>
 
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
-#include "json_type_set.h"
 #include "configvalue.h"
+#include "json_type_set.h"
 
 namespace rapidoson {
 
@@ -69,7 +69,7 @@ namespace rapidoson {
     };
 
     template <typename T, typename... Constraints>
-    void TestLeafConstraints(const T& t, bool expect_success = true, const std::string &expected_message = "") {
+    TransformResult TestLeafConstraints(const T& t) {
         std::string json = fmt::format(R"(
                 {{
                   "leaf": {}
@@ -78,24 +78,12 @@ namespace rapidoson {
 
         ConfigValue<T, Constraints...> value("leaf");
         auto result = ParseLeaf(json, &value);
-        if (result.Success() == false) {
-            std::cout << "Failed parsing the following json string:" << std::endl <<
-            json << std::endl;
-        }
-        ASSERT_TRUE(result.Success());
-        result = value.Validate();
-        if (result.Success() == false) {
-            std::cout << result.GetMessage() << std::endl;
-        }
-        ASSERT_EQ(expect_success, result.Success());
-        ASSERT_EQ(expected_message, result.GetMessage());
+        EXPECT_TRUE(result.Success());
+        return value.Validate();
     }
 
     template <typename T, typename... Constraints>
-    void TestValueConstraints(ConfigValue<T, Constraints...>* value,
-            T t,
-            bool expect_success = true,
-            const std::string &expected_message = "") {
+    TransformResult TestValueConstraints(ConfigValue<T, Constraints...>* value, T t) {
 
         std::string json = fmt::format(R"(
                 {{
@@ -105,21 +93,12 @@ namespace rapidoson {
 
         value->SetName("leaf");
         auto result = ParseLeaf(json, value);
-        if (result.Success() == false) {
-            std::cout << "Failed parsing the following json string:" << std::endl <<
-                      json << std::endl;
-        }
-        ASSERT_TRUE(result.Success());
-        result = value->Validate();
-        if (result.Success() == false) {
-            std::cout << result.GetMessage() << std::endl;
-        }
-        ASSERT_EQ(expect_success, result.Success());
-        ASSERT_EQ(expected_message, result.GetMessage());
+        EXPECT_TRUE(result.Success());
+        return value->Validate();
     }
 
     template <typename ValueType, typename ConfigType>
-    void TestLeafType(ConfigType c, bool expect_success = true, const std::string & expected_message = "") {
+    TransformResult TestLeafType(ConfigType c) {
         std::string json = fmt::format(R"(
                 {{
                   "leaf": {}
@@ -127,9 +106,7 @@ namespace rapidoson {
                 )", ToJsonValue<ConfigType>::Convert(c));
 
         ConfigValue<ValueType> value("leaf");
-        auto result = ParseLeaf(json, &value);
-        ASSERT_EQ(expect_success, result.Success());
-        ASSERT_EQ(expected_message, result.GetMessage());
+        return ParseLeaf(json, &value);
     }
 
 }  // rapidjson

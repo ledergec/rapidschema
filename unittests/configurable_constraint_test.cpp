@@ -1,29 +1,29 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "configvalue.h"
 #include "range_constraints.h"
 #include "test_utils.h"
+#include "transform_result_matchers.h"
 
 namespace rapidoson {
 
     struct ConfigurableConstraint {
-        ConfigurableConstraint()
-            : result(TransformResult::TRUE()) {}
-
-        TransformResult Check(const float&) const {
+        std::optional<Failure> Check(const float&) const {
             return result;
         }
 
-        TransformResult result;
+        std::optional<Failure> result;
     };
 
     TEST(ConfigurableConstraintTest, WhenConstraintConfigure_CorrectlyValidated) {
         ConfigValue<float, ConfigurableConstraint> value("leaf");
-        value.GetConstraint<ConfigurableConstraint>().result = TransformResult::TRUE();
+        value.GetConstraint<ConfigurableConstraint>().result = std::nullopt;
         TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
 
-        value.GetConstraint<ConfigurableConstraint>().result = TransformResult(false, "", "message");
-        TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f, false, "message");
+        value.GetConstraint<ConfigurableConstraint>().result = std::optional(Failure("message"));
+        auto result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
+        ASSERT_THAT(result, TransformFailed("message"));
     }
 
 }

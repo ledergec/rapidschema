@@ -5,8 +5,8 @@
 #ifndef RAPIDJSON_UTILS_H
 #define RAPIDJSON_UTILS_H
 
-#include <rapidjson/stringbuffer.h>
 #include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
 namespace rapidoson {

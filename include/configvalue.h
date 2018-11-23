@@ -59,13 +59,12 @@ namespace rapidoson {
             return checker_.template Get<Constraint>();
         }
 
-    protected:
-        TransformResult ParseInternal(const rapidjson::Value& document) override {
+        TransformResult Parse(const rapidjson::Value& document) override {
             if (document.Is<T>() == false) {
                 rapidjson::StringBuffer buffer;
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 document.Accept(writer);
-                return TransformResult(false, GetName(), fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString()));
+                return TransformResult(Failure(fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString())));
             }
 
             t_ = document.Get<T>();
@@ -73,7 +72,7 @@ namespace rapidoson {
             return TransformResult::TRUE();
         }
 
-        TransformResult ValidateInternal() const override {
+        TransformResult Validate() const override {
             return checker_.Check(t_);
         }
 

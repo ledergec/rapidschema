@@ -15,43 +15,26 @@ namespace rapidoson {
     class Config {
     public:
         Config()
-            : name_("") {}
+                : name_("") {}
 
-        Config(const std::string& name)
-            : name_(name) {}
+        Config(const std::string &name)
+                : name_(name) {}
 
         virtual ~Config() = default;
 
-        virtual TransformResult Parse(const rapidjson::Value& document) {
-            auto res = ParseInternal(document);
-            return AugmentResult(res);
-        }
+        virtual TransformResult Parse(const rapidjson::Value &document) = 0;
 
-        virtual TransformResult Validate() const {
-            auto res = ValidateInternal();
-            return AugmentResult(res);
-        }
+        virtual TransformResult Validate() const = 0;
 
-        const std::string& GetName() {
+        const std::string &GetName() {
             return name_;
         }
 
-        void SetName(const std::string& name) {
+        void SetName(const std::string &name) {
             name_ = name;
         }
 
-    protected:
-        virtual TransformResult ParseInternal(const rapidjson::Value& document) = 0;
-        virtual TransformResult ValidateInternal() const = 0;
     private:
-        TransformResult AugmentResult(TransformResult &res) const {
-            if (res.GetPath().empty()) {
-                return TransformResult(res.Success(), name_, res.GetMessage());
-            }
-            return TransformResult(res.Success(),
-                                   std::string(name_).append(".").append(res.GetPath()), res.GetMessage());
-        }
-
         std::string name_;
     };
 

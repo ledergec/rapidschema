@@ -5,12 +5,13 @@
 #ifndef RAPIDJSON_STRING_CONSTRAINTS_H
 #define RAPIDJSON_STRING_CONSTRAINTS_H
 
+#include <optional>
 #include <string>
 
 #include <fmt/format.h>
 
+#include "failure.h"
 #include "rapidjson/document.h"
-#include "transformresult.h"
 
 namespace rapidoson {
 
@@ -20,14 +21,11 @@ namespace rapidoson {
     template<uint32_t Mul, typename T>
     class MultipleOf<Mul, T, typename std::enable_if<std::is_integral<T>::value>::type> {
     public:
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             if (n % Mul != 0) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n));
+                return std::optional(Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 
@@ -36,18 +34,15 @@ namespace rapidoson {
     public:
         MultipleOf() {}
 
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             auto lower_diff = n - std::floor(n / Mul) * Mul;
             auto upper_diff = std::ceil(n / Mul) * Mul - n;
             auto diff = std::min(lower_diff, upper_diff);
 
             if (diff > 1e-10) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n));
+                return std::optional(Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 

@@ -1,7 +1,8 @@
-#include <tuple>
-#include <gtest/gtest.h>
 
+#include <tuple>
 #include <type_traits>
+
+#include <gtest/gtest.h>
 
 namespace rapidoson {
 

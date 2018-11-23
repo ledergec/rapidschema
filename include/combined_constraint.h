@@ -5,9 +5,9 @@
 #ifndef RAPIDJSON_COMBINED_CONSTRAINT_H
 #define RAPIDJSON_COMBINED_CONSTRAINT_H
 
+#include <iostream>
 #include <string>
 #include <type_traits>
-#include <iostream>
 
 #include "rapidjson/document.h"
 #include "transformresult.h"
@@ -19,19 +19,20 @@ namespace rapidoson {
         template<typename T, std::size_t I, typename... Constraints>
         struct TupleChecker {
             static TransformResult CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
-                std::cout << "Checking constraint: " << I << std::endl;
-                auto result = std::get<I>(tuple).Check(t);
-                if (result.Success() == false) {
-                    return result;
+                auto check_result = std::get<I-1>(tuple).Check(t);
+                TransformResult result;
+                if (check_result.has_value()) {
+                    result.Append(check_result.value());
                 }
-                return TupleChecker<T, I + 1, Constraints...>::CheckEach(t, tuple);
+                result.Append(TupleChecker<T, I - 1, Constraints...>::CheckEach(t, tuple));
+                return result;
             }
         };
 
         template<typename T, typename... Constraints>
-        struct TupleChecker<T, sizeof...(Constraints), Constraints...> {
-            static TransformResult CheckEach(const T&, const std::tuple<Constraints...> &) {
-                return TransformResult::TRUE();
+        struct TupleChecker<T, 0, Constraints...> {
+            static TransformResult CheckEach(const T& t, const std::tuple<Constraints...> & tuple) {
+                return TransformResult();
             }
         };
 
@@ -59,7 +60,7 @@ namespace rapidoson {
     class CombinedConstraint {
     public:
         TransformResult Check(const T& t) const {
-            return internal::TupleChecker<T, 0, Constraints...>::CheckEach(t, constraints_);
+            return internal::TupleChecker<T, sizeof...(Constraints), Constraints...>::CheckEach(t, constraints_);
         }
 
         template <typename Constraint>

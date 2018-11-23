@@ -1,50 +1,47 @@
 #include <gtest/gtest.h>
 
 #include "range_constraints.h"
+#include "transform_result_matchers.h"
 
 namespace rapidoson {
 
-    TEST(ConfigValueInt32Test, GivenMinimumConstraint_WhenParsingValueInRange_ThenParsedCorrectly) {
+    TEST(RangeConstraints, GivenMinimum_WhenMinimumConstraintChecked_ThenSuccess) {
         Minimum<int32_t, 3> minimum;
-        ASSERT_TRUE(minimum.Check(3).Success());
+        ASSERT_THAT(minimum.Check(3), CheckSucceeded());
     }
 
-    TEST(ConfigValueInt32Test, GivenMinimumConstraint_WhenParsingValueOutOfRange_ThenParsingFails) {
+    TEST(RangeConstraints, GivenJustOutOfBounds_WhenMinimumConstraintCheckt_ThenFails) {
         Minimum<int32_t, 3> minimum;
-        ASSERT_FALSE(minimum.Check(2).Success());
-        ASSERT_EQ(minimum.Check(2).GetMessage(), "Expected: >= 3. Actual: 2");
+        ASSERT_THAT(minimum.Check(2), CheckFailed("Expected: >= 3. Actual: 2"));
     }
 
-    TEST(ConfigValueInt32Test, GivenExclusiveMinimumConstraint_WhenParsingValueInRange_ThenParsedCorrectly) {
+    TEST(RangeConstraints, GivenLargerThanMinimum_WhenExclusiveMinimumConstraintChecked_ThenFails) {
         ExclusiveMinimum<int32_t, 3> exclusive_minimum;
-        ASSERT_TRUE(exclusive_minimum.Check(4).Success());
+        ASSERT_THAT(exclusive_minimum.Check(4), CheckSucceeded());
     }
 
-    TEST(ConfigValueInt32Test, GivenExclusiveMinimumConstraint_WhenParsingValueOutOfRange_ThenParsingFails) {
+    TEST(RangeConstraints, GivenMinimum_WhenExclusiveMinimumConstraintChecked_ThenSuccess) {
         ExclusiveMinimum<int32_t, 3> exclusive_minimum;
-        ASSERT_FALSE(exclusive_minimum.Check(3).Success());
-        ASSERT_EQ(exclusive_minimum.Check(3).GetMessage(), "Expected: > 3. Actual: 3");
+        ASSERT_THAT(exclusive_minimum.Check(3), CheckFailed("Expected: > 3. Actual: 3"));
     }
 
-    TEST(ConfigValueInt32Test, GivenMaximumConstraint_WhenParsingValueInRange_ThenParsedCorrectly) {
+    TEST(RangeConstraints, GivenMaximum_WhenMaximumConstraintChecked_ThenSuccess) {
         Maximum<int32_t, 3> maximum;
-        ASSERT_TRUE(maximum.Check(3).Success());
+        ASSERT_THAT(maximum.Check(3), CheckSucceeded());
     }
 
-    TEST(ConfigValueInt32Test, GivenMaximumConstraint_WhenParsingValueOutOfRange_ThenParsingFails) {
+    TEST(RangeConstraints, GivenJustOutOfBounds_WhenMaximumConstraintChecked_ThenFails) {
         Maximum<int32_t, 3> maximum;
-        ASSERT_FALSE(maximum.Check(4).Success());
-        ASSERT_EQ(maximum.Check(4).GetMessage(), "Expected: <= 3. Actual: 4");
+        ASSERT_THAT(maximum.Check(4), CheckFailed("Expected: <= 3. Actual: 4"));
     }
 
-    TEST(ConfigValueInt32Test, GivenExclusiveMaximumConstraint_WhenParsingValueInRange_ThenParsedCorrectly) {
+    TEST(RangeConstraints, GivenLowerThanMaximum_WhenMaximumConstraintChecked_ThenSuccess) {
         ExclusiveMaximum<int32_t, 3> exclusive_maximum;
-        ASSERT_TRUE(exclusive_maximum.Check(2).Success());
+        ASSERT_THAT(exclusive_maximum.Check(2), CheckSucceeded());
     }
 
-    TEST(ConfigValueInt32Test, GivenExclusiveMaximumConstraint_WhenParsingValueOutOfRange_ThenParsingFails) {
-        Maximum<int32_t, 3> maximum;
-        ASSERT_FALSE(maximum.Check(3).Success());
-        ASSERT_EQ(maximum.Check(3).GetMessage(), "Expected: < 3. Actual: 3");
+    TEST(RangeConstraints, GivenMaximum_WhenMaximumConstraintChecked_ThenFails) {
+        ExclusiveMaximum<int32_t, 3> exclusive_maximum;
+        ASSERT_THAT(exclusive_maximum.Check(3), CheckFailed("Expected: < 3. Actual: 3"));
     }
 }

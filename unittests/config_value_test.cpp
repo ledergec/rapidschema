@@ -1,47 +1,56 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "configvalue.h"
 #include "range_constraints.h"
 #include "string_constraints.h"
 #include "test_utils.h"
+#include "transform_result_matchers.h"
 
 namespace rapidoson {
 
-    TEST(ConfigValueInt32Test, WhenParsingFloat_ThenFails) {
-        TestLeafType<int32_t, float>(23.4, false, "Expected type: int32. Actual value was: 23.4");
+    TEST(ConfigValueTest, WhenParsingFloat_ThenFails) {
+        auto result = TestLeafType<int32_t, float>(23.4);
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: 23.4"));
     }
 
-    TEST(ConfigValueInt32Test, WhenParsingString_ThenFails) {
-        TestLeafType<int32_t, std::string>("ein string", false, "Expected type: int32. Actual value was: \"ein string\"");
+    TEST(ConfigValueTest, WhenParsingString_ThenFails) {
+        auto result = TestLeafType<int32_t, std::string>("ein string");
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: \"ein string\""));
     }
 
-    TEST(ConfigValueInt32Test, WhenParsingNull_ThenFails) {
-        TestLeafType<int32_t, std::nullptr_t>(nullptr, false, "Expected type: int32. Actual value was: null");
+    TEST(ConfigValueTest, WhenParsingNull_ThenFails) {
+        auto result = TestLeafType<int32_t, std::nullptr_t>(nullptr);
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: null"));
     }
 
-    TEST(ConfigValueInt32Test, WhenParsingBool_ThenFails) {
-        TestLeafType<int32_t, bool>(false, false, "Expected type: int32. Actual value was: false");
+    TEST(ConfigValueTest, WhenParsingBool_ThenFails) {
+        auto result = TestLeafType<int32_t, bool>(false);
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: false"));
     }
 
-    TEST(ConfigValueInt32Test, WhenParsingOutOfLowerRange_ThenFails) {
+    TEST(ConfigValueTest, WhenParsingOutOfLowerRange_ThenFails) {
         auto out_of_range = static_cast<int64_t>(std::numeric_limits<int32_t>::min()) - 1;
-        TestLeafType<int32_t, int64_t>(out_of_range, false, "Expected type: int32. Actual value was: -2147483649");
+        auto result = TestLeafType<int32_t, int64_t>(out_of_range);
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: -2147483649"));
     }
 
-    TEST(ConfigValueInt32Test, WhenParsingOutOfUpperRange_ThenFails) {
+    TEST(ConfigValueTest, WhenParsingOutOfUpperRange_ThenFails) {
         auto out_of_range = static_cast<int64_t>(std::numeric_limits<int32_t>::max()) + 1;
-        TestLeafType<int32_t, int64_t>(out_of_range, false, "Expected type: int32. Actual value was: 2147483648");
+        auto result = TestLeafType<int32_t, int64_t>(out_of_range);
+        ASSERT_THAT(result, TransformFailed("Expected type: int32. Actual value was: 2147483648"));
     }
 
-    TEST(ConfigValueInt32Test, GivenNoConstraints_WhenParsing23_ThenParsedCorrectly) {
-        TestLeafConstraints<int32_t>(23);
+    TEST(ConfigValueTest, GivenNoConstraints_WhenParsing23_ThenParsedCorrectly) {
+        auto result = TestLeafConstraints<int32_t>(23);
+        ASSERT_THAT(result, TransformSucceeded());
     }
 
-    TEST(ConfigValueInt32Test, GivenNoConstraints_WhenParsingLowerLimit_ThenParsedCorrectly) {
+    TEST(ConfigValueTest, GivenNoConstraints_WhenParsingLowerLimit_ThenParsedCorrectly) {
         TestLeafConstraints<int32_t>(std::numeric_limits<int32_t>::min());
     }
 
-    TEST(ConfigValueInt32Test, GivenNoConstraints_WhenParsingUpperLimit_ThenParsedCorrectly) {
+    TEST(ConfigValueTest, GivenNoConstraints_WhenParsingUpperLimit_ThenParsedCorrectly) {
         TestLeafConstraints<int32_t>(std::numeric_limits<int32_t>::max());
     }
 

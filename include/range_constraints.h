@@ -5,6 +5,7 @@
 #ifndef RAPIDJSON_RANGE_CONSTRAINTS_H
 #define RAPIDJSON_RANGE_CONSTRAINTS_H
 
+#include <optional>
 #include <string>
 
 #include <fmt/format.h>
@@ -20,14 +21,11 @@ namespace rapidoson {
     template<typename T, T Min>
     class Minimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
     public:
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             if (n < Min) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: >= {}. Actual: {}", Min, n));
+                return std::optional(Failure(fmt::format("Expected: >= {}. Actual: {}", Min, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 
@@ -37,14 +35,11 @@ namespace rapidoson {
     template<typename T, T Min>
     class ExclusiveMinimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
     public:
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             if (n <= Min) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: > {}. Actual: {}", Min, n));
+                return std::optional(Failure(fmt::format("Expected: > {}. Actual: {}", Min, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 
@@ -54,14 +49,11 @@ namespace rapidoson {
     template<typename T, T Max>
     class Maximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
     public:
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             if (n > Max) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: <= {}. Actual: {}", Max, n));
+                return std::optional(Failure(fmt::format("Expected: <= {}. Actual: {}", Max, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 
@@ -71,14 +63,11 @@ namespace rapidoson {
     template<typename T, T Max>
     class ExclusiveMaximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
     public:
-        TransformResult Check(const T& n) const {
+        std::optional<Failure> Check(const T& n) const {
             if (n >= Max) {
-                return TransformResult(
-                        false,
-                        "",
-                        fmt::format("Expected: < {}. Actual: {}", Max, n));
+                return std::optional(Failure(fmt::format("Expected: < {}. Actual: {}", Max, n)));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };}  // rapidjson
 

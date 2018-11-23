@@ -8,8 +8,8 @@
 #include <string>
 #include <variant>
 
-#include "json_type_set.h"
 #include "configvalue.h"
+#include "json_type_set.h"
 
 namespace rapidoson {
 
