@@ -4,10 +4,11 @@ MAINTAINER  christian
 # update and install dependencies
 RUN         apt-get update \
                 && apt-get install -y \ 
+		build-essential \
 		cmake \
-		sudo \
-		git \
 		emacs \
+		git \
+		sudo \
 		&& apt-get clean \
 		&& rm -rf /var/lib/apt/lists/*
 
