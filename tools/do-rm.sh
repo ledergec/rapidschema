@@ -1,0 +1,1 @@
+docker rm rapidoson-dev-container

@@ -1,0 +1,1 @@
+docker stop rapidoson-dev-container
