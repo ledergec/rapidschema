@@ -7,14 +7,20 @@
 
 #include <gmock/gmock.h>
 
+#include "failure.h"
 #include "failure_collection.h"
+#include "ostream_operators.h"
 
 MATCHER(CheckSucceeded, "") {
     return arg.has_value() == false;
 }
 
 MATCHER_P(CheckFailed, message, "") {
-    return arg.has_value() == true && arg.value().message == message;
+    bool result = arg.has_value() == true && arg.value().message == message;
+    if (result == false) {
+        std::cout << arg << std::endl;
+    }
+    return result;
 }
 
 MATCHER(TransformSucceeded, "") {
