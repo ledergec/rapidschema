@@ -5,7 +5,9 @@
 #ifndef RAPIDJSON_CONFIGVALUE_H
 #define RAPIDJSON_CONFIGVALUE_H
 
+#include <optional>
 #include <string>
+
 #include <fmt/format.h>
 
 #include <rapidjson/stringbuffer.h>
@@ -59,20 +61,20 @@ namespace rapidoson {
             return checker_.template Get<Constraint>();
         }
 
-        TransformResult Parse(const rapidjson::Value& document) override {
+        std::optional<FailureCollection> Parse(const rapidjson::Value& document) override {
             if (document.Is<T>() == false) {
                 rapidjson::StringBuffer buffer;
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 document.Accept(writer);
-                return TransformResult(Failure(fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString())));
+                return FailureCollection(Failure(fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString())));
             }
 
             t_ = document.Get<T>();
 
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
 
-        TransformResult Validate() const override {
+        std::optional<FailureCollection> Validate() const override {
             return checker_.Check(t_);
         }
 

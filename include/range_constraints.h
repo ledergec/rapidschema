@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 
 #include "rapidjson/document.h"
-#include "transformresult.h"
+#include "failure_collection.h"
 
 namespace rapidoson {
 
@@ -23,7 +23,7 @@ namespace rapidoson {
     public:
         std::optional<Failure> Check(const T& n) const {
             if (n < Min) {
-                return std::optional(Failure(fmt::format("Expected: >= {}. Actual: {}", Min, n)));
+                return Failure(fmt::format("Expected: >= {}. Actual: {}", Min, n));
             }
             return std::nullopt;
         }
@@ -37,7 +37,7 @@ namespace rapidoson {
     public:
         std::optional<Failure> Check(const T& n) const {
             if (n <= Min) {
-                return std::optional(Failure(fmt::format("Expected: > {}. Actual: {}", Min, n)));
+                return Failure(fmt::format("Expected: > {}. Actual: {}", Min, n));
             }
             return std::nullopt;
         }
@@ -51,7 +51,7 @@ namespace rapidoson {
     public:
         std::optional<Failure> Check(const T& n) const {
             if (n > Max) {
-                return std::optional(Failure(fmt::format("Expected: <= {}. Actual: {}", Max, n)));
+                return Failure(fmt::format("Expected: <= {}. Actual: {}", Max, n));
             }
             return std::nullopt;
         }
@@ -65,7 +65,7 @@ namespace rapidoson {
     public:
         std::optional<Failure> Check(const T& n) const {
             if (n >= Max) {
-                return std::optional(Failure(fmt::format("Expected: < {}. Actual: {}", Max, n)));
+                return Failure(fmt::format("Expected: < {}. Actual: {}", Max, n));
             }
             return std::nullopt;
         }

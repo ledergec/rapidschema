@@ -5,6 +5,7 @@
 #ifndef RAPIDJSON_TRANSFORMRESULT_H
 #define RAPIDJSON_TRANSFORMRESULT_H
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -12,11 +13,11 @@
 
 namespace rapidoson {
 
-    class TransformResult {
+    class FailureCollection {
     public:
-        TransformResult() {}
+        FailureCollection() {}
 
-        TransformResult(const Failure & failure) {
+        FailureCollection(const Failure & failure) {
             failures_.push_back(failure);
         }
 
@@ -24,7 +25,7 @@ namespace rapidoson {
             return failures_;
         }
 
-        void Append(const TransformResult& other) {
+        void Append(const FailureCollection& other) {
             std::copy(other.GetFailures().begin(), other.GetFailures().end(), std::back_inserter(failures_));
         }
 
@@ -42,18 +43,23 @@ namespace rapidoson {
             }
         }
 
-        bool Success() const {
-            return failures_.empty();
-        }
-
-        static TransformResult TRUE() {
-            static TransformResult result;
-            return result;
-        }
-   private:
+    private:
         std::vector<Failure> failures_;
     };
 
+    static std::optional<FailureCollection> operator + (std::optional<FailureCollection> lhs,
+                                                        std::optional<FailureCollection> rhs) {
+        if (lhs.has_value()) {
+            if (rhs.has_value()) {
+                lhs.value().Append(rhs.value());
+                return lhs;
+            } else {
+                return lhs;
+            }
+        } else {
+            return rhs;
+        }
+    }
 }  // rapidjson
 
 #endif //RAPIDJSON_TRANSFORMRESULT_H

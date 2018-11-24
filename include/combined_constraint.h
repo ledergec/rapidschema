@@ -6,11 +6,13 @@
 #define RAPIDJSON_COMBINED_CONSTRAINT_H
 
 #include <iostream>
+#include <optional>
 #include <string>
 #include <type_traits>
 
-#include "rapidjson/document.h"
-#include "transformresult.h"
+#include <rapidjson/document.h>
+
+#include "failure_collection.h"
 
 namespace rapidoson {
 
@@ -18,21 +20,20 @@ namespace rapidoson {
 
         template<typename T, std::size_t I, typename... Constraints>
         struct TupleChecker {
-            static TransformResult CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
+            static std::optional<FailureCollection> CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
                 auto check_result = std::get<I-1>(tuple).Check(t);
-                TransformResult result;
+                std::optional<FailureCollection> result;
                 if (check_result.has_value()) {
-                    result.Append(check_result.value());
+                    result = result + check_result.value();
                 }
-                result.Append(TupleChecker<T, I - 1, Constraints...>::CheckEach(t, tuple));
-                return result;
+                return result + TupleChecker<T, I - 1, Constraints...>::CheckEach(t, tuple);
             }
         };
 
         template<typename T, typename... Constraints>
         struct TupleChecker<T, 0, Constraints...> {
-            static TransformResult CheckEach(const T& t, const std::tuple<Constraints...> & tuple) {
-                return TransformResult();
+            static std::optional<FailureCollection> CheckEach(const T& t, const std::tuple<Constraints...> & tuple) {
+                return std::nullopt;
             }
         };
 
@@ -59,7 +60,7 @@ namespace rapidoson {
     template<typename T, typename... Constraints>
     class CombinedConstraint {
     public:
-        TransformResult Check(const T& t) const {
+        std::optional<FailureCollection> Check(const T& t) const {
             return internal::TupleChecker<T, sizeof...(Constraints), Constraints...>::CheckEach(t, constraints_);
         }
 

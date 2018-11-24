@@ -23,7 +23,7 @@ namespace rapidoson {
     public:
         std::optional<Failure> Check(const T& n) const {
             if (n % Mul != 0) {
-                return std::optional(Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n)));
+                return Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n));
             }
             return std::nullopt;
         }
@@ -40,7 +40,7 @@ namespace rapidoson {
             auto diff = std::min(lower_diff, upper_diff);
 
             if (diff > 1e-10) {
-                return std::optional(Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n)));
+                return Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", Mul, n));
             }
             return std::nullopt;
         }

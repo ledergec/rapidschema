@@ -32,8 +32,8 @@ namespace rapidoson {
 
     TEST_F(CombinedConstraintTest, GivenBothConstraintsNotSatisfied_WhenParsingValue_ThenBothReported) {
         auto result = constraint.Check(1);
-        ASSERT_EQ(2, result.GetFailures().size());
-        ASSERT_THAT(result.GetFailures(), UnorderedElementsAre(Failure("Expected: >= 3. Actual: 1"),
+        ASSERT_EQ(2, result.value().GetFailures().size());
+        ASSERT_THAT(result.value().GetFailures(), UnorderedElementsAre(Failure("Expected: >= 3. Actual: 1"),
                 Failure("Expected: MultipleOf 6. Actual: 1")));
     }
 

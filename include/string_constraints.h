@@ -5,38 +5,36 @@
 #ifndef RAPIDJSON_STRING_CONSTRAINTS_H
 #define RAPIDJSON_STRING_CONSTRAINTS_H
 
+#include <optional>
 #include <string>
 
-#include "rapidjson/document.h"
-#include "transformresult.h"
+#include <fmt/format.h>
+
+#include <rapidjson/document.h>
+
+#include "failure.h"
 
 namespace rapidoson {
 
     template<size_t MinLen>
     class MinLength {
     public:
-        static TransformResult Check(const std::string& str) {
+        static std::optional<Failure> Check(const std::string& str) {
             if (str.size() < MinLen) {
-                return TransformResult(
-                        false,
-                        "",
-                        std::string("std::string \"").append(str).append("\" is shorter than ").append(std::to_string(MinLen)));
+                return Failure(fmt::format("Expected std::string of length at least {}. Actual: {} of size {}", MinLen, str, str.size()));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 
     template<size_t MaxLen>
     class MaxLength {
     public:
-        static TransformResult Check(const std::string& str) {
+        static std::optional<Failure> Check(const std::string& str) {
             if (str.size() > MaxLen) {
-                return TransformResult(
-                        false,
-                        "",
-                        std::string("std::string \"").append(str).append("\" exeeds maximum length ").append(std::to_string(MaxLen)));
+                return Failure(fmt::format("Expected std::string of length at most {}. Actual: {} of size {}", MaxLen, str, str.size()));
             }
-            return TransformResult::TRUE();
+            return std::nullopt;
         }
     };
 

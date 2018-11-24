@@ -5,10 +5,11 @@
 #ifndef RAPIDJSON_CONFIG_H
 #define RAPIDJSON_CONFIG_H
 
+#include <optional>
 #include <string>
 
 #include "rapidjson/document.h"
-#include "transformresult.h"
+#include "failure_collection.h"
 
 namespace rapidoson {
 
@@ -22,9 +23,9 @@ namespace rapidoson {
 
         virtual ~Config() = default;
 
-        virtual TransformResult Parse(const rapidjson::Value &document) = 0;
+        virtual std::optional<FailureCollection> Parse(const rapidjson::Value &document) = 0;
 
-        virtual TransformResult Validate() const = 0;
+        virtual std::optional<FailureCollection> Validate() const = 0;
 
         const std::string &GetName() {
             return name_;
