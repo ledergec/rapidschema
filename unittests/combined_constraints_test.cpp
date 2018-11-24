@@ -12,7 +12,7 @@ namespace rapidoson {
 
     class CombinedConstraintTest : public Test {
     public:
-        CombinedConstraint<uint32_t, Minimum<int32_t, 3>, MultipleOf<6, int32_t>> constraint;
+        CombinedConstraint<uint32_t, Minimum<uint32_t, 3>, MultipleOf<6, int32_t>> constraint;
     };
 
     TEST_F(CombinedConstraintTest, GivenMultipleConstraintsSatisfied_WhenParsingValue_ThenParsedCorrectly) {

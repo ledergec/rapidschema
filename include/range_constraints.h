@@ -15,10 +15,10 @@
 
 namespace rapidoson {
 
-    template<typename T, T Min, class Enabled = void>
+    template<typename T, auto Min, class Enabled = void>
     class Minimum;
 
-    template<typename T, T Min>
+    template<typename T, auto Min>
     class Minimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
     public:
         std::optional<Failure> Check(const T& n) const {
@@ -29,10 +29,10 @@ namespace rapidoson {
         }
     };
 
-    template<typename T, T Min, class Enabled = void>
+    template<typename T, auto Min, class Enabled = void>
     class ExclusiveMinimum;
 
-    template<typename T, T Min>
+    template<typename T, auto Min>
     class ExclusiveMinimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
     public:
         std::optional<Failure> Check(const T& n) const {
@@ -43,10 +43,10 @@ namespace rapidoson {
         }
     };
 
-    template<typename T, T Max, class Enabled = void>
+    template<typename T, auto Max, class Enabled = void>
     class Maximum;
 
-    template<typename T, T Max>
+    template<typename T, auto Max>
     class Maximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
     public:
         std::optional<Failure> Check(const T& n) const {
@@ -57,10 +57,10 @@ namespace rapidoson {
         }
     };
 
-    template<typename T, T Max, class Enabled = void>
+    template<typename T, auto Max, class Enabled = void>
     class ExclusiveMaximum;
 
-    template<typename T, T Max>
+    template<typename T, auto Max>
     class ExclusiveMaximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
     public:
         std::optional<Failure> Check(const T& n) const {
