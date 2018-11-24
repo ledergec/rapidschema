@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_TRANSFORMRESULT_H
-#define RAPIDJSON_TRANSFORMRESULT_H
+#ifndef RAPIDJSON_FAILURE_COLLECTION_H
+#define RAPIDJSON_FAILURE_COLLECTION_H
 
 #include <optional>
 #include <string>
@@ -62,4 +62,4 @@ namespace rapidoson {
     }
 }  // rapidjson
 
-#endif //RAPIDJSON_TRANSFORMRESULT_H
+#endif //RAPIDJSON_FAILURE_COLLECTION_H
