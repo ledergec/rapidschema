@@ -12,7 +12,7 @@
 
 #include <rapidjson/document.h>
 
-#include "failure_collection.h"
+#include "transform_result.h"
 
 namespace rapidoson {
 
@@ -20,20 +20,18 @@ namespace rapidoson {
 
         template<typename T, std::size_t I, typename... Constraints>
         struct TupleChecker {
-            static std::optional<FailureCollection> CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
-                auto check_result = std::get<I-1>(tuple).Check(t);
-                std::optional<FailureCollection> result;
-                if (check_result.has_value()) {
-                    result = result + check_result.value();
-                }
-                return result + TupleChecker<T, I - 1, Constraints...>::CheckEach(t, tuple);
+            static TransformResult CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
+                TransformResult result;
+                result.Append(std::get<I - 1>(tuple).Check(t));
+                result.Append(TupleChecker<T, I - 1, Constraints...>::CheckEach(t, tuple));
+                return result;
             }
         };
 
         template<typename T, typename... Constraints>
         struct TupleChecker<T, 0, Constraints...> {
-            static std::optional<FailureCollection> CheckEach(const T& t, const std::tuple<Constraints...> & tuple) {
-                return std::nullopt;
+            static TransformResult CheckEach(const T& t, const std::tuple<Constraints...> & tuple) {
+                return TransformResult();
             }
         };
 
@@ -60,7 +58,7 @@ namespace rapidoson {
     template<typename T, typename... Constraints>
     class CombinedConstraint {
     public:
-        std::optional<FailureCollection> Check(const T& t) const {
+        TransformResult Check(const T& t) const {
             return internal::TupleChecker<T, sizeof...(Constraints), Constraints...>::CheckEach(t, constraints_);
         }
 

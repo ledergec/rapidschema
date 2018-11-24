@@ -20,14 +20,14 @@
 
 namespace rapidoson {
 
-    static std::optional<FailureCollection> ParseObject(const std::string &json, Config *config) {
+    static TransformResult ParseObject(const std::string &json, Config *config) {
         rapidjson::Document document;
         rapidjson::ParseResult result = document.Parse(json.c_str());
         assert(result.IsError() == false);
         return config->Parse(document);
     }
 
-    static std::optional<FailureCollection> ParseLeaf(const std::string &json, Config *config) {
+    static TransformResult ParseLeaf(const std::string &json, Config *config) {
         rapidjson::Document document;
         rapidjson::ParseResult result = document.Parse(json.c_str());
         assert(result.IsError() == false);
@@ -69,7 +69,7 @@ namespace rapidoson {
     };
 
     template <typename T, typename... Constraints>
-    std::optional<FailureCollection> TestLeafConstraints(const T& t) {
+    TransformResult TestLeafConstraints(const T& t) {
         std::string json = fmt::format(R"(
                 {{
                   "leaf": {}
@@ -78,12 +78,12 @@ namespace rapidoson {
 
         ConfigValue<T, Constraints...> value("leaf");
         auto result = ParseLeaf(json, &value);
-        EXPECT_FALSE(result.has_value());
+        EXPECT_TRUE(result.Success());
         return value.Validate();
     }
 
     template <typename T, typename... Constraints>
-    std::optional<FailureCollection> TestValueConstraints(ConfigValue<T, Constraints...>* value, T t) {
+    TransformResult TestValueConstraints(ConfigValue<T, Constraints...>* value, T t) {
 
         std::string json = fmt::format(R"(
                 {{
@@ -93,12 +93,12 @@ namespace rapidoson {
 
         value->SetName("leaf");
         auto result = ParseLeaf(json, value);
-        EXPECT_FALSE(result.has_value());
+        EXPECT_TRUE(result.Success());
         return value->Validate();
     }
 
     template <typename ValueType, typename ConfigType>
-    std::optional<FailureCollection> TestLeafType(ConfigType c) {
+    TransformResult TestLeafType(ConfigType c) {
         std::string json = fmt::format(R"(
                 {{
                   "leaf": {}

@@ -9,7 +9,7 @@
 #include <string>
 
 #include "rapidjson/document.h"
-#include "failure_collection.h"
+#include "transform_result.h"
 
 namespace rapidoson {
 
@@ -23,9 +23,9 @@ namespace rapidoson {
 
         virtual ~Config() = default;
 
-        virtual std::optional<FailureCollection> Parse(const rapidjson::Value &document) = 0;
+        virtual TransformResult Parse(const rapidjson::Value &document) = 0;
 
-        virtual std::optional<FailureCollection> Validate() const = 0;
+        virtual TransformResult Validate() const = 0;
 
         const std::string &GetName() {
             return name_;

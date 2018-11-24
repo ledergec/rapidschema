@@ -16,6 +16,7 @@
 #include "combined_constraint.h"
 #include "config.h"
 #include "rapidjson_type_to_string.h"
+#include "transform_result.h"
 #include "type_name.h"
 
 namespace rapidjson {
@@ -61,20 +62,22 @@ namespace rapidoson {
             return checker_.template Get<Constraint>();
         }
 
-        std::optional<FailureCollection> Parse(const rapidjson::Value& document) override {
+        TransformResult Parse(const rapidjson::Value& document) override {
             if (document.Is<T>() == false) {
                 rapidjson::StringBuffer buffer;
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 document.Accept(writer);
-                return FailureCollection(Failure(fmt::format("Expected type: {}. Actual value was: {}", TypeName<T>::name, buffer.GetString())));
+                return std::optional<internal::FailureCollection>(
+                        Failure(fmt::format("Expected type: {}. Actual value was: {}",
+                                TypeName<T>::name, buffer.GetString())));
             }
 
             t_ = document.Get<T>();
 
-            return std::nullopt;
+            return TransformResult();
         }
 
-        std::optional<FailureCollection> Validate() const override {
+        TransformResult Validate() const override {
             return checker_.Check(t_);
         }
 

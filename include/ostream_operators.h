@@ -8,7 +8,7 @@
 #include <optional>
 
 #include "failure.h"
-#include "failure_collection.h"
+#include "transform_result.h"
 
 namespace rapidoson {
 

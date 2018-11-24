@@ -11,7 +11,7 @@
 #include <fmt/format.h>
 
 #include "rapidjson/document.h"
-#include "failure_collection.h"
+#include "transform_result.h"
 
 namespace rapidoson {
 

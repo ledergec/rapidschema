@@ -8,7 +8,7 @@
 #include <gmock/gmock.h>
 
 #include "failure.h"
-#include "failure_collection.h"
+#include "transform_result.h"
 #include "ostream_operators.h"
 
 MATCHER(CheckSucceeded, "") {
@@ -24,13 +24,12 @@ MATCHER_P(CheckFailed, message, "") {
 }
 
 MATCHER(TransformSucceeded, "") {
-    return arg.has_value() == false;
+    return arg.Success();
 }
 
 MATCHER_P(TransformFailed, message, "") {
-    return arg.has_value() &&
-            arg.value().GetFailures().size() == 1 &&
-            arg.value().GetFailures()[0].message == message;
+    return arg.GetFailures().size() == 1 &&
+            arg.GetFailures()[0].message == message;
 }
 
 #endif //RAPIDOSON_TRANSFORM_RESULT_MATCHERS_H
