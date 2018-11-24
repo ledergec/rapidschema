@@ -7,4 +7,9 @@ https://www.xquartz.org/releases/XQuartz-2.7.10.html
 
 https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/
 
+Run the following to grant access to the x server:
 sudo xhost +
+
+Run this to see who is blocking the usage of port 6000 and does not allow to start socat:
+sudo lsof -iTCP -sTCP:LISTEN -n -P
+Usually it is X11
