@@ -33,8 +33,10 @@ namespace rapidoson {
     }
 
     TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingString_ThenSuccess) {
-        auto result = TestLeafType<std::string, std::string>("ein string");
+        ConfigValue<std::string> value("leaf");
+        auto result = ParseLeaf("ein string", &value);
         ASSERT_THAT(result, TransformSucceeded());
+        ASSERT_EQ("ein string", value.Get());
     }
 
     TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenParsingTooShortString_ThenFails) {

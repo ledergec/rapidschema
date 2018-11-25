@@ -10,12 +10,24 @@
 #include <fmt/format.h>
 
 template<typename ConfigType, class Enable = void>
-struct ToJsonLiteral {
-    static std::string Convert(const ConfigType& c);
+struct ToJsonLiteral;
+
+template <>
+struct ToJsonLiteral<const char*> {
+    static std::string Convert(const char* str) {
+        return fmt::format(R"("{}")", str);
+    }
+};
+
+template <size_t N>
+struct ToJsonLiteral<char[N]> {
+    static std::string Convert(const char* str) {
+        return fmt::format(R"("{}")", str);
+    }
 };
 
 template <>
-struct ToJsonLiteral<std::string, std::enable_if<std::true_type::value>::type> {
+struct ToJsonLiteral<std::string> {
     static std::string Convert(const std::string& c) {
         return fmt::format(R"("{}")", c);
     }
