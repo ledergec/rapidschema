@@ -4,7 +4,7 @@ file(GLOB UNITTEST_SRC
     "*.cpp"
 )
 
-add_executable(unittest ${UNITTEST_SRC} transform_result_matchers.h)
+add_executable(unittest ${UNITTEST_SRC})
 
 target_link_libraries(unittest gtest gmock fmt)
 
