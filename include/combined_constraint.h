@@ -18,6 +18,7 @@ namespace rapidoson {
 
     namespace internal {
 
+
         template<typename T, std::size_t I, typename... Constraints>
         struct TupleChecker {
             static TransformResult CheckEach(const T& t, const std::tuple<Constraints...>& tuple) {
@@ -56,17 +57,18 @@ namespace rapidoson {
     }  // namespace internal
 
     template<typename T, template<typename> class ... Constraints>
+    class CombinedConstraint;
+
+    template<typename T, template<typename> class ... Constraints>
+    static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints);
+
+    template<typename T, template<typename> class ... Constraints>
     class CombinedConstraint {
     public:
         CombinedConstraint() = default;
 
         TransformResult Check(const T& t) const {
             return internal::TupleChecker<T, sizeof...(Constraints), Constraints<T>...>::CheckEach(t, constraints_);
-        }
-
-        static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
-            return CombinedConstraint(std::make_tuple<Constraints<T>...>(
-                    std::forward<Constraints<T>>(constraints)...));
         }
 
         template <template<typename> class Constraint>
@@ -80,7 +82,16 @@ namespace rapidoson {
 
     private:
         std::tuple<Constraints<T>...> constraints_;
+
+        friend CombinedConstraint MakeConstraint<T, Constraints...>(Constraints<T>&&... constraints);
     };
+
+    template<typename T, template<typename> class ... Constraints>
+    static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
+        return CombinedConstraint(std::make_tuple<Constraints<T>...>(
+                std::forward<Constraints<T>>(constraints)...));
+    }
+
 
 }  // namespace rapidoson
 

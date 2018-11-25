@@ -13,8 +13,7 @@ namespace rapidoson {
     class CombinedConstraintTest : public Test {
     public:
         CombinedConstraintTest()
-        : constraint(CombinedConstraint<uint32_t, Minimum, MultipleOf>::MakeConstraint(Minimum<uint32_t>(3),
-                MultipleOf<uint32_t >(6))) {}
+        : constraint(MakeConstraint(Minimum<uint32_t>(3), MultipleOf<uint32_t >(6))) {}
 
         CombinedConstraint<uint32_t, Minimum, MultipleOf> constraint;
     };

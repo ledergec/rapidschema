@@ -46,6 +46,12 @@ namespace rapidoson {
         ASSERT_THAT(result, TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
     }
 
+    TEST(StringConfigValueTest, MakeValueWorksToo) {
+        auto value = MakeValue("leaf", MinLength(20));
+        auto result = ValidateLeaf<std::string>("ein string", &value);
+        ASSERT_THAT(result, TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
+    }
+
     TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenParsingTooLongString_ThenFails) {
         ConfigValue<std::string, MaxLength> value("leaf");
         value.GetConstraint<MaxLength>().SetMaxLength(2);

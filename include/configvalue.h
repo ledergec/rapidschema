@@ -42,7 +42,15 @@ namespace rapidjson {
 namespace rapidoson {
 
     template<typename T, template<typename> class ... Constraints>
+    class ConfigValue;
+
+    template<typename T, template<typename> class ... Constraints>
+    ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints);
+
+    template<typename T, template<typename> class ... Constraints>
     class ConfigValue : public Config {
+        using ValueChecker = CombinedConstraint<T, Constraints...>;
+
     public:
         ConfigValue() = default;
 
@@ -82,9 +90,19 @@ namespace rapidoson {
         }
 
     private:
+        ConfigValue(const std::string& name, ValueChecker&& checker)
+        : checker_(std::forward<ValueChecker>(checker)) {}
+
         T t_;
-        CombinedConstraint<T, Constraints...> checker_;
+        ValueChecker checker_;
+
+        friend ConfigValue MakeValue<T, Constraints...>(const std::string& name, Constraints<T>&&... constraints);
     };
+
+    template<typename T, template<typename> class ... Constraints>
+    ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints) {
+        return ConfigValue(name, MakeConstraint(std::forward<Constraints<T>>(constraints)...));
+    }
 
 }  // rapidjson
 
