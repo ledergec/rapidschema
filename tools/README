@@ -13,3 +13,8 @@ sudo xhost +
 Run this to see who is blocking the usage of port 6000 and does not allow to start socat:
 sudo lsof -iTCP -sTCP:LISTEN -n -P
 Usually it is X11
+
+Even better?
+http://blog.bennycornelissen.nl.s3-website-eu-west-1.amazonaws.com/post/bwc-gui-apps-in-docker-on-osx/
+
+If you have problems with en0 not having an ip address asigned, you need to connect to the WLAN. How to make sure it works also if not connected to the WLAN, I don't know.
