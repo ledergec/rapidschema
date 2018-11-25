@@ -12,7 +12,7 @@ namespace rapidoson {
 
     TEST(StringConstraintsTest, GivenTooLongString_WhenMaxLengthConstraintChecked_ThenFails) {
         MaxLength max_length(3);
-        ASSERT_THAT(max_length.Check("miau"), CheckFailed("Expected std::string of length at most 3. Actual: miau of size 4"));
+        ASSERT_THAT(max_length.Check("miau"), CheckFailed("Expected std::string of length at most 3. Actual: length 4 string: \"miau\""));
     }
 
     TEST(StringConstraintsTest, GivenLongEnoughString_WhenMinLengthConstraintChecked_ThenSuccess) {
@@ -22,6 +22,6 @@ namespace rapidoson {
 
     TEST(StringConstraintsTest, GivenTooShortString_WhenMinLengthConstraintChecked_ThenFails) {
         MinLength min_length(3);
-        ASSERT_THAT(min_length.Check("ma"), CheckFailed("Expected std::string of length at least 3. Actual: ma of size 2"));
+        ASSERT_THAT(min_length.Check("ma"), CheckFailed("Expected std::string of length at least 3. Actual: length 2 string: \"ma\""));
     }
 }

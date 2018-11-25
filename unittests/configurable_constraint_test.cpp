@@ -20,11 +20,11 @@ namespace rapidoson {
     TEST(ConfigurableConstraintTest, WhenConstraintConfigure_CorrectlyValidated) {
         ConfigValue<float, ConfigurableConstraint> value("leaf");
         value.GetConstraint<ConfigurableConstraint>().result = std::nullopt;
-        auto result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
+        auto result = ValidateLeaf<float>(3.0f, &value);
         ASSERT_THAT(result, TransformSucceeded());
 
         value.GetConstraint<ConfigurableConstraint>().result = std::optional(Failure("message"));
-        result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
+        result = ValidateLeaf<float>(3.0f, &value);
         ASSERT_THAT(result, TransformFailed("message"));
     }
 

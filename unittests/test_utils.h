@@ -17,96 +17,47 @@
 
 #include "configvalue.h"
 #include "json_type_set.h"
+#include "to_json_literal.h"
 
 namespace rapidoson {
 
-    static TransformResult ParseObject(const std::string &json, Config *config) {
+    template <typename T>
+    std::string CreateLeafString(const T& t) {
+        return fmt::format(R"(
+                {{
+                  "leaf": {}
+                }}
+                )", ToJsonLiteral<T>::Convert(t));
+    }
+
+    static TransformResult ParseObject(const std::string &json, Config * config) {
         rapidjson::Document document;
         rapidjson::ParseResult result = document.Parse(json.c_str());
-        assert(result.IsError() == false);
+        EXPECT_FALSE(result.IsError());
         return config->Parse(document);
     }
 
-    static TransformResult ParseLeaf(const std::string &json, Config *config) {
+    template <typename T>
+    static TransformResult ParseLeaf(const T& t, Config * config) {
+        auto leaf_str = CreateLeafString(t);
         rapidjson::Document document;
-        rapidjson::ParseResult result = document.Parse(json.c_str());
-        assert(result.IsError() == false);
-        assert(document.HasMember("leaf"));
+        rapidjson::ParseResult result = document.Parse(leaf_str.c_str());
+        EXPECT_FALSE(result.IsError());
+        EXPECT_TRUE(document.HasMember("leaf"));
         return config->Parse(document["leaf"]);
     }
 
-    template<typename ConfigType, class Enable = void>
-    struct ToJsonValue {
-        static std::string Convert(const ConfigType& c);
-    };
-
-    template <>
-    struct ToJsonValue<std::string, std::enable_if<std::true_type::value>::type> {
-        static std::string Convert(const std::string& c) {
-            return fmt::format(R"("{}")", c);
-        }
-    };
-
-    template <>
-    struct ToJsonValue<std::nullptr_t, std::enable_if<std::true_type::value>::type> {
-        static std::string Convert(const std::nullptr_t& c) {
-            return "null";
-        }
-    };
-
-    template <typename ConfigType>
-    struct ToJsonValue<ConfigType, typename std::enable_if<std::is_integral<ConfigType>::value>::type> {
-        static std::string Convert(const ConfigType& c) {
-            return fmt::format(R"({})", c);
-        }
-    };
-
-    template <typename ConfigType>
-    struct ToJsonValue<ConfigType, typename std::enable_if<std::is_floating_point<ConfigType>::value>::type> {
-        static std::string Convert(const ConfigType& c) {
-            return fmt::format(R"({:.1f})", c);
-        }
-    };
-
-    template <typename T, template<typename> class... Constraints>
-    TransformResult TestLeafConstraints(const T& t) {
-        std::string json = fmt::format(R"(
-                {{
-                  "leaf": {}
-                }}
-                )", ToJsonValue<T>::Convert(t));
-
-        ConfigValue<T, Constraints...> value("leaf");
-        auto result = ParseLeaf(json, &value);
+    template <typename T>
+    static TransformResult ValidateLeaf(const T& t, Config * config) {
+        auto result = ParseLeaf(t, config);
         EXPECT_TRUE(result.Success());
-        return value.Validate();
-    }
-
-    template <typename T, template<typename> class... Constraints>
-    TransformResult TestValueConstraints(ConfigValue<T, Constraints...>* value, T t) {
-
-        std::string json = fmt::format(R"(
-                {{
-                  "leaf": {}
-                }}
-                )", ToJsonValue<T>::Convert(t));
-
-        value->SetName("leaf");
-        auto result = ParseLeaf(json, value);
-        EXPECT_TRUE(result.Success());
-        return value->Validate();
+        return config->Validate();
     }
 
     template <typename ValueType, typename ConfigType>
     TransformResult TestLeafType(ConfigType c) {
-        std::string json = fmt::format(R"(
-                {{
-                  "leaf": {}
-                }}
-                )", ToJsonValue<ConfigType>::Convert(c));
-
         ConfigValue<ValueType> value("leaf");
-        return ParseLeaf(json, &value);
+        return ParseLeaf(c, &value);
     }
 
 }  // rapidjson
