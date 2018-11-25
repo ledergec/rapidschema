@@ -13,7 +13,8 @@ namespace rapidoson {
     class CombinedConstraintTest : public Test {
     public:
         CombinedConstraintTest()
-        : constraint(std::make_tuple(Minimum<uint32_t>(3), MultipleOf<uint32_t>(6))) {}
+        : constraint(CombinedConstraint<uint32_t, Minimum, MultipleOf>::MakeConstraint(Minimum<uint32_t>(3),
+                MultipleOf<uint32_t >(6))) {}
 
         CombinedConstraint<uint32_t, Minimum, MultipleOf> constraint;
     };

@@ -60,11 +60,13 @@ namespace rapidoson {
     public:
         CombinedConstraint() = default;
 
-        CombinedConstraint(std::tuple<Constraints<T>...> constraints)
-        : constraints_(constraints) {}
-
         TransformResult Check(const T& t) const {
             return internal::TupleChecker<T, sizeof...(Constraints), Constraints<T>...>::CheckEach(t, constraints_);
+        }
+
+        static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
+            return CombinedConstraint(std::make_tuple<Constraints<T>...>(
+                    std::forward<Constraints<T>>(constraints)...));
         }
 
         template <template<typename> class Constraint>
@@ -73,8 +75,13 @@ namespace rapidoson {
         }
 
     private:
+        CombinedConstraint(std::tuple<Constraints<T>...> constraints)
+                : constraints_(constraints) {}
+
+    private:
         std::tuple<Constraints<T>...> constraints_;
     };
+
 }  // namespace rapidoson
 
 #endif //RAPIDJSON_COMBINED_CONSTRAINT_H
