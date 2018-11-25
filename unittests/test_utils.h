@@ -68,7 +68,7 @@ namespace rapidoson {
         }
     };
 
-    template <typename T, typename... Constraints>
+    template <typename T, template<typename> class... Constraints>
     TransformResult TestLeafConstraints(const T& t) {
         std::string json = fmt::format(R"(
                 {{
@@ -82,7 +82,7 @@ namespace rapidoson {
         return value.Validate();
     }
 
-    template <typename T, typename... Constraints>
+    template <typename T, template<typename> class... Constraints>
     TransformResult TestValueConstraints(ConfigValue<T, Constraints...>* value, T t) {
 
         std::string json = fmt::format(R"(

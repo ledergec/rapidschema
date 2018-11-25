@@ -21,8 +21,8 @@ namespace rapidoson {
                 : Config(name) {}
 
     protected:
-        std::optional<FailureCollection> ParseInternal(const rapidjson::Value& document) override;
-        std::optional<FailureCollection> ValidateInternal() const override;
+        TransformResult Parse(const rapidjson::Value& document) override;
+        TransformResult Validate() const override;
     };
 
     namespace internal {
@@ -65,15 +65,15 @@ namespace rapidoson {
     protected:
     static_assert(JsonTypeSet<Ts...>::Unique(), "JsonTypes must be unique");
 
-        FailureCollection ParseInternal(const rapidjson::Value& document) override {
+        TransformResult Parse(const rapidjson::Value& document) override {
             return internal::ParseHelper<std::variant<Ts...>, Ts...>::ParseType(document, &data_);
         }
 
         template <typename U>
-        FailureCollection ParseType(const rapidjson::Value& document) {
+        TransformResult ParseType(const rapidjson::Value& document) {
         }
 
-        FailureCollection ValidateInternal() const override;
+        TransformResult Validate() const override;
 
     private:
         std::variant<Ts...> data_;

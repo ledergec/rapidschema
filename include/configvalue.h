@@ -41,7 +41,7 @@ namespace rapidjson {
 
 namespace rapidoson {
 
-    template<typename T, typename ...Constraints>
+    template<typename T, template<typename> class ... Constraints>
     class ConfigValue : public Config {
     public:
         ConfigValue() = default;
@@ -57,8 +57,8 @@ namespace rapidoson {
             return t_;
         }
 
-        template <typename Constraint>
-        Constraint & GetConstraint() {
+        template <template<typename> class Constraint>
+        Constraint<T> & GetConstraint() {
             return checker_.template Get<Constraint>();
         }
 

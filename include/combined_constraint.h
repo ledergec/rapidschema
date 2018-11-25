@@ -55,20 +55,25 @@ namespace rapidoson {
 
     }  // namespace internal
 
-    template<typename T, typename... Constraints>
+    template<typename T, template<typename> class ... Constraints>
     class CombinedConstraint {
     public:
+        CombinedConstraint() = default;
+
+        CombinedConstraint(std::tuple<Constraints<T>...> constraints)
+        : constraints_(constraints) {}
+
         TransformResult Check(const T& t) const {
-            return internal::TupleChecker<T, sizeof...(Constraints), Constraints...>::CheckEach(t, constraints_);
+            return internal::TupleChecker<T, sizeof...(Constraints), Constraints<T>...>::CheckEach(t, constraints_);
         }
 
-        template <typename Constraint>
-        Constraint& Get() {
-            return internal::TupleAccessor<Constraint, std::tuple<Constraints...>>::Get(constraints_);
+        template <template<typename> class Constraint>
+        Constraint<T>& Get() {
+            return internal::TupleAccessor<Constraint<T>, std::tuple<Constraints<T>...>>::Get(constraints_);
         }
 
     private:
-        std::tuple<Constraints...> constraints_;
+        std::tuple<Constraints<T>...> constraints_;
     };
 }  // namespace rapidoson
 

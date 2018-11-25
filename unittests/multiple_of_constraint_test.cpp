@@ -10,8 +10,12 @@ namespace rapidoson {
 
     class MultipleOfTest : public Test {
     public:
-        MultipleOf<3, int32_t> multiple_of_int;
-        MultipleOf<2, double> multiple_of_double;
+        MultipleOfTest()
+        : multiple_of_int(3)
+        , multiple_of_double(2.0) {}
+
+        MultipleOf<int32_t> multiple_of_int;
+        MultipleOf<double> multiple_of_double;
     };
 
     TEST_F(MultipleOfTest, GivenMultipleOf_WhenCheckingEqualValue_ThenParsedCorrectly) {
@@ -22,8 +26,10 @@ namespace rapidoson {
         ASSERT_THAT(multiple_of_int.Check(0), CheckSucceeded());
     }
 
-    TEST_F(MultipleOfTest, GivenMultipleOf_WhenCheckingNoMultipleValue_ThenParsedCorrectly) {
-        ASSERT_THAT(multiple_of_int.Check(5), CheckFailed("Expected: MultipleOf 3. Actual: 5"));
+    TEST_F(MultipleOfTest, GivenNoMultipleOf_WhenCheckingMultipleValue_ThenParsedCorrectly) {
+        auto result = multiple_of_int.Check(5);
+        std::cout << "do" << std::endl;
+        ASSERT_THAT(result, CheckFailed("Expected: MultipleOf 3. Actual: 5"));
     }
 
     TEST_F(MultipleOfTest, GivenMultipleOfFloat_WhenCheckingNoMultipleValue_ThenParsedCorrectly) {

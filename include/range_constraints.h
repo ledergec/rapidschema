@@ -15,60 +15,71 @@
 
 namespace rapidoson {
 
-    template<typename T, auto Min, class Enabled = void>
-    class Minimum;
-
-    template<typename T, auto Min>
-    class Minimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
+    template<typename T>
+    class Minimum {
     public:
+        Minimum() = default;
+
+        Minimum(const T& min)
+        : min_(min) {}
+
         std::optional<Failure> Check(const T& n) const {
-            if (n < Min) {
-                return Failure(fmt::format("Expected: >= {}. Actual: {}", Min, n));
+            if (n < min_) {
+                return Failure(fmt::format("Expected: >= {}. Actual: {}", min_, n));
             }
             return std::nullopt;
         }
+
+        void SetMin(const T& min) {
+            min_ = min;
+        }
+
+    private:
+        T min_;
     };
 
-    template<typename T, auto Min, class Enabled = void>
-    class ExclusiveMinimum;
+//    template<typename T, auto Min, class Enabled = void>
+//    class ExclusiveMinimum;
+//
+//    template<typename T, auto Min>
+//    class ExclusiveMinimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
+//    public:
+//        std::optional<Failure> Check(const T& n) const {
+//            if (n <= Min) {
+//                return Failure(fmt::format("Expected: > {}. Actual: {}", Min, n));
+//            }
+//            return std::nullopt;
+//        }
+//    };
+//
+//    template<typename T, auto Max, class Enabled = void>
+//    class Maximum;
+//
+//    template<typename T, auto Max>
+//    class Maximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
+//    public:
+//        std::optional<Failure> Check(const T& n) const {
+//            if (n > Max) {
+//                return Failure(fmt::format("Expected: <= {}. Actual: {}", Max, n));
+//            }
+//            return std::nullopt;
+//        }
+//    };
+//
+//    template<typename T, auto Max, class Enabled = void>
+//    class ExclusiveMaximum;
+//
+//    template<typename T, auto Max>
+//    class ExclusiveMaximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
+//    public:
+//        std::optional<Failure> Check(const T& n) const {
+//            if (n >= Max) {
+//                return Failure(fmt::format("Expected: < {}. Actual: {}", Max, n));
+//            }
+//            return std::nullopt;
+//        }
+//    };
 
-    template<typename T, auto Min>
-    class ExclusiveMinimum<T, Min, typename std::enable_if<std::is_integral<T>::value>::type> {
-    public:
-        std::optional<Failure> Check(const T& n) const {
-            if (n <= Min) {
-                return Failure(fmt::format("Expected: > {}. Actual: {}", Min, n));
-            }
-            return std::nullopt;
-        }
-    };
-
-    template<typename T, auto Max, class Enabled = void>
-    class Maximum;
-
-    template<typename T, auto Max>
-    class Maximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
-    public:
-        std::optional<Failure> Check(const T& n) const {
-            if (n > Max) {
-                return Failure(fmt::format("Expected: <= {}. Actual: {}", Max, n));
-            }
-            return std::nullopt;
-        }
-    };
-
-    template<typename T, auto Max, class Enabled = void>
-    class ExclusiveMaximum;
-
-    template<typename T, auto Max>
-    class ExclusiveMaximum<T, Max, typename std::enable_if<std::is_arithmetic<T>::value>::type> {
-    public:
-        std::optional<Failure> Check(const T& n) const {
-            if (n >= Max) {
-                return Failure(fmt::format("Expected: < {}. Actual: {}", Max, n));
-            }
-            return std::nullopt;
-        }
-    };}  // rapidjson
+}  // rapidjson
 
 #endif //RAPIDJSON_RANGE_CONSTRAINTS_H

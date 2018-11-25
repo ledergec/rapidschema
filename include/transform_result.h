@@ -86,8 +86,11 @@ namespace rapidoson {
     class TransformResult {
     public:
         TransformResult()
-                : failure_collection_(std::nullopt) {}
-                
+        : failure_collection_(std::nullopt) {}
+
+        explicit TransformResult(Failure failure)
+        : failure_collection_(failure) {}
+
         TransformResult(const std::optional<internal::FailureCollection>& failures)
                 : failure_collection_(failures) {}
 

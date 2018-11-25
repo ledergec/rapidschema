@@ -16,7 +16,11 @@ MATCHER(CheckSucceeded, "") {
 }
 
 MATCHER_P(CheckFailed, message, "") {
-    bool result = arg.has_value() == true && arg.value().message == message;
+    if (arg.has_value() == false) {
+        std::cout << "Expected failure but was success" << std::endl;
+        return false;
+    }
+    bool result = arg.value().message == message;
     if (result == false) {
         std::cout << arg << std::endl;
     }

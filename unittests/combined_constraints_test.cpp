@@ -12,7 +12,10 @@ namespace rapidoson {
 
     class CombinedConstraintTest : public Test {
     public:
-        CombinedConstraint<uint32_t, Minimum<uint32_t, 3>, MultipleOf<6, int32_t>> constraint;
+        CombinedConstraintTest()
+        : constraint(std::make_tuple(Minimum<uint32_t>(3), MultipleOf<uint32_t>(6))) {}
+
+        CombinedConstraint<uint32_t, Minimum, MultipleOf> constraint;
     };
 
     TEST_F(CombinedConstraintTest, GivenMultipleConstraintsSatisfied_WhenParsingValue_ThenParsedCorrectly) {

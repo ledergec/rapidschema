@@ -12,6 +12,7 @@
 
 #include "config.h"
 #include "rapidjson_type_to_string.h"
+#include "transform_result.h"
 
 namespace rapidoson {
 
@@ -22,15 +23,15 @@ namespace rapidoson {
                 , sub_configs_(sub_configs) {}
 
     protected:
-        FailureCollection ParseInternal(const rapidjson::Value & document) override {
+        TransformResult Parse(const rapidjson::Value & document) override {
             if (document.IsObject() == false) {
-                return FailureCollection(false, GetName(), fmt::format("Expected object but was: {} ",
-                        JsonTypeToString(document.GetType())));
+                return TransformResult(Failure(fmt::format("Expected object but was: {} ",
+                        JsonTypeToString(document.GetType()))));
             }
 
             for (auto config : sub_configs_) {
                 if (document.HasMember(config->GetName().c_str()) == false) {
-                    return FailureCollection(false, "", std::string("Missing member ").append(config->GetName()));
+                    return TransformResult(Failure(fmt::format("Missing member {}", config->GetName())));
                 }
 
                 auto result = config->Parse(document.FindMember(config->GetName().c_str())->value);
@@ -39,18 +40,16 @@ namespace rapidoson {
                 }
             }
 
-            return FailureCollection::FailureCollection();
+            return TransformResult();
         }
 
-        FailureCollection ValidateInternal() const override {
+        TransformResult Validate() const override {
+            TransformResult result;
             for (auto config : sub_configs_) {
-                auto result = config->Validate();
-                if (result.Success() == false) {
-                    return result;
-                }
+                result.Append(config->Validate());
             }
 
-            return FailureCollection::FailureCollection();
+            return result;
         }
 
     private:

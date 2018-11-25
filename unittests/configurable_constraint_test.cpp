@@ -8,8 +8,9 @@
 
 namespace rapidoson {
 
+    template <typename T>
     struct ConfigurableConstraint {
-        std::optional<Failure> Check(const float&) const {
+        std::optional<Failure> Check(const T&) const {
             return result;
         }
 
