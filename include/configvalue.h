@@ -24,15 +24,15 @@ namespace rapidjson {
         template<typename ValueType>
         struct TypeHelper<ValueType, std::string> {
 
-            static bool Is(const ValueType &v) { return v.IsString(); }
+            static bool Is(const ValueType& v) { return v.IsString(); }
 
-            static std::string Get(const ValueType &v) { return v.GetString(); }
+            static std::string Get(const ValueType& v) { return v.GetString(); }
 
-            static ValueType &Set(ValueType &v, const std::string data) {
+            static ValueType& Set(ValueType& v, const std::string data) {
                 return v.SetString(typename ValueType::StringRefType(data));
             }
 
-            static ValueType &Set(ValueType &v, const std::string data, typename ValueType::AllocatorType &a) {
+            static ValueType& Set(ValueType& v, const std::string data, typename ValueType::AllocatorType &a) {
                 return v.SetString(data, a);
             }
         };

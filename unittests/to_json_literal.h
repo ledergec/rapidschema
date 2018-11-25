@@ -1,0 +1,8 @@
+//
+// Created by root on 11/25/18.
+//
+
+#ifndef RAPIDOSON_TO_JSON_LITERAL_H
+#define RAPIDOSON_TO_JSON_LITERAL_H
+
+#endif //RAPIDOSON_TO_JSON_LITERAL_H
