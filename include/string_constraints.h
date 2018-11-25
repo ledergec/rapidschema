@@ -16,26 +16,42 @@
 
 namespace rapidoson {
 
-    template<size_t MinLen>
+    template<typename String = std::string>
     class MinLength {
     public:
-        static std::optional<Failure> Check(const std::string& str) {
-            if (str.size() < MinLen) {
-                return Failure(fmt::format("Expected std::string of length at least {}. Actual: {} of size {}", MinLen, str, str.size()));
+        MinLength() = default;
+
+        MinLength(size_t min_length)
+        : min_length_(min_length) {}
+
+        std::optional<Failure> Check(const std::string& str) {
+            if (str.size() < min_length_) {
+                return Failure(fmt::format("Expected std::string of length at least {}. Actual: {} of size {}", min_length_, str, str.size()));
             }
             return std::nullopt;
         }
+
+    private:
+        size_t min_length_;
     };
 
-    template<size_t MaxLen>
+    template<typename String = std::string>
     class MaxLength {
     public:
-        static std::optional<Failure> Check(const std::string& str) {
-            if (str.size() > MaxLen) {
-                return Failure(fmt::format("Expected std::string of length at most {}. Actual: {} of size {}", MaxLen, str, str.size()));
+        MaxLength() = default;
+
+        MaxLength(size_t max_length)
+        : max_length_(max_length) {}
+
+        std::optional<Failure> Check(const std::string& str) {
+            if (str.size() > max_length_) {
+                return Failure(fmt::format("Expected std::string of length at most {}. Actual: {} of size {}", max_length_, str, str.size()));
             }
             return std::nullopt;
         }
+
+    private:
+        size_t max_length_;
     };
 
 }  // rapidjson

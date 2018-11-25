@@ -21,11 +21,11 @@ namespace rapidoson {
         ConfigValue<float, ConfigurableConstraint> value("leaf");
         value.GetConstraint<ConfigurableConstraint>().result = std::nullopt;
         auto result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
-//        ASSERT_THAT(result, TransformSucceeded());
-//
-//        value.GetConstraint<ConfigurableConstraint>().result = std::optional(Failure("message"));
-//        result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
-//        ASSERT_THAT(result, TransformFailed("message"));
+        ASSERT_THAT(result, TransformSucceeded());
+
+        value.GetConstraint<ConfigurableConstraint>().result = std::optional(Failure("message"));
+        result = TestValueConstraints<float, ConfigurableConstraint>(&value, 3.0f);
+        ASSERT_THAT(result, TransformFailed("message"));
     }
 
 }
