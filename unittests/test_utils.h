@@ -37,6 +37,14 @@ namespace rapidoson {
         return config->Parse(document);
     }
 
+    static TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
+        rapidjson::Document document;
+        rapidjson::ParseResult result = document.Parse(json.c_str());
+        EXPECT_FALSE(result.IsError());
+        EXPECT_TRUE(document.HasMember("leaf"));
+        return config->Parse(document["leaf"]);
+    }
+
     template <typename T>
     static TransformResult ParseLeaf(const T& t, Config * config) {
         auto leaf_str = CreateLeafString(t);
