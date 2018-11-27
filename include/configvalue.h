@@ -17,27 +17,7 @@
 #include "config.h"
 #include "rapidjson_type_to_string.h"
 #include "transform_result.h"
-#include "type_name.h"
-
-namespace rapidjson {
-    namespace internal {
-        template<typename ValueType>
-        struct TypeHelper<ValueType, std::string> {
-
-            static bool Is(const ValueType& v) { return v.IsString(); }
-
-            static std::string Get(const ValueType& v) { return v.GetString(); }
-
-            static ValueType& Set(ValueType& v, const std::string data) {
-                return v.SetString(typename ValueType::StringRefType(data));
-            }
-
-            static ValueType& Set(ValueType& v, const std::string data, typename ValueType::AllocatorType &a) {
-                return v.SetString(data, a);
-            }
-        };
-    }
-}
+#include "type_properties.h"
 
 namespace rapidoson {
 
@@ -71,16 +51,17 @@ namespace rapidoson {
         }
 
         TransformResult Parse(const rapidjson::Value& document) override {
-            if (document.Is<T>() == false) {
+            if (TypeProperties<T>::IsType(document) == false) {
                 rapidjson::StringBuffer buffer;
                 rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
                 document.Accept(writer);
                 return std::optional<internal::FailureCollection>(
                         Failure(fmt::format("Expected type: {}. Actual value was: {}",
-                                TypeName<T>::name, buffer.GetString())));
+                                            TypeProperties<T>::name,
+                                            buffer.GetString())));
             }
 
-            t_ = document.Get<T>();
+            t_ = TypeProperties<T>::FromJson(document);
 
             return TransformResult();
         }

@@ -10,22 +10,22 @@ namespace rapidoson {
 
     TEST(Int64ConfigValueTest, WhenParsingFloat_ThenFails) {
         auto result = TestLeafType<int64_t, float>(23.4);
-        ASSERT_THAT(result, TransformFailed("Expected type: int64. Actual value was: 23.4"));
+        ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: 23.4"));
     }
 
     TEST(Int64ConfigValueTest, WhenParsingString_ThenFails) {
         auto result = TestLeafType<int64_t, std::string>("ein string");
-        ASSERT_THAT(result, TransformFailed("Expected type: int64. Actual value was: \"ein string\""));
+        ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: \"ein string\""));
     }
 
     TEST(Int64ConfigValueTest, WhenParsingNull_ThenFails) {
         auto result = TestLeafType<int64_t, std::nullptr_t>(nullptr);
-        ASSERT_THAT(result, TransformFailed("Expected type: int64. Actual value was: null"));
+        ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: null"));
     }
 
     TEST(Int64ConfigValueTest, WhenParsingBool_ThenFails) {
         auto result = TestLeafType<int64_t, bool>(false);
-        ASSERT_THAT(result, TransformFailed("Expected type: int64. Actual value was: false"));
+        ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: false"));
     }
 
     TEST(Int64ConfigValueTest, WhenParsingOutOfLowerRange_ThenFails) {

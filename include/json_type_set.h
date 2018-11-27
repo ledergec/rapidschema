@@ -5,8 +5,7 @@
 #ifndef RAPIDJSON_JSON_TYPE_SET_H
 #define RAPIDJSON_JSON_TYPE_SET_H
 
-#include "json_type.h"
-#include "to_json_type.h"
+#include "type_properties.h"
 
 namespace rapidoson {
 
@@ -24,7 +23,8 @@ namespace rapidoson {
     public:
         template <typename T>
         static constexpr bool Contains() {
-            return ToJsonType<T>::value == ToJsonType<S>::value || JsonTypeSet<Ss...>::template Contains<T>();
+            return TypeProperties<T>::json_type == TypeProperties<S>::json_type ||
+                    JsonTypeSet<Ss...>::template Contains<T>();
         }
 
         static constexpr bool Unique() {
