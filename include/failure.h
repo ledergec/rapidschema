@@ -13,15 +13,26 @@ namespace rapidoson {
         Failure() = default;
 
         explicit Failure(const std::string& mes)
-        : message(mes)
-        , path() {}
+        : message_(mes) {}
 
-        std::string message;
-        std::string path;
+        const std::string& GetPath() const {
+            return path_;
+        }
+
+        const void SetPath(const std::string& path) {
+            path_ = path;
+        }
+
+        const std::string& GetMessage() const {
+            return message_;
+        }
+
+        std::string path_;
+        std::string message_;
     };
 
     static bool operator==(const Failure & lhs, const Failure& rhs) {
-        return lhs.message == rhs.message && lhs.path == rhs.path;
+        return lhs.GetMessage() == rhs.GetMessage() && lhs.GetPath() == rhs.GetPath();
     }
 }
 

@@ -57,8 +57,8 @@ namespace rapidoson {
                 document.Accept(writer);
                 return std::optional<internal::FailureCollection>(
                         Failure(fmt::format("Expected type: {}. Actual value was: {}",
-                                            TypeProperties<T>::name,
-                                            buffer.GetString())));
+                                TypeProperties<T>::name,
+                                buffer.GetString())));
             }
 
             t_ = TypeProperties<T>::FromJson(document);
@@ -72,7 +72,8 @@ namespace rapidoson {
 
     private:
         ConfigValue(const std::string& name, ValueChecker&& checker)
-        : checker_(std::forward<ValueChecker>(checker)) {}
+        : Config(name)
+        , checker_(std::forward<ValueChecker>(checker)) {}
 
         T t_;
         ValueChecker checker_;

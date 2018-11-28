@@ -14,7 +14,7 @@
 namespace rapidoson {
 
     static std::ostream &operator<<(std::ostream &stream, const Failure& failure) {
-        stream << "Failure: [message = " << failure.message << ", path = " << failure.path << "]";
+        stream << "Failure: [message = " << failure.GetMessage() << ", path = " << failure.GetPath() << "]";
         return stream;
     }
 

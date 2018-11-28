@@ -22,25 +22,26 @@ namespace rapidoson {
                 : Config(name)
                 , sub_configs_(sub_configs) {}
 
-    protected:
         TransformResult Parse(const rapidjson::Value & document) override {
             if (document.IsObject() == false) {
-                return TransformResult(Failure(fmt::format("Expected object but was: {} ",
+                TransformResult(Failure(fmt::format("Expected object but was: {} ",
                         JsonTypeToString(document.GetType()))));
             }
 
+            TransformResult result;
             for (auto config : sub_configs_) {
                 if (document.HasMember(config->GetName().c_str()) == false) {
-                    return TransformResult(Failure(fmt::format("Missing member {}", config->GetName())));
+                    result.Append(Failure(fmt::format("Missing member {}", config->GetName())));
                 }
 
-                auto result = config->Parse(document.FindMember(config->GetName().c_str())->value);
-                if (result.Success() == false) {
-                    return result;
+                auto tmp = config->Parse(document.FindMember(config->GetName().c_str())->value);
+                if (tmp.Success() == false) {
+                    tmp.AddPath(config->GetName());
+                    result.Append(tmp);
                 }
             }
 
-            return TransformResult();
+            return result;
         }
 
         TransformResult Validate() const override {

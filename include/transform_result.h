@@ -39,10 +39,10 @@ namespace rapidoson {
 
             void AddPath(const std::string& path) {
                 for (auto& failure : failures_) {
-                    if (failure.path.empty()) {
-                        failure.path = path;
+                    if (failure.GetPath().empty()) {
+                        failure.SetPath(path);
                     } else {
-                        failure.path = path + "." + failure.path;
+                        failure.SetPath(path + "." + failure.GetPath());
                     }
                 }
             }
