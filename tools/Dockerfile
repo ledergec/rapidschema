@@ -9,6 +9,7 @@ RUN         apt-get update \
 		emacs \
 		git \
 		sudo \
+		valgrind \
 		wget && \
 		apt-get clean && \
 		rm -rf /var/lib/apt/lists/*
