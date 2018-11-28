@@ -4,6 +4,8 @@ option(test "Build all tests." OFF) # Makes boolean 'test' available.
 
 project (rapidoson)
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-function -Wno-unused-local-typedefs -Werror")
+
 include_directories(extern/rapidjson/include)
 include_directories(extern/fmt/include)
 include_directories(include)
