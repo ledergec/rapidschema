@@ -38,7 +38,7 @@ namespace rapidoson {
             }
 
             void AddPath(const std::string& path) {
-                for (auto failure : failures_) {
+                for (auto& failure : failures_) {
                     if (failure.path.empty()) {
                         failure.path = path;
                     } else {
@@ -113,6 +113,12 @@ namespace rapidoson {
         
         void Append(const std::optional<Failure>& failure) {
             failure_collection_ = internal::Append(failure_collection_, failure);
+        }
+
+        void AddPath(const std::string& path) {
+            if (failure_collection_.has_value()) {
+                failure_collection_.value().AddPath(path);
+            }
         }
     private:
         std::optional<internal::FailureCollection> failure_collection_;
