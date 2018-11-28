@@ -5,6 +5,7 @@
 #ifndef RAPIDOSON_OSTREAM_OPERATORS_H
 #define RAPIDOSON_OSTREAM_OPERATORS_H
 
+#include <iostream>
 #include <optional>
 
 #include "failure.h"
@@ -12,12 +13,18 @@
 
 namespace rapidoson {
 
+    static std::ostream &operator<<(std::ostream &stream, const Failure& failure) {
+        stream << "Failure: [message = " << failure.message << ", path = " << failure.path << "]";
+        return stream;
+    }
+
     static std::ostream &operator<<(std::ostream &stream, const std::optional<Failure>& failure) {
         if (failure.has_value()) {
-            stream << "Failure: [message = " << failure.value().message << ", path = " << failure.value().path << "]";
+            stream << failure.value();
         } else {
             stream << "Success";
         }
+        return stream;
     }
 
     static std::ostream &operator<<(std::ostream &stream, const TransformResult& result) {
@@ -29,6 +36,7 @@ namespace rapidoson {
                 stream << failure << std::endl;
             }
         }
+        return stream;
     }
 
 }
