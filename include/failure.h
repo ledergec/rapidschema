@@ -10,18 +10,18 @@
 namespace rapidoson {
 
     struct Failure {
-        Failure() {}
+        Failure() = default;
 
-        explicit Failure(const std::string& mes) {
-            message = mes;
-        }
+        explicit Failure(const std::string& mes)
+        : message(mes)
+        , path() {}
 
         std::string message;
         std::string path;
     };
 
     static bool operator==(const Failure & lhs, const Failure& rhs) {
-        return lhs.message == rhs.message && rhs.path == rhs.path;
+        return lhs.message == rhs.message && lhs.path == rhs.path;
     }
 }
 
