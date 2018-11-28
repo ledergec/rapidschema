@@ -15,6 +15,7 @@
 
 std::ostream& operator<<(std::ostream& stream, const std::chrono::milliseconds& milliseconds) {
     stream << milliseconds.count() << " [ms]";
+    return stream;
 }
 
 namespace rapidoson {
