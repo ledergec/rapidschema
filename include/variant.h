@@ -71,6 +71,7 @@ namespace rapidoson {
 
         template <typename U>
         TransformResult ParseType(const rapidjson::Value& document) {
+            return TransformResult();
         }
 
         TransformResult Validate() const override;
