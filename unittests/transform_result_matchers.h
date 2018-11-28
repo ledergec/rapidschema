@@ -20,7 +20,7 @@ MATCHER_P(CheckFailed, message, "") {
         std::cout << "Expected failure but was success" << std::endl;
         return false;
     }
-    bool result = arg.value().message == message;
+    bool result = arg.value().GetMessage() == message;
     if (result == false) {
         std::cout << arg << std::endl;
     }
@@ -36,7 +36,7 @@ MATCHER_P(TransformFailed, message, "") {
         std::cout << "Expected one failure, but was " << arg.GetFailures().size() << std::endl;
         return false;
     }
-    if(arg.GetFailures()[0].message.compare(message) != 0) {
+    if(arg.GetFailures()[0].GetMessage().compare(message) != 0) {
         std::cout << "Expected message: \"" << message << "\" actual message: \"" << arg.GetFailures()[0] << "\"" << std::endl;
         return false;
     }

@@ -12,6 +12,10 @@ namespace rapidoson {
     struct Failure {
         Failure() = default;
 
+        explicit Failure(const std::string& path, const std::string& mes)
+                : path_(path)
+                , message_(mes) {}
+
         explicit Failure(const std::string& mes)
         : message_(mes) {}
 

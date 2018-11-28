@@ -123,6 +123,11 @@ namespace rapidoson {
     private:
         std::optional<internal::FailureCollection> failure_collection_;
     };
+
+    static bool operator== (const TransformResult& lhs, const TransformResult& rhs) {
+        return lhs.GetFailures() == rhs.GetFailures();
+    }
+
 };  // rapidjson
 
 #endif //RAPIDJSON_FAILURE_COLLECTION_H

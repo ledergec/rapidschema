@@ -56,14 +56,14 @@ namespace rapidoson {
 
     TEST_F(TransformResultTest, WhenPathAddedToEmptyPath_ThenNoDotAdded) {
         Failure expected = failure1_;
-        expected.path = "path";
+        expected.SetPath("path");
         result_.AddPath("path");
         ASSERT_THAT(result_.GetFailures(), ElementsAre(expected));
     }
 
     TEST_F(TransformResultTest, WhenPathAddedToNonEmptyPath_ThenDotAdded) {
         Failure expected = failure1_;
-        expected.path = "second.first";
+        expected.SetPath("second.first");
 
         result_.AddPath("first");
         result_.AddPath("second");

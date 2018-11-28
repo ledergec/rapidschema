@@ -31,7 +31,8 @@ namespace rapidoson {
             TransformResult result;
             for (auto config : sub_configs_) {
                 if (document.HasMember(config->GetName().c_str()) == false) {
-                    result.Append(Failure(fmt::format("Missing member {}", config->GetName())));
+                    result.Append(Failure(fmt::format("Missing member: \"{}\"", config->GetName())));
+                    continue;
                 }
 
                 auto tmp = config->Parse(document.FindMember(config->GetName().c_str())->value);

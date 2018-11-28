@@ -13,7 +13,6 @@ include_directories(include)
 add_subdirectory(extern/googletest)
 add_subdirectory(extern/rapidjson)
 add_subdirectory(extern/fmt)
-add_subdirectory(examples)
 add_subdirectory(unittests)
 
 if (test)
