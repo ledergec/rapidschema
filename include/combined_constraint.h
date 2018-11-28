@@ -38,7 +38,7 @@ namespace rapidoson {
 
         template <template<typename> class Constraint>
         Constraint<T>& Get() {
-            return internal::TupleAccessor<Constraint<T>, std::tuple<Constraints<T>...>>::Get(constraints_);
+            return std::get<Constraint<T>>(constraints_);
         }
 
     private:

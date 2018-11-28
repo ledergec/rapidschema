@@ -18,24 +18,6 @@ namespace rapidoson {
 
     namespace internal {
 
-        template<typename T, typename Tuple, std::size_t I = 0, class Enabled = void>
-        struct TupleAccessor {
-            static T& Get(Tuple& tuple) {
-                return std::get<I + 1>(tuple);
-            }
-        };
-
-        template<typename T, typename Tuple, std::size_t I>
-        struct TupleAccessor<T, Tuple, I, typename std::enable_if<std::is_same<T, typename std::tuple_element<I, Tuple>::type>::value>::type> {
-            static T& Get(Tuple& tuple) {
-                return std::get<I>(tuple);
-            }
-        };
-
-        template<typename T, typename Tuple, std::size_t I>
-        struct TupleAccessor<T, Tuple, I, typename std::enable_if<I == std::tuple_size<Tuple>::value>::type> {
-        };
-
         template <typename Tuple, typename F, std::size_t ...Indices>
         constexpr void ForEachImpl(Tuple&& tuple, F&& f, std::index_sequence<Indices...>) {
             using swallow = int[];
