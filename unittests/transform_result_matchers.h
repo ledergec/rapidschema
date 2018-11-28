@@ -32,8 +32,15 @@ MATCHER(TransformSucceeded, "") {
 }
 
 MATCHER_P(TransformFailed, message, "") {
-    return arg.GetFailures().size() == 1 &&
-            arg.GetFailures()[0].message == message;
+    if (arg.GetFailures().size() != 1) {
+        std::cout << "Expected one failure, but was " << arg.GetFailures().size() << std::endl;
+        return false;
+    }
+    if(arg.GetFailures()[0].message.compare(message) != 0) {
+        std::cout << "Expected message: \"" << message << "\" actual message: \"" << arg.GetFailures()[0] << "\"" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 #endif //RAPIDOSON_TRANSFORM_RESULT_MATCHERS_H
