@@ -29,7 +29,8 @@ namespace rapidoson {
             }
 
             void Append(const FailureCollection& other) {
-                std::copy(other.GetFailures().begin(), other.GetFailures().end(), std::back_inserter(failures_));
+                auto other_vector = other.GetFailures();
+                std::copy(other_vector.begin(), other_vector.end(), std::back_inserter(failures_));
             }
 
             void Append(const Failure& other) {
