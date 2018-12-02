@@ -10,13 +10,13 @@
 #include <type_traits>
 #include <variant>
 
-#include <rapidjson/document.h>
-
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
+#include <rapidjson/document.h>
+
 #include "rapidschema/configvalue.h"
-#include "rapidschema/json_type_set.h"
+#include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/to_json_literal.h"
 
 namespace rapidschema {

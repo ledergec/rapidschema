@@ -13,7 +13,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/meta_utils.h"
+#include "rapidschema/meta/meta_utils.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {

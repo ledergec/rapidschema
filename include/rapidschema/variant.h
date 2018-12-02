@@ -12,7 +12,7 @@
 #include <utility>
 
 #include "rapidschema/configvalue.h"
-#include "rapidschema/json_type_set.h"
+#include "rapidschema/meta/json_type_set.h"
 
 namespace rapidschema {
 
@@ -111,7 +111,7 @@ class Variant : public Config {
   explicit Variant(const std::string& name)
       : Config(name) {}
 
-  static_assert(JsonTypeSet<typename ConfigValues::Type...>::Unique(), "JsonTypes must be unique");
+  static_assert(internal::JsonTypeSet<typename ConfigValues::Type...>::Unique(), "JsonTypes must be unique");
 
   TransformResult Parse(const rapidjson::Value& document) override {
     auto result = internal::ParseHelper<Tuple, sizeof...(ConfigValues)>::ParseType(document, &unique_tuple_);
