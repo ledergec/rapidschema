@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <optional>
 #include <string>
-#include <variant>
+#include <tuple>
 
 #include "configvalue.h"
 #include "json_type_set.h"
@@ -17,73 +17,124 @@ namespace rapidoson {
 
     namespace internal {
 
-        template <typename V, typename... Ts>
-        struct ParseHelper;
+        static const int INVALID_VARIANT_INDEX = -1;
 
-        template <typename V, typename T, typename... Ts>
-        struct ParseHelper<V, T, Ts...> {
-            static TransformResult ParseType(const rapidjson::Value &document, V *v) {
-                ConfigValue<T> value;
-                auto res = value.Parse(document);
+        template <typename Tuple, size_t Index>
+        struct ParseHelper {
+            static std::pair<int, TransformResult> ParseType(const rapidjson::Value &document, Tuple *tuple) {
+                auto res = std::get<Index - 1>(*tuple).Parse(document);
                 if (res.Success()) {
-                    *v = value;
-                    return TransformResult();
+                    return {Index -1, TransformResult()};
                 } else {
-                    return ParseHelper<V, Ts...>::ParseType(document, v);
+                    return ParseHelper<Tuple, Index - 1>::ParseType(document, tuple);
                 }
             }
         };
 
-        template <typename V>
-        struct ParseHelper<V> {
-            static TransformResult ParseType(const rapidjson::Value &document, V *v) {
-                (void) document;
-                (void) v;
-                return TransformResult(Failure(fmt::format("No type in variant matched. Actual type: {}",
-                        JsonTypeToString(document.GetType()))));
+        template <typename Tuple>
+        struct ParseHelper<Tuple, 0> {
+            static std::pair<int, TransformResult> ParseType(const rapidjson::Value &document, Tuple *tuple) {
+                (void) tuple;
+                return {-1, TransformResult(Failure(fmt::format("No type in variant matched. Actual type: {}",
+                        JsonTypeToString(document.GetType()))))};
             }
         };
 
+        template <typename Tuple, size_t Index>
+        using BasicVariantType = typename std::tuple_element<Index, Tuple>::type::Type;
+
+        template <typename Tuple, typename T, size_t Index, class Enabled = void>
+        struct ConfigTypeHelper;
+
+        template <typename Tuple, typename T, size_t I>
+        struct ConfigTypeHelper<
+                Tuple,
+                T,
+                I,
+                typename std::enable_if<std::is_same<T, BasicVariantType<Tuple, I - 1>>::value>::type> {
+            using Type = typename std::tuple_element<I - 1, Tuple>::type;
+            static constexpr size_t Index = I - 1;
+        };
+
+        template <typename Tuple, typename T, size_t I>
+        struct ConfigTypeHelper<
+                Tuple,
+                T,
+                I,
+                typename std::enable_if<!std::is_same<T, BasicVariantType<Tuple, I - 1>>::value>::type> {
+            using Type = typename ConfigTypeHelper<Tuple, T, I - 1>::Type;
+            static constexpr size_t Index = ConfigTypeHelper<Tuple, T, I - 1>::Index;
+        };
+
+        template <typename Tuple, typename T>
+        struct ConfigTypeHelper<
+                Tuple,
+                T,
+                0> {};
+
+        template <typename Tuple, size_t Index>
+        struct ConfigValidateHelper {
+            static TransformResult Validate(const Tuple & tuple, int32_t index) {
+                if (index == Index - 1) {
+                    return std::get<Index - 1>(tuple).Validate();
+                } else {
+                    return ConfigValidateHelper<Tuple, Index - 1>::Validate(tuple, index);
+                }
+            }
+        };
+
+        template <typename Tuple>
+        struct ConfigValidateHelper<Tuple, 0> {
+            static TransformResult Validate(const Tuple & tuple, int32_t index) {
+                assert(false);
+                return TransformResult();
+            }
+        };
     }
 
-    template<typename... Ts>
-    class Variant;
-
-    template<typename... Ts>
-    class Variant<ConfigValue<Ts>...> : public Config {
+    template<typename... ConfigValues>
+    class Variant : public Config {
     public:
         Variant(const std::string& name)
                 : Config(name) {}
 
-        static_assert(JsonTypeSet<Ts...>::Unique(), "JsonTypes must be unique");
+        static_assert(JsonTypeSet<typename ConfigValues::Type...>::Unique(), "JsonTypes must be unique");
 
         TransformResult Parse(const rapidjson::Value& document) override {
-            return internal::ParseHelper<std::variant<ConfigValue<Ts>...>, Ts...>::ParseType(document, &data_);
+            auto result = internal::ParseHelper<std::tuple<ConfigValues...>,
+                    sizeof...(ConfigValues)>::ParseType(document, &data_);
+            variant_index_ = result.first;
+            return result.second;
+        }
+
+        template<typename T>
+        using ConfigTypeOf = internal::ConfigTypeHelper<std::tuple<ConfigValues...>, T, sizeof...(ConfigValues)>;
+
+        template <typename T>
+        const typename ConfigTypeOf<T>::Type & GetVariant() const {
+            return std::get<ConfigTypeOf<T>::Index>(data_);
         }
 
         template <typename T>
-        ConfigValue<T>& GetVariant() {
-            return std::get<ConfigValue<T>>(data_);
-        }
-
-        template <typename T>
-        const ConfigValue<T>& GetVariant() const {
-            return std::get<ConfigValue<T>>(data_);
+        typename ConfigTypeOf<T>::Type & GetVariant() {
+            return std::get<ConfigTypeOf<T>::Index>(data_);
         }
 
         template <typename T>
         bool Is() {
-            return std::holds_alternative<ConfigValue<T>>(data_);
+            return ConfigTypeOf<T>::Index == variant_index_;
         }
 
+
         TransformResult Validate() const override {
-            return std::visit([](const auto & value) {
-                return value.Validate();
-            }, data_);
+            assert(variant_index_ != internal::INVALID_VARIANT_INDEX);
+            return internal::ConfigValidateHelper<std::tuple<ConfigValues...>, sizeof...(ConfigValues)>::Validate(data_, variant_index_);
         }
 
     private:
-        std::variant<ConfigValue<Ts>...> data_;
+        int32_t variant_index_ = internal::INVALID_VARIANT_INDEX;
+        // must be a tuple because each config value and its constraints must be stored
+        std::tuple<ConfigValues...> data_;
 };
 
 }  // rapidoson

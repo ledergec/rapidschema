@@ -35,13 +35,19 @@ namespace rapidoson {
         ConfigValue() = default;
 
         ConfigValue(const std::string& name)
-                : Config(name) {}
+        : Config(name) {}
+
+        using Type = T;
+
+        ConfigValue<T, Constraints...>& operator= (T t) {
+            t_ = t;
+        }
 
         operator T() {
             return t_;
         }
 
-        const T& Get() {
+        const T& Get() const {
             return t_;
         }
 

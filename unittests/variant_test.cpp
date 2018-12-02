@@ -6,6 +6,7 @@
 
 #include "configvalue.h"
 #include "range_constraints.h"
+#include "string_constraints.h"
 #include "test_utils.h"
 #include "transform_result_matchers.h"
 #include "variant.h"
@@ -35,13 +36,18 @@ namespace rapidoson {
         ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
     }
 
-//    TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenParsingVariant_ThenConstraintsApplied) {
-//        Variant<ConfigValue<int32_t, Minimum>,
-//                ConfigValue<std::string>> variant("variant");
-//        auto result = ParseLeaf<std::string>("hallo", &variant);
-//        ASSERT_THAT(result, TransformSucceeded());
-//        ASSERT_FALSE(variant.Is<int32_t>());
-//        ASSERT_TRUE(variant.Is<std::string>());
-//        ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
-//    }
+    TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenParsingVariant_ThenConstraintsApplied) {
+        Variant<ConfigValue<int32_t, Minimum>,
+                ConfigValue<std::string, MaxLength>> variant("variant");
+        auto result = ParseLeaf<std::string>("hallo", &variant);
+        ASSERT_THAT(result, TransformSucceeded());
+        ASSERT_FALSE(variant.Is<int32_t>());
+        ASSERT_TRUE(variant.Is<std::string>());
+        ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
+
+        variant.GetVariant<std::string>().GetConstraint<MaxLength>().SetMaxLength(4);
+
+        result = variant.Validate();
+        ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. Actual: length 5 string: \"hallo\""));
+    }
 }
