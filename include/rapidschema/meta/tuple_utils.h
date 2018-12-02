@@ -2,8 +2,8 @@
 // Created by root on 11/28/18.
 //
 
-#ifndef INCLUDE_RAPIDSCHEMA_META_META_UTILS_H_
-#define INCLUDE_RAPIDSCHEMA_META_META_UTILS_H_
+#ifndef INCLUDE_RAPIDSCHEMA_META_TUPLE_UTILS_H_
+#define INCLUDE_RAPIDSCHEMA_META_TUPLE_UTILS_H_
 
 #include <iostream>
 #include <optional>
@@ -35,4 +35,4 @@ void ForEach(Tuple &&tuple, F &&f) {
 }  // namespace internal
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_META_META_UTILS_H_
+#endif  // INCLUDE_RAPIDSCHEMA_META_TUPLE_UTILS_H_
