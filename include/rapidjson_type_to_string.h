@@ -29,6 +29,7 @@ namespace rapidoson {
                 return "number";
             default:
                 assert(false);
+                return "";
         }
     }
 
