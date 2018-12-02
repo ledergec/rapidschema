@@ -36,9 +36,37 @@ namespace rapidoson {
         ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
     }
 
-    TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenParsingVariant_ThenConstraintsApplied) {
+    TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_ThenConstraintsApplied) {
         Variant<ConfigValue<int32_t, Minimum>,
                 ConfigValue<std::string, MaxLength>> variant("variant");
+        auto result = ParseLeaf<std::string>("hallo", &variant);
+        ASSERT_THAT(result, TransformSucceeded());
+        ASSERT_TRUE(variant.Is<std::string>());
+
+        result = variant.Validate();
+        ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0. Actual: length 5 string: \"hallo\""));
+    }
+
+    TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidatingVariant_ThenConstraintsApplied) {
+        Variant<ConfigValue<int32_t, Minimum>,
+                ConfigValue<std::string, MaxLength>> variant("variant");
+        auto result = ParseLeaf<std::string>("hallo", &variant);
+        ASSERT_THAT(result, TransformSucceeded());
+        ASSERT_TRUE(variant.Is<std::string>());
+
+        variant.GetVariant<std::string>().GetConstraint<MaxLength>().SetMaxLength(4);
+
+        result = variant.Validate();
+        ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. Actual: length 5 string: \"hallo\""));
+    }
+
+
+    TEST(VariantTest, WhenParsingVariantWithConstraintsCreated_ThenConstraintsApplied) {
+        auto variant = MakeVariant(
+                "variant",
+                MakeValue<int32_t, Minimum>("variant", Minimum(10)),
+                MakeValue<std::string, MaxLength>("variant", MaxLength(4)));
+
         auto result = ParseLeaf<std::string>("hallo", &variant);
         ASSERT_THAT(result, TransformSucceeded());
         ASSERT_FALSE(variant.Is<int32_t>());

@@ -93,6 +93,12 @@ namespace rapidoson {
     }
 
     template<typename... ConfigValues>
+    class Variant;
+
+    template<typename... ConfigValues>
+    Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values);
+
+    template<typename... ConfigValues>
     class Variant : public Config {
     public:
         Variant(const std::string& name)
@@ -135,7 +141,18 @@ namespace rapidoson {
         int32_t variant_index_ = internal::INVALID_VARIANT_INDEX;
         // must be a tuple because each config value and its constraints must be stored
         std::tuple<ConfigValues...> data_;
-};
+
+        Variant(const std::string& name, std::tuple<ConfigValues...> && data)
+                : Config(name)
+                , data_(std::forward<std::tuple<ConfigValues...>>(data)) {}
+
+        friend Variant<ConfigValues...> MakeVariant<ConfigValues...>(const std::string& name, ConfigValues&&... config_values);
+    };
+
+    template<typename... ConfigValues>
+    Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values) {
+        return Variant<ConfigValues...>(name, std::make_tuple<ConfigValues...>(std::forward<ConfigValues>(config_values)...));
+    }
 
 }  // rapidoson
 
