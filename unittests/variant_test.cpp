@@ -61,11 +61,11 @@ namespace rapidoson {
     }
 
 
-    TEST(VariantTest, WhenParsingVariantWithConstraintsCreated_ThenConstraintsApplied) {
+    TEST(VariantTest, WhenParsingVariantWithCreatedWithMakeVariant_ThenConstraintsApplied) {
         auto variant = MakeVariant(
                 "variant",
-                MakeValue<int32_t, Minimum>("variant", Minimum(10)),
-                MakeValue<std::string, MaxLength>("variant", MaxLength(4)));
+                MakeVariantValue<int32_t, Minimum>(Minimum(10)),
+                MakeVariantValue<std::string, MaxLength>(MaxLength(4)));
 
         auto result = ParseLeaf<std::string>("hallo", &variant);
         ASSERT_THAT(result, TransformSucceeded());

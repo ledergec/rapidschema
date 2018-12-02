@@ -131,7 +131,6 @@ namespace rapidoson {
             return ConfigTypeOf<T>::Index == variant_index_;
         }
 
-
         TransformResult Validate() const override {
             assert(variant_index_ != internal::INVALID_VARIANT_INDEX);
             return internal::ConfigValidateHelper<std::tuple<ConfigValues...>, sizeof...(ConfigValues)>::Validate(data_, variant_index_);
@@ -152,6 +151,11 @@ namespace rapidoson {
     template<typename... ConfigValues>
     Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values) {
         return Variant<ConfigValues...>(name, std::make_tuple<ConfigValues...>(std::forward<ConfigValues>(config_values)...));
+    }
+
+    template<typename T, template<typename> class ... Constraints>
+    ConfigValue<T, Constraints...> MakeVariantValue(Constraints<T>&&... constraints) {
+        return MakeValue("", std::forward<Constraints<T>>(constraints)...);
     }
 
 }  // rapidoson
