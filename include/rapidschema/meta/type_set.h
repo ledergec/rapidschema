@@ -5,14 +5,7 @@
 #ifndef INCLUDE_RAPIDSCHEMA_META_TYPE_SET_H_
 #define INCLUDE_RAPIDSCHEMA_META_TYPE_SET_H_
 
-#include <iostream>
-#include <optional>
-#include <string>
 #include <type_traits>
-
-#include <rapidjson/document.h>
-
-#include "rapidschema/transform_result.h"
 
 namespace rapidschema {
 namespace internal {
