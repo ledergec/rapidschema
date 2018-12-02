@@ -29,6 +29,7 @@ namespace rapidoson {
 
     template<typename T, template<typename> class ... Constraints>
     class ConfigValue : public Config {
+
         using ValueChecker = CombinedConstraint<T, Constraints...>;
 
     public:

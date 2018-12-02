@@ -100,6 +100,12 @@ namespace rapidoson {
 
     template<typename... ConfigValues>
     class Variant : public Config {
+
+        using Tuple = std::tuple<ConfigValues...>;
+
+        template<typename T>
+        using ConfigTypeOf = internal::ConfigTypeHelper<Tuple, T, sizeof...(ConfigValues)>;
+
     public:
         Variant(const std::string& name)
                 : Config(name) {}
@@ -107,23 +113,19 @@ namespace rapidoson {
         static_assert(JsonTypeSet<typename ConfigValues::Type...>::Unique(), "JsonTypes must be unique");
 
         TransformResult Parse(const rapidjson::Value& document) override {
-            auto result = internal::ParseHelper<std::tuple<ConfigValues...>,
-                    sizeof...(ConfigValues)>::ParseType(document, &data_);
+            auto result = internal::ParseHelper<Tuple, sizeof...(ConfigValues)>::ParseType(document, &unique_tuple_);
             variant_index_ = result.first;
             return result.second;
         }
 
-        template<typename T>
-        using ConfigTypeOf = internal::ConfigTypeHelper<std::tuple<ConfigValues...>, T, sizeof...(ConfigValues)>;
-
         template <typename T>
         const typename ConfigTypeOf<T>::Type & GetVariant() const {
-            return std::get<ConfigTypeOf<T>::Index>(data_);
+            return std::get<ConfigTypeOf<T>::Index>(unique_tuple_);
         }
 
         template <typename T>
         typename ConfigTypeOf<T>::Type & GetVariant() {
-            return std::get<ConfigTypeOf<T>::Index>(data_);
+            return std::get<ConfigTypeOf<T>::Index>(unique_tuple_);
         }
 
         template <typename T>
@@ -133,17 +135,17 @@ namespace rapidoson {
 
         TransformResult Validate() const override {
             assert(variant_index_ != internal::INVALID_VARIANT_INDEX);
-            return internal::ConfigValidateHelper<std::tuple<ConfigValues...>, sizeof...(ConfigValues)>::Validate(data_, variant_index_);
+            return internal::ConfigValidateHelper<Tuple, sizeof...(ConfigValues)>::Validate(unique_tuple_, variant_index_);
         }
 
     private:
         int32_t variant_index_ = internal::INVALID_VARIANT_INDEX;
         // must be a tuple because each config value and its constraints must be stored
-        std::tuple<ConfigValues...> data_;
+        Tuple unique_tuple_;
 
-        Variant(const std::string& name, std::tuple<ConfigValues...> && data)
+        Variant(const std::string& name, Tuple&& data)
                 : Config(name)
-                , data_(std::forward<std::tuple<ConfigValues...>>(data)) {}
+                , unique_tuple_(std::forward<Tuple>(data)) {}
 
         friend Variant<ConfigValues...> MakeVariant<ConfigValues...>(const std::string& name, ConfigValues&&... config_values);
     };
