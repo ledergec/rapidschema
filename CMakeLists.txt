@@ -6,9 +6,16 @@ project (rapidschema)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-function -Wno-unused-local-typedefs -Werror")
 
+include(cmake/cpplint.cmake)
+
+# add all source code directories
+cpplint_add_subdirectory(unittests)
+cpplint_add_subdirectory(include)
+
 include_directories(extern/rapidjson/include)
 include_directories(extern/fmt/include)
 include_directories(include)
+include_directories(unittests)
 
 add_subdirectory(extern/googletest)
 add_subdirectory(extern/rapidjson)

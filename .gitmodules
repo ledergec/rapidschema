@@ -7,3 +7,6 @@
 [submodule "extern/fmt"]
 	path = extern/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "extern/cpplint"]
+	path = extern/cpplint
+	url = https://github.com/cpplint/cpplint.git
