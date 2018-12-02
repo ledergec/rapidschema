@@ -11,7 +11,7 @@
 #include "transform_result_matchers.h"
 #include "variant.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     TEST(VariantTest, GivenSingleVariantNoConstraints_WhenParsingVariant_ThenVariantCanBeParsed) {
         Variant<ConfigValue<int32_t>> variant("variant");

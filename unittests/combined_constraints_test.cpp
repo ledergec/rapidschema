@@ -5,7 +5,7 @@
 #include "range_constraints.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     using testing::Test;
     using testing::UnorderedElementsAre;

@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_COMBINED_CONSTRAINT_H
-#define RAPIDJSON_COMBINED_CONSTRAINT_H
+#ifndef RAPIDSCHEMA_COMBINED_CONSTRAINT_H
+#define RAPIDSCHEMA_COMBINED_CONSTRAINT_H
 
 #include <iostream>
 #include <optional>
@@ -15,7 +15,7 @@
 #include "meta_utils.h"
 #include "transform_result.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template<typename T, template<typename> class ... Constraints>
     class CombinedConstraint;
@@ -58,6 +58,6 @@ namespace rapidoson {
     }
 
 
-}  // namespace rapidoson
+}  // namespace rapidschema
 
-#endif //RAPIDJSON_COMBINED_CONSTRAINT_H
+#endif //RAPIDSCHEMA_COMBINED_CONSTRAINT_H

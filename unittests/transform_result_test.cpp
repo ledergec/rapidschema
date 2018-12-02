@@ -2,7 +2,7 @@
 
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     using testing::Test;
     using testing::ElementsAre;

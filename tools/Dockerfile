@@ -29,6 +29,6 @@ RUN useradd -d /home/dev -ms /bin/bash -g root -G sudo -p dev dev
 RUN adduser dev sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 ENV HOME /home/dev
-RUN mkdir /home/dev/rapidoson
+RUN mkdir /home/dev/rapidschema
 USER dev
 WORKDIR /home/dev

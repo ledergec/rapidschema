@@ -1,1 +1,1 @@
-docker exec -it rapidoson-dev-container bash
+docker exec -it rapidschema-dev-container bash

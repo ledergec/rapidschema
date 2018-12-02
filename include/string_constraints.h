@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_STRING_CONSTRAINTS_H
-#define RAPIDJSON_STRING_CONSTRAINTS_H
+#ifndef RAPIDSCHEMA_STRING_CONSTRAINTS_H
+#define RAPIDSCHEMA_STRING_CONSTRAINTS_H
 
 #include <optional>
 #include <string>
@@ -14,7 +14,7 @@
 
 #include "failure.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template<typename String = std::string>
     class MinLength {
@@ -64,4 +64,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_STRING_CONSTRAINTS_H
+#endif //RAPIDSCHEMA_STRING_CONSTRAINTS_H

@@ -10,7 +10,7 @@
 #include "test_utils.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     TEST(StringConfigValueTest, WhenParsingFloat_ThenFails) {
         auto result = TestLeafType<std::string, float>(23.4);

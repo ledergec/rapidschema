@@ -1,1 +1,1 @@
-docker stop rapidoson-dev-container
+docker stop rapidschema-dev-container

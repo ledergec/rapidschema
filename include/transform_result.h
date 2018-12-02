@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_FAILURE_COLLECTION_H
-#define RAPIDJSON_FAILURE_COLLECTION_H
+#ifndef RAPIDSCHEMA_FAILURE_COLLECTION_H
+#define RAPIDSCHEMA_FAILURE_COLLECTION_H
 
 #include <cassert>
 #include <optional>
@@ -12,7 +12,7 @@
 
 #include "failure.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     namespace internal {
 
@@ -130,4 +130,4 @@ namespace rapidoson {
 
 };  // rapidjson
 
-#endif //RAPIDJSON_FAILURE_COLLECTION_H
+#endif //RAPIDSCHEMA_FAILURE_COLLECTION_H

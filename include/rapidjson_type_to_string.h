@@ -2,14 +2,14 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_VALUEPARSER_H
-#define RAPIDJSON_VALUEPARSER_H
+#ifndef RAPIDSCHEMA_VALUEPARSER_H
+#define RAPIDSCHEMA_VALUEPARSER_H
 
 #include <string>
 
 #include "rapidjson/document.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     static std::string JsonTypeToString(rapidjson::Type type) {
         switch (type) {
@@ -35,4 +35,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_VALUEPARSER_H
+#endif //RAPIDSCHEMA_VALUEPARSER_H

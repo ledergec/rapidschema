@@ -2,7 +2,7 @@
 
 #include "json_type_set.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     using IntStringBool = JsonTypeSet<int, std::string, bool>;
     using IntFloatBool = JsonTypeSet<int, float, bool>;

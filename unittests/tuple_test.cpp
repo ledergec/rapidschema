@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-namespace rapidoson {
+namespace rapidschema {
 
     class A {};
     class B {};

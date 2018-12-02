@@ -2,15 +2,15 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_TO_JSON_TYPE_H
-#define RAPIDJSON_TO_JSON_TYPE_H
+#ifndef RAPIDSCHEMA_TO_JSON_TYPE_H
+#define RAPIDSCHEMA_TO_JSON_TYPE_H
 
 #include <string>
 #include <type_traits>
 
 #include <rapidjson/document.h>
 
-namespace rapidoson {
+namespace rapidschema {
 
     // json types as specified by the json schema draft v6
     enum struct JsonType {
@@ -155,4 +155,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_TO_JSON_TYPE_H
+#endif //RAPIDSCHEMA_TO_JSON_TYPE_H

@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_VARIANT_H
-#define RAPIDJSON_VARIANT_H
+#ifndef RAPIDSCHEMA_VARIANT_H
+#define RAPIDSCHEMA_VARIANT_H
 
 #include <assert.h>
 #include <optional>
@@ -13,7 +13,7 @@
 #include "configvalue.h"
 #include "json_type_set.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     namespace internal {
 
@@ -160,6 +160,6 @@ namespace rapidoson {
         return MakeValue("", std::forward<Constraints<T>>(constraints)...);
     }
 
-}  // rapidoson
+}  // rapidschema
 
-#endif //RAPIDJSON_VARIANT_H
+#endif //RAPIDSCHEMA_VARIANT_H

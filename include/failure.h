@@ -2,12 +2,12 @@
 // Created by root on 11/23/18.
 //
 
-#ifndef RAPIDOSON_FAILURE_H
-#define RAPIDOSON_FAILURE_H
+#ifndef RAPIDSCHEMA_FAILURE_H
+#define RAPIDSCHEMA_FAILURE_H
 
 #include <string>
 
-namespace rapidoson {
+namespace rapidschema {
 
     struct Failure {
         Failure() = default;
@@ -40,4 +40,4 @@ namespace rapidoson {
     }
 }
 
-#endif //RAPIDOSON_FAILURE_H
+#endif //RAPIDSCHEMA_FAILURE_H

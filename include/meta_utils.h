@@ -2,8 +2,8 @@
 // Created by root on 11/28/18.
 //
 
-#ifndef RAPIDOSON_META_HELPER_H
-#define RAPIDOSON_META_HELPER_H
+#ifndef RAPIDSCHEMA_META_HELPER_H
+#define RAPIDSCHEMA_META_HELPER_H
 
 #include <iostream>
 #include <optional>
@@ -14,7 +14,7 @@
 
 #include "transform_result.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     namespace internal {
 
@@ -36,6 +36,6 @@ namespace rapidoson {
     }  // namespace internal
 
 
-}  // namespace rapidoson
+}  // namespace rapidschema
 
-#endif //RAPIDOSON_META_HELPER_H
+#endif //RAPIDSCHEMA_META_HELPER_H

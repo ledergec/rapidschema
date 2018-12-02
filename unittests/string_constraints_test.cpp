@@ -3,7 +3,7 @@
 #include "string_constraints.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     TEST(StringConstraintsTest, GivenShortEnoughString_WhenMaxLengthConstraintChecked_ThenSuccess) {
         MaxLength max_length(3);

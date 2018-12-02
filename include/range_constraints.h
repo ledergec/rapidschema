@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_RANGE_CONSTRAINTS_H
-#define RAPIDJSON_RANGE_CONSTRAINTS_H
+#ifndef RAPIDSCHEMA_RANGE_CONSTRAINTS_H
+#define RAPIDSCHEMA_RANGE_CONSTRAINTS_H
 
 #include <optional>
 #include <string>
@@ -13,7 +13,7 @@
 #include "rapidjson/document.h"
 #include "transform_result.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template<typename T>
     class Minimum {
@@ -109,4 +109,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_RANGE_CONSTRAINTS_H
+#endif //RAPIDSCHEMA_RANGE_CONSTRAINTS_H

@@ -19,7 +19,7 @@
 #include "json_type_set.h"
 #include "to_json_literal.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template <typename T>
     std::string CreateLeafString(const T& t) {

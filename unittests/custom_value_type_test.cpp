@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream& stream, const std::chrono::milliseconds& 
     return stream;
 }
 
-namespace rapidoson {
+namespace rapidschema {
 
     template<>
     struct TypeProperties<std::chrono::milliseconds> {

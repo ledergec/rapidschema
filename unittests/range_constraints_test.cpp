@@ -3,7 +3,7 @@
 #include "range_constraints.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     TEST(RangeConstraintsTest, GivenMinimum_WhenMinimumConstraintChecked_ThenSuccess) {
         Minimum<uint32_t> minimum(3);

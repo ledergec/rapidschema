@@ -6,7 +6,7 @@
 #include "test_utils.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     TEST(Int64ConfigValueTest, WhenParsingFloat_ThenFails) {
         auto result = TestLeafType<int64_t, float>(23.4);

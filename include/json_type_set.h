@@ -2,12 +2,12 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_JSON_TYPE_SET_H
-#define RAPIDJSON_JSON_TYPE_SET_H
+#ifndef RAPIDSCHEMA_JSON_TYPE_SET_H
+#define RAPIDSCHEMA_JSON_TYPE_SET_H
 
 #include "type_properties.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template <typename... Ss>
     struct JsonTypeSet {
@@ -47,4 +47,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_JSON_TYPE_SET_H
+#endif //RAPIDSCHEMA_JSON_TYPE_SET_H

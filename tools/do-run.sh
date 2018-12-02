@@ -8,16 +8,16 @@ xhost +
 
 IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
 
-docker rm rapidoson-dev-container
+docker rm rapidschema-dev-container
 
 docker run -it \
     --entrypoint /bin/bash \
     -u root \
     -e DISPLAY=$IP:0 \
-    --name rapidoson-dev-container \
+    --name rapidschema-dev-container \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v `pwd`/.java:/root/.java \
     -v ${HOME}/.Xauthority:/home/dev/.Xauthority \
     -v `pwd`/.CLion2018.2:/root/.CLion2018.2 \
-    -v `pwd`/..:/home/dev/rapidoson \
-    rapidoson-dev-image
+    -v `pwd`/..:/home/dev/rapidschema \
+    rapidschema-dev-image

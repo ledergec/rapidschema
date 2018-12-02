@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_STRING_CONSTRAINTS_H
-#define RAPIDJSON_STRING_CONSTRAINTS_H
+#ifndef RAPIDSCHEMA_STRING_CONSTRAINTS_H
+#define RAPIDSCHEMA_STRING_CONSTRAINTS_H
 
 #include <iostream>
 #include <optional>
@@ -14,7 +14,7 @@
 #include "failure.h"
 #include "rapidjson/document.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     namespace internal {
         template<typename T, class Enabled = void>
@@ -88,4 +88,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_STRING_CONSTRAINTS_H
+#endif //RAPIDSCHEMA_STRING_CONSTRAINTS_H

@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 
 option(test "Build all tests." OFF) # Makes boolean 'test' available.
 
-project (rapidoson)
+project (rapidschema)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-function -Wno-unused-local-typedefs -Werror")
 

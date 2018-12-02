@@ -8,7 +8,7 @@
 #include "test_utils.h"
 #include "transform_result_matchers.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     using testing::Test;
 

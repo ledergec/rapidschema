@@ -2,14 +2,14 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_UTILS_H
-#define RAPIDJSON_UTILS_H
+#ifndef RAPIDSCHEMA_UTILS_H
+#define RAPIDSCHEMA_UTILS_H
 
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-namespace rapidoson {
+namespace rapidschema {
 
     std::string ValueToString(const rapidjson::Value& document) {
         rapidjson::StringBuffer buffer;
@@ -20,4 +20,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_UTILS_H
+#endif //RAPIDSCHEMA_UTILS_H

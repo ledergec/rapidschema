@@ -1,1 +1,1 @@
-docker start rapidoson-dev-container
+docker start rapidschema-dev-container

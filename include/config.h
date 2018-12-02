@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_CONFIG_H
-#define RAPIDJSON_CONFIG_H
+#ifndef RAPIDSCHEMA_CONFIG_H
+#define RAPIDSCHEMA_CONFIG_H
 
 #include <optional>
 #include <string>
@@ -11,7 +11,7 @@
 #include "rapidjson/document.h"
 #include "transform_result.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     class Config {
     public:
@@ -41,4 +41,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_CONFIG_H
+#endif //RAPIDSCHEMA_CONFIG_H

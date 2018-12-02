@@ -2,8 +2,8 @@
 // Created by Christian Ledergerber on 15.11.18.
 //
 
-#ifndef RAPIDJSON_CONFIGVALUE_H
-#define RAPIDJSON_CONFIGVALUE_H
+#ifndef RAPIDSCHEMA_CONFIGVALUE_H
+#define RAPIDSCHEMA_CONFIGVALUE_H
 
 #include <optional>
 #include <string>
@@ -19,7 +19,7 @@
 #include "transform_result.h"
 #include "type_properties.h"
 
-namespace rapidoson {
+namespace rapidschema {
 
     template<typename T, template<typename> class ... Constraints>
     class ConfigValue;
@@ -95,4 +95,4 @@ namespace rapidoson {
 
 }  // rapidjson
 
-#endif //RAPIDJSON_CONFIGVALUE_H
+#endif //RAPIDSCHEMA_CONFIGVALUE_H
