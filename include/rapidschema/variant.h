@@ -71,12 +71,12 @@ class Variant : public Config {
 
   template <typename T>
   const ConfigTypeOf<T>& GetVariant() const {
-    return unique_tuple_.template Get<internal::ConfigValueHasType<T>::template Condition>();
+    return unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>();
   }
 
   template <typename T>
   ConfigTypeOf<T> & GetVariant() {
-    return unique_tuple_.template Get<internal::ConfigValueHasType<T>::template Condition>();
+    return unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>();
   }
 
   template <typename T>
@@ -110,7 +110,8 @@ template<typename... ConfigValues>
 Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values) {
   return Variant<ConfigValues...>(
       name,
-      internal::UniqueTuple<ConfigValues...>(std::forward<ConfigValues>(config_values)...));
+      internal::UniqueTuple<ConfigValues...>(
+          std::make_tuple<ConfigValues...>(std::forward<ConfigValues>(config_values)...)));
 }
 
 template<typename T, template<typename> class ... Constraints>

@@ -13,7 +13,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/meta/tuple_utils.h"
+#include "rapidschema/meta/unique_tuple.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -26,12 +26,14 @@ static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... 
 
 template<typename T, template<typename> class ... Constraints>
 class CombinedConstraint {
+  using TupleT = internal::UniqueTuple<Constraints<T>...>;
+
  public:
   CombinedConstraint() = default;
 
   TransformResult Check(const T& t) const {
     TransformResult result;
-    internal::ForEach(constraints_, [&result, t](const auto &checker) {
+    constraints_.ForEach([&result, t](const auto &checker) {
       result.Append(checker.Check(t));
     });
     return result;
@@ -39,23 +41,28 @@ class CombinedConstraint {
 
   template <template<typename> class Constraint>
   Constraint<T>& Get() {
-    return std::get<Constraint<T>>(constraints_);
+    return constraints_.template GetType<Constraint<T>>();
+  }
+
+  template <template<typename> class Constraint>
+  const Constraint<T>& Get() const {
+    return constraints_.template GetType<Constraint<T>>();
   }
 
  private:
-  explicit CombinedConstraint(std::tuple<Constraints<T>...> constraints)
-      : constraints_(constraints) {}
+  explicit CombinedConstraint(TupleT&& constraints)
+      : constraints_(std::forward<TupleT>(constraints)) {}
 
  private:
-  std::tuple<Constraints<T>...> constraints_;
+  TupleT constraints_;
 
   friend CombinedConstraint MakeConstraint<T, Constraints...>(Constraints<T>&&... constraints);
 };
 
 template<typename T, template<typename> class ... Constraints>
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
-  return CombinedConstraint(std::make_tuple<Constraints<T>...>(
-      std::forward<Constraints<T>>(constraints)...));
+  return CombinedConstraint(internal::UniqueTuple<Constraints<T>...>(
+      std::make_tuple(std::forward<Constraints<T>>(constraints)...)));
 }
 
 
