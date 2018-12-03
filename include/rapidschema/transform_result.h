@@ -134,6 +134,6 @@ static bool operator== (const TransformResult& lhs, const TransformResult& rhs) 
   return lhs.GetFailures() == rhs.GetFailures();
 }
 
-};  // namespace rapidschema
+}  // namespace rapidschema
 
 #endif  // INCLUDE_RAPIDSCHEMA_TRANSFORM_RESULT_H_
