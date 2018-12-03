@@ -41,25 +41,31 @@ TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingDomString_ThenSuccess)
   ASSERT_EQ("ein string", value.Get());
 }
 
-TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenParsingDomTooShortString_ThenFails) {
+/////////////////////////// Validate /////////////////////////////////////////////
+
+TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenValidatingShortString_ThenFails) {
   ConfigValue<std::string, MinLength> value("leaf");
   value.GetConstraint<MinLength>().SetMinLength(20);
-  auto result = ValidateLeaf<std::string>("ein string", &value);
+  value = "ein string";
+  auto result = value.Validate();
   ASSERT_THAT(result,
       TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
 }
 
-TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenParsingDomTooShortString_ThenFails) {
+TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatingShortString_ThenFails) {
   auto value = MakeValue("leaf", MinLength(20));
-  auto result = ValidateLeaf<std::string>("ein string", &value);
+  value.GetConstraint<MinLength>().SetMinLength(20);
+  value = "ein string";
+  auto result = value.Validate();
   ASSERT_THAT(result,
       TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
 }
 
-TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenParsingDomTooLongString_ThenFails) {
+TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenValidatingLongString_ThenFails) {
   ConfigValue<std::string, MaxLength> value("leaf");
   value.GetConstraint<MaxLength>().SetMaxLength(2);
-  auto result = ValidateLeaf<std::string>("ein string", &value);
+  value = "ein string";
+  auto result = value.Validate();
   ASSERT_THAT(result,
       TransformFailed("Expected std::string of length at most 2. Actual: length 10 string: \"ein string\""));
 }
