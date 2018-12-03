@@ -70,6 +70,13 @@ class Variant : public Config {
   }
 
   template <typename T>
+  Variant<ConfigValues...>& operator=(const T& t) {
+    variant_index_ = ConfigIndexOf<T>;
+    GetVariant<T>() = t;
+    return *this;
+  }
+
+  template <typename T>
   const ConfigTypeOf<T>& GetVariant() const {
     return unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>();
   }

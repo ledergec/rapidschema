@@ -12,34 +12,36 @@
 
 namespace rapidschema {
 
-TEST(StringConfigValueTest, WhenParsingFloat_ThenFails) {
+/////////////////////////// Parse DOM Style /////////////////////////////////////////////
+
+TEST(StringConfigValueTest, WhenParsingDomFloat_ThenFails) {
   auto result = TestLeafType<std::string, float>(23.4);
   ASSERT_THAT(result, TransformFailed("Expected type: std::string. Actual value was: 23.4"));
 }
 
-TEST(StringConfigValueTest, WhenParsingInt_ThenFails) {
+TEST(StringConfigValueTest, WhenParsingDomInt_ThenFails) {
   auto result = TestLeafType<std::string, uint32_t>(23);
   ASSERT_THAT(result, TransformFailed("Expected type: std::string. Actual value was: 23"));
 }
 
-TEST(StringConfigValueTest, WhenParsingNull_ThenFails) {
+TEST(StringConfigValueTest, WhenParsingDomNull_ThenFails) {
   auto result = TestLeafType<std::string, std::nullptr_t>(nullptr);
   ASSERT_THAT(result, TransformFailed("Expected type: std::string. Actual value was: null"));
 }
 
-TEST(StringConfigValueTest, WhenParsingBool_ThenFails) {
+TEST(StringConfigValueTest, WhenParsingDomBool_ThenFails) {
   auto result = TestLeafType<std::string, bool>(false);
   ASSERT_THAT(result, TransformFailed("Expected type: std::string. Actual value was: false"));
 }
 
-TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingString_ThenSuccess) {
+TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingDomString_ThenSuccess) {
   ConfigValue<std::string> value("leaf");
   auto result = ParseLeaf("ein string", &value);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ("ein string", value.Get());
 }
 
-TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenParsingTooShortString_ThenFails) {
+TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenParsingDomTooShortString_ThenFails) {
   ConfigValue<std::string, MinLength> value("leaf");
   value.GetConstraint<MinLength>().SetMinLength(20);
   auto result = ValidateLeaf<std::string>("ein string", &value);
@@ -47,14 +49,14 @@ TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenParsingTooShortString_T
       TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
 }
 
-TEST(StringConfigValueTest, MakeValueWorksToo) {
+TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenParsingDomTooShortString_ThenFails) {
   auto value = MakeValue("leaf", MinLength(20));
   auto result = ValidateLeaf<std::string>("ein string", &value);
   ASSERT_THAT(result,
       TransformFailed("Expected std::string of length at least 20. Actual: length 10 string: \"ein string\""));
 }
 
-TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenParsingTooLongString_ThenFails) {
+TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenParsingDomTooLongString_ThenFails) {
   ConfigValue<std::string, MaxLength> value("leaf");
   value.GetConstraint<MaxLength>().SetMaxLength(2);
   auto result = ValidateLeaf<std::string>("ein string", &value);

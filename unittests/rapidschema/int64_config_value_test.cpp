@@ -8,69 +8,68 @@
 
 namespace rapidschema {
 
-TEST(Int64ConfigValueTest, WhenParsingFloat_ThenFails) {
+/////////////////////////// Parse DOM Style /////////////////////////////////////////////
+
+TEST(Int64ConfigValueTest, WhenParsingDomFloat_ThenFails) {
   auto result = TestLeafType<int64_t, float>(23.4);
   ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: 23.4"));
 }
 
-TEST(Int64ConfigValueTest, WhenParsingString_ThenFails) {
+TEST(Int64ConfigValueTest, WhenParsingDomString_ThenFails) {
   auto result = TestLeafType<int64_t, std::string>("ein string");
   ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: \"ein string\""));
 }
 
-TEST(Int64ConfigValueTest, WhenParsingNull_ThenFails) {
+TEST(Int64ConfigValueTest, WhenParsingDomNull_ThenFails) {
   auto result = TestLeafType<int64_t, std::nullptr_t>(nullptr);
   ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: null"));
 }
 
-TEST(Int64ConfigValueTest, WhenParsingBool_ThenFails) {
+TEST(Int64ConfigValueTest, WhenParsingDomBool_ThenFails) {
   auto result = TestLeafType<int64_t, bool>(false);
   ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: false"));
 }
 
-TEST(Int64ConfigValueTest, WhenParsingOutOfLowerRange_ThenFails) {
+TEST(Int64ConfigValueTest, WhenParsingDomOutOfLowerRange_ThenFails) {
   auto json = R"({"leaf": -9223372036854775809})";
   ConfigValue<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_FALSE(result.Success());
 }
 
-TEST(Int64ConfigValueTest, WhenParsingLowerRange_ThenSucceeds) {
+TEST(Int64ConfigValueTest, WhenParsingDomLowerRange_ThenSucceeds) {
   auto json = R"({"leaf": -9223372036854775807})";
   ConfigValue<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-TEST(Int64ConfigValueTest, WhenParsingOutOfUpperRange_ThenFails) {
+TEST(Int64ConfigValueTest, WhenParsingDomOutOfUpperRange_ThenFails) {
   auto json = R"({"leaf": 9223372036854775808})";
   ConfigValue<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_FALSE(result.Success());
 }
 
-TEST(Int64ConfigValueTest, WhenParsingUpperRange_ThenSucceeds) {
+TEST(Int64ConfigValueTest, WhenParsingDomUpperRange_ThenSucceeds) {
   auto json = R"({"leaf": 9223372036854775806})";
   ConfigValue<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-TEST(Int64ConfigValueTest, GivenNoConstraints_WhenParsing23_ThenParsedCorrectly) {
-  ConfigValue<int64_t> value;
-  auto result = ValidateLeaf<int64_t>(23, &value);
+TEST(Int64ConfigValueTest, WhenParsingDom23_ThenParsedCorrectly) {
+  auto result = TestLeafType<int64_t, int64_t>(23);
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-TEST(Int64ConfigValueTest, GivenNoConstraints_WhenParsingLowerLimit_ThenParsedCorrectly) {
-  ConfigValue<int64_t> value;
-  auto result = ValidateLeaf<int64_t>(std::numeric_limits<int64_t>::min(), &value);
+TEST(Int64ConfigValueTest, WhenParsingDomLowerLimit_ThenParsedCorrectly) {
+  auto result = TestLeafType<int64_t, int64_t>(std::numeric_limits<int64_t>::min());
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-TEST(Int64ConfigValueTest, GivenNoConstraints_WhenParsingUpperLimit_ThenParsedCorrectly) {
-  ConfigValue<int64_t> value;
-  auto result = ValidateLeaf<int64_t>(std::numeric_limits<int64_t>::max(), &value);
+TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
+  auto result = TestLeafType<int64_t, int64_t>(std::numeric_limits<int64_t>::max());
   ASSERT_THAT(result, TransformSucceeded());
 }
 

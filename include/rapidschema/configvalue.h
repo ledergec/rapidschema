@@ -39,8 +39,9 @@ class ConfigValue : public Config {
 
   using Type = T;
 
-  ConfigValue<T, Constraints...>& operator= (T t) {
+  ConfigValue<T, Constraints...>& operator=(const T& t) {
     t_ = t;
+    return *this;
   }
 
   operator T() {
