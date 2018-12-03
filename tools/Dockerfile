@@ -2,17 +2,20 @@ FROM        ubuntu:bionic
 MAINTAINER  christian
 
 # update and install dependencies
-RUN         apt-get update \
-                && apt-get install -y \ 
-		build-essential \
-		cmake \
-		emacs \
-		git \
-		sudo \
-		valgrind \
-		wget && \
-		apt-get clean && \
-		rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y \ 
+    	    build-essential \
+	    cmake \
+	    emacs \
+	    git \
+	    python-pip \
+	    sudo \
+	    valgrind \
+	    wget && \
+	    apt-get clean && \
+	    rm -rf /var/lib/apt/lists/*
+
+RUN pip install cpplint
 
 RUN mkdir /home/dev
 
