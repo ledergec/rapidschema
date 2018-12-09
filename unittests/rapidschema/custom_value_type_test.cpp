@@ -8,7 +8,6 @@
 #include <chrono>  // NOLINT(build/c++11)
 
 #include "rapidschema/configvalue.h"
-#include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
 #include "rapidschema/type_properties.h"
