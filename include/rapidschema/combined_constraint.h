@@ -5,26 +5,23 @@
 #ifndef INCLUDE_RAPIDSCHEMA_COMBINED_CONSTRAINT_H_
 #define INCLUDE_RAPIDSCHEMA_COMBINED_CONSTRAINT_H_
 
-#include <iostream>
 #include <optional>
-#include <string>
-#include <tuple>
-#include <type_traits>
 
 #include <rapidjson/document.h>
 
+#include "rapidschema/concepts/constraint.h"
 #include "rapidschema/meta/unique_tuple.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
 
-template<typename T, template<typename> class ... Constraints>
+template<typename T, template<typename> class ... Constraints> requires AreConstraints<T, Constraints...>
 class CombinedConstraint;
 
-template<typename T, template<typename> class ... Constraints>
+template<typename T, template<typename> class ... Constraints> requires AreConstraints<T, Constraints...>
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints);
 
-template<typename T, template<typename> class ... Constraints>
+template<typename T, template<typename> class ... Constraints> requires AreConstraints<T, Constraints...>
 class CombinedConstraint {
   using TupleT = internal::UniqueTuple<Constraints<T>...>;
 
@@ -59,12 +56,11 @@ class CombinedConstraint {
   friend CombinedConstraint MakeConstraint<T, Constraints...>(Constraints<T>&&... constraints);
 };
 
-template<typename T, template<typename> class ... Constraints>
+template<typename T, template<typename> class ... Constraints> requires AreConstraints<T, Constraints...>
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
   return CombinedConstraint(internal::UniqueTuple<Constraints<T>...>(
       std::make_tuple(std::forward<Constraints<T>>(constraints)...)));
 }
-
 
 }  // namespace rapidschema
 
