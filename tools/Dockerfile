@@ -19,12 +19,12 @@ RUN pip install cpplint
 
 RUN mkdir /home/dev
 
-RUN wget https://download.jetbrains.com/cpp/CLion-2018.2.6.tar.gz && \
-    tar -C /home/dev -zxvf CLion-2018.2.6.tar.gz && \
-    rm CLion-2018.2.6.tar.gz
+RUN wget https://download.jetbrains.com/cpp/CLion-2018.3.1.tar.gz && \
+    tar -C /home/dev -zxvf CLion-2018.3.1.tar.gz && \
+    rm CLion-2018.3.1.tar.gz
     
 RUN echo '' >> /home/dev/.bashrc && \
-    echo 'alias clion=/home/dev/clion-2018.2.6/bin/clion.sh' >> /home/dev/.bashrc
+    echo 'alias clion=/home/dev/clion-2018.3.1/bin/clion.sh' >> /home/dev/.bashrc
 
 ENTRYPOINT [ "sh", "-c", "echo $HOME" ]
 
