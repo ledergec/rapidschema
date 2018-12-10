@@ -8,12 +8,12 @@
 #include <cassert>
 #include <tuple>
 
+#include "rapidschema/concepts/unique_types.h"
 #include "rapidschema/meta/type_set.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
 namespace internal {
-
 
 template <typename Tuple, template <typename> typename Condition, size_t Index, class Enabled = void>
 struct TupleElementWithCondition;
@@ -95,7 +95,7 @@ struct SameType {
   using Condition = std::is_same<T, Y>;
 };
 
-template <typename... Ts>
+template <typename... Ts> requires UniqueTypes<Ts...>
 class UniqueTuple {
   static_assert(TypeSet<Ts...>::Unique(), "Types for unique tuple must be unique.");
   using TupleT = std::tuple<Ts...>;

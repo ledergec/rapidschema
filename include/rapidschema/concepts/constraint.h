@@ -11,7 +11,6 @@
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
-
 namespace internal {
 
 template<typename T, template<typename> class C>

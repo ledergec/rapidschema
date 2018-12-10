@@ -2,13 +2,12 @@
 // Created by root on 12/9/18.
 //
 
-#include "rapidschema/type_properties.h"
-
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
 
-namespace rapidschema {
+#include "rapidschema/type_properties.h"
 
+namespace rapidschema {
 namespace internal {
 
 template<class T, std::size_t = sizeof(T)>

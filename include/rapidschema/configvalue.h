@@ -14,8 +14,7 @@
 #include <rapidjson/writer.h>
 
 #include "rapidschema/combined_constraint.h"
-#include "rapidschema/concepts/constraint.h"
-#include "rapidschema/concepts/has_type_properties.h"
+#include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/config.h"
 #include "rapidschema/rapidjson_type_to_string.h"
 #include "rapidschema/transform_result.h"
@@ -23,16 +22,13 @@
 
 namespace rapidschema {
 
-template<typename T, template<typename> class ... Constraints> requires HasTypeProperties<T> &&
-                                                                        AreConstraints<T, Constraints...>
+template<typename T, template<typename> class ... Constraints> requires CorrectValueParameters<T, Constraints...>
 class ConfigValue;
 
-template<typename T, template<typename> class ... Constraints> requires HasTypeProperties<T> &&
-                                                                        AreConstraints<T, Constraints...>
+template<typename T, template<typename> class ... Constraints> requires CorrectValueParameters<T, Constraints...>
 ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints);
 
-template<typename T, template<typename> class ... Constraints> requires HasTypeProperties<T> &&
-                                                                        AreConstraints<T, Constraints...>
+template<typename T, template<typename> class ... Constraints> requires CorrectValueParameters<T, Constraints...>
 class ConfigValue : public Config {
   using ValueChecker = CombinedConstraint<T, Constraints...>;
 
@@ -91,8 +87,7 @@ class ConfigValue : public Config {
   friend ConfigValue MakeValue<T, Constraints...>(const std::string& name, Constraints<T>&&... constraints);
 };
 
-template<typename T, template<typename> class ... Constraints> requires HasTypeProperties<T> &&
-                                                                        AreConstraints<T, Constraints...>
+template<typename T, template<typename> class ... Constraints> requires CorrectValueParameters<T, Constraints...>
 ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints) {
   return ConfigValue(name, MakeConstraint(std::forward<Constraints<T>>(constraints)...));
 }
