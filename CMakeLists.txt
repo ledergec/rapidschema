@@ -4,7 +4,11 @@ option(test "Build all tests." OFF) # Makes boolean 'test' available.
 
 project (rapidschema)
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-function -Wno-unused-local-typedefs -Werror -Wpedantic -std=gnu++2a -fconcepts")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-function -Wno-unused-local-typedefs -Werror -Wpedantic -std=gnu++2a")
+
+if (${RAPIDSCHEMA_WITH_CONCEPTS})
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
+endif()
 
 include(cmake/cpplint.cmake)
 

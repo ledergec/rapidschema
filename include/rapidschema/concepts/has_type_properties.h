@@ -5,6 +5,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
 
+#ifdef RAPIDSCHEMA_WITH_CONCEPTS
+
 #include "rapidschema/type_properties.h"
 
 namespace rapidschema {
@@ -25,5 +27,7 @@ template<typename T>
 concept bool HasTypeProperties = internal::SpecializationExists<TypeProperties<T>>::value;
 
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_

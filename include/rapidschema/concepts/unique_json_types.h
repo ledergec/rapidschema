@@ -5,6 +5,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_UNIQUE_JSON_TYPES_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_UNIQUE_JSON_TYPES_H_
 
+#ifdef RAPIDSCHEMA_WITH_CONCEPTS
+
 #include "rapidschema/meta/json_type_set.h"
 
 namespace rapidschema {
@@ -14,5 +16,7 @@ template<typename ... T>
 concept bool UniqueJsonTypes = internal::JsonTypeSet<T...>::Unique();
 
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_CONCEPTS_UNIQUE_JSON_TYPES_H_

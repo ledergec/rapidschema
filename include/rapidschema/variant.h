@@ -12,6 +12,7 @@
 #include <tuple>
 #include <utility>
 
+#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/concepts/unique_json_types.h"
 #include "rapidschema/configvalue.h"
@@ -30,13 +31,13 @@ struct ConfigValueHasType {
 
 }  // namespace internal
 
-template<typename... ConfigValues> requires UniqueJsonTypes<typename ConfigValues::Type...>
+template<typename... ConfigValues> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename ConfigValues::Type...>)
 class Variant;
 
-template<typename... ConfigValues> requires UniqueJsonTypes<typename ConfigValues::Type...>
+template<typename... ConfigValues> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename ConfigValues::Type...>)
 Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values);
 
-template<typename... ConfigValues> requires UniqueJsonTypes<typename ConfigValues::Type...>
+template<typename... ConfigValues> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename ConfigValues::Type...>)
 class Variant : public Config {
   using Tuple = internal::UniqueTuple<ConfigValues...>;
 
@@ -113,7 +114,7 @@ class Variant : public Config {
                                                                ConfigValues&&... config_values);
 };
 
-template<typename... ConfigValues> requires UniqueJsonTypes<typename ConfigValues::Type...>
+template<typename... ConfigValues> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename ConfigValues::Type...>)
 Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... config_values) {
   return Variant<ConfigValues...>(
       name,
@@ -121,7 +122,8 @@ Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... 
           std::make_tuple<ConfigValues...>(std::forward<ConfigValues>(config_values)...)));
 }
 
-template<typename T, template<typename> class ... Constraints> requires CorrectValueParameters<T, Constraints...>
+template<typename T, template<typename> class ... Constraints>
+    RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 ConfigValue<T, Constraints...> MakeVariantValue(Constraints<T>&&... constraints) {
   return MakeValue("", std::forward<Constraints<T>>(constraints)...);
 }

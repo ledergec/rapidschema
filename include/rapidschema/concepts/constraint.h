@@ -5,6 +5,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_CONSTRAINT_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_CONSTRAINT_H_
 
+#ifdef RAPIDSCHEMA_WITH_CONCEPTS
+
 #include <optional>
 
 #include "rapidschema/failure.h"
@@ -48,5 +50,7 @@ template<typename T, template<typename> class ... Constraints>
 concept bool AreConstraints = internal::AreConstraints<T, Constraints...>::value;
 
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_CONCEPTS_CONSTRAINT_H_

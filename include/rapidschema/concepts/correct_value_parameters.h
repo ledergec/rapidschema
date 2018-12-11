@@ -5,6 +5,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_CORRECT_VALUE_PARAMETERS_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_CORRECT_VALUE_PARAMETERS_H_
 
+#ifdef RAPIDSCHEMA_WITH_CONCEPTS
+
 #include "rapidschema/concepts/constraint.h"
 #include "rapidschema/concepts/has_type_properties.h"
 #include "rapidschema/concepts/unique_types.h"
@@ -22,4 +24,7 @@ concept bool CorrectValueParameters = AreConstraints<T, Constraints...> &&
 
 }  // namespace rapidschema
 
+#endif
+
 #endif  // INCLUDE_RAPIDSCHEMA_CONCEPTS_CORRECT_VALUE_PARAMETERS_H_
+

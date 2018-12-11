@@ -8,6 +8,7 @@
 #include <cassert>
 #include <tuple>
 
+#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/unique_types.h"
 #include "rapidschema/meta/type_set.h"
 #include "rapidschema/transform_result.h"
@@ -59,6 +60,7 @@ template <typename Tuple, typename Visitor>
 struct TupleVisitor<Tuple, Visitor, 0> {
   static TransformResult Visit(const Tuple& tuple, Visitor&& visitor, size_t index) {
     assert(false);
+    return TransformResult();
   }
 };
 
@@ -95,7 +97,7 @@ struct SameType {
   using Condition = std::is_same<T, Y>;
 };
 
-template <typename... Ts> requires UniqueTypes<Ts...>
+template <typename... Ts> RAPIDSCHEMA_REQUIRES(UniqueTypes<Ts...>)
 class UniqueTuple {
   static_assert(TypeSet<Ts...>::Unique(), "Types for unique tuple must be unique.");
   using TupleT = std::tuple<Ts...>;
