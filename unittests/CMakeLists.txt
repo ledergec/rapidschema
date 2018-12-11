@@ -13,4 +13,4 @@ set_target_properties(unittest PROPERTIES
             CXX_EXTENSIONS OFF
         )
 
-add_dependencies(unittest ${CPPLINT_TARGET})
+setup_cpplint(unittest ${UNITTEST_SRC} ${HDR_BINARY})

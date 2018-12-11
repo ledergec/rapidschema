@@ -10,12 +10,9 @@ if (${RAPIDSCHEMA_WITH_CONCEPTS})
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
 endif()
 
-include(cmake/cpplint.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
 
 # add all source code directories
-cpplint_add_subdirectory(unittests)
-cpplint_add_subdirectory(include)
-
 include_directories(extern/rapidjson/include)
 include_directories(extern/fmt/include)
 include_directories(include)

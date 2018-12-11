@@ -21,8 +21,6 @@ RUN apt-get update && \
 RUN sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
     sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /usr/bin/g++ g++ /usr/bin/g++-8
 
-RUN pip install cpplint
-
 RUN mkdir /home/dev
 
 RUN wget https://download.jetbrains.com/cpp/CLion-2018.3.1.tar.gz && \
