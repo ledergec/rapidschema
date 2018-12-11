@@ -98,6 +98,10 @@ class Variant : public Config {
     return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
 
+  void Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const override {
+    return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
+  }
+
  private:
   int32_t variant_index_ = INVALID_VARIANT_INDEX;
   // must be a tuple because each config value and its constraints must be stored

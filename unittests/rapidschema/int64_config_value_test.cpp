@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "rapidschema/confignode.h"
 #include "rapidschema/configvalue.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
@@ -71,6 +72,23 @@ TEST(Int64ConfigValueTest, WhenParsingDomLowerLimit_ThenParsedCorrectly) {
 TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
   auto result = TestLeafType<int64_t, int64_t>(std::numeric_limits<int64_t>::max());
   ASSERT_THAT(result, TransformSucceeded());
+}
+
+
+class Int64ConfigValueTestNode : public ConfigNode {
+ public:
+  Int64ConfigValueTestNode()
+      : ConfigNode("testNode", {&value})
+      , value("value") {}
+
+  ConfigValue<int64_t> value;
+};
+
+TEST(Int64ConfigValueTest, WhenSerialize_ThenCorrectResult) {
+  Int64ConfigValueTestNode node;
+  node.value = 123;
+  std::string result = SerializeConfig(node);
+  ASSERT_EQ(R"({"value":123})", result);
 }
 
 }  // namespace rapidschema

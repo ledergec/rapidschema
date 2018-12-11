@@ -79,6 +79,10 @@ class ConfigValue : public Config {
     return checker_.Check(t_);
   }
 
+  void Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const override {
+    TypeProperties<T>::Serialize(t_, writer);
+  }
+
  private:
   ConfigValue(const std::string& name, ValueChecker&& checker)
       : Config(name)

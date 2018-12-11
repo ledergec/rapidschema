@@ -68,6 +68,13 @@ TransformResult TestLeafType(ConfigType c) {
     return ParseLeaf(c, &value);
 }
 
+inline std::string SerializeConfig(const Config& config) {
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    config.Serialize(&writer);
+    return buffer.GetString();
+}
+
 }  // namespace rapidschema
 
 #endif  // UNITTESTS_RAPIDSCHEMA_TEST_UTILS_H_

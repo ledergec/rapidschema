@@ -9,6 +9,8 @@
 #include <type_traits>
 
 #include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 namespace rapidschema {
 
@@ -37,6 +39,10 @@ struct TypeProperties<std::string> {
   static std::string FromJson(const rapidjson::Value &value) {
       return value.GetString();
   }
+
+  static void Serialize(const std::string& str, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->String(str.c_str());
+  }
 };
 
 template<>
@@ -50,6 +56,10 @@ struct TypeProperties<int32_t> {
 
   static int32_t FromJson(const rapidjson::Value &value) {
       return value.GetInt();
+  }
+
+  static void Serialize(const int32_t& i, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Int(i);
   }
 };
 
@@ -65,6 +75,10 @@ struct TypeProperties<uint32_t> {
   static uint32_t FromJson(const rapidjson::Value &value) {
       return value.GetUint();
   }
+
+  static void Serialize(const uint32_t& i, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Uint(i);
+  }
 };
 
 template<>
@@ -78,6 +92,10 @@ struct TypeProperties<int64_t> {
 
   static int64_t FromJson(const rapidjson::Value &value) {
       return value.GetInt64();
+  }
+
+  static void Serialize(const int64_t& i, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Int64(i);
   }
 };
 
@@ -94,6 +112,10 @@ struct TypeProperties<uint64_t> {
   static int64_t FromJson(const rapidjson::Value &value) {
       return value.GetUint64();
   }
+
+  static void Serialize(const uint64_t& i, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Uint64(i);
+  }
 };
 
 template<>
@@ -107,6 +129,10 @@ struct TypeProperties<bool> {
 
   static bool FromJson(const rapidjson::Value &value) {
       return value.GetBool();
+  }
+
+  static void Serialize(const bool& b, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Bool(b);
   }
 };
 
@@ -123,6 +149,10 @@ struct TypeProperties<float> {
   static float FromJson(const rapidjson::Value &value) {
       return value.GetFloat();
   }
+
+  static void Serialize(const float& f, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Double(f);
+  }
 };
 
 template<>
@@ -137,6 +167,10 @@ struct TypeProperties<double> {
   static double FromJson(const rapidjson::Value &value) {
       return value.GetDouble();
   }
+
+  static void Serialize(const double& d, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    writer->Double(d);
+  }
 };
 
 template<>
@@ -150,6 +184,11 @@ struct TypeProperties<std::nullptr_t > {
 
   static std::nullptr_t FromJson(const rapidjson::Value &value) {
       return nullptr;
+  }
+
+  static void Serialize(const nullptr_t& n, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+    (void) n;
+    writer->Null();
   }
 };
 

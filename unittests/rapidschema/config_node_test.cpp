@@ -151,4 +151,33 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWi
     ASSERT_EQ(expected, result);
 }
 
+class ConfigNodeTestTestSubNode : public ConfigNode {
+ public:
+  ConfigNodeTestTestSubNode()
+      : ConfigNode("testSubNode", {&value})
+      , value("value") {}
+
+  ConfigValue<int32_t> value;
+};
+
+class ConfigNodeTestTestNode : public ConfigNode {
+ public:
+  ConfigNodeTestTestNode()
+      : ConfigNode("testNode", {&value, &sub_node})
+      , value("value") {}
+
+  ConfigValue<int32_t> value;
+  ConfigNodeTestTestSubNode sub_node;
+};
+
+TEST_F(ConfigNodeTest, WhenSerialize_ThenCorrectResult) {
+    ConfigNodeTestTestNode node;
+    node.value = 123;
+    node.sub_node.value = 432;
+
+    std::string result = SerializeConfig(node);
+    ASSERT_EQ(R"({"value":123,"testSubNode":{"value":432}})", result);
+}
+
+
 }  // namespace rapidschema
