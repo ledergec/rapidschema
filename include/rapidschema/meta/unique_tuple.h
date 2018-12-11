@@ -45,22 +45,22 @@ struct TupleElementWithCondition<
     Condition,
     0> {};
 
-template <typename Tuple, typename Visitor, size_t Index>
-struct TupleVisitor {
-  static TransformResult Visit(const Tuple& tuple, Visitor&& visitor, size_t index) {
+template <typename BaseClass, typename Tuple, size_t Index>
+struct TupleAccessor {
+  static const BaseClass* Get(const Tuple& tuple, size_t index) {
     if (index == Index - 1) {
-      return visitor(std::get<Index - 1>(tuple));
+      return &std::get<Index - 1>(tuple);
     } else {
-      return TupleVisitor<Tuple, Visitor, Index - 1>::Visit(tuple, std::forward<Visitor>(visitor), index);
+      return TupleAccessor<BaseClass, Tuple, Index - 1>::Get(tuple, index);
     }
   }
 };
 
-template <typename Tuple, typename Visitor>
-struct TupleVisitor<Tuple, Visitor, 0> {
-  static TransformResult Visit(const Tuple& tuple, Visitor&& visitor, size_t index) {
+template <typename BaseClass, typename Tuple>
+struct TupleAccessor<BaseClass, Tuple, 0> {
+  static const BaseClass* Get(const Tuple& tuple, size_t index) {
     assert(false);
-    return TransformResult();
+    return nullptr;
   }
 };
 
@@ -139,9 +139,9 @@ class UniqueTuple {
     return std::get<ElementWithCondition<SameType<T>::template Condition>::Index>(tuple_);
   }
 
-  template <typename Visitor>
-  TransformResult Visit(Visitor &&visitor, size_t index) const {
-    return TupleVisitor<TupleT, Visitor, sizeof...(Ts)>::Visit(tuple_, std::forward<Visitor>(visitor), index);
+  template <typename BaseClass>
+  const BaseClass* Get(size_t index) const {
+    return TupleAccessor<BaseClass, TupleT, sizeof...(Ts)>::Get(tuple_, index);
   }
 
   template <typename Operation>

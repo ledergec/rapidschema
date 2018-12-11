@@ -95,11 +95,7 @@ class Variant : public Config {
 
   TransformResult Validate() const override {
     assert(variant_index_ != INVALID_VARIANT_INDEX);
-    return unique_tuple_.template Visit(
-        [](const auto& config_value) {
-          return config_value.Validate();
-        },
-        variant_index_);
+    return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
 
  private:
