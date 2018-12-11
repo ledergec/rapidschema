@@ -19,5 +19,5 @@ docker run -it \
     -v `pwd`/.java:/root/.java \
     -v ${HOME}/.Xauthority:/home/dev/.Xauthority \
     -v `pwd`/.CLion2018.2:/root/.CLion2018.2 \
-    -v `pwd`/..:/home/dev/rapidschema \
+    -v `pwd`/../../..:/home/dev/rapidschema \
     rapidschema-dev-image
