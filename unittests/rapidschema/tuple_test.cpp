@@ -19,8 +19,6 @@ TEST(TupleTest, TestSizeOfEmptyTuple) {
   A a = std::get<0>(std::tuple<A>());
   (void) a;
 
-  using test_type =
-      std::enable_if<std::is_same<A, typename std::tuple_element<0, std::tuple<A, B>>::type>::value>::type;
   static_assert(std::is_same<A, typename std::tuple_element<0, std::tuple<A, B>>::type>::value, "");
 }
 
