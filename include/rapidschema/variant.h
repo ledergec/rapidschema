@@ -89,6 +89,12 @@ class Variant : public Config {
   }
 
   template <typename T>
+  void SetVariant(const T& t) {
+    unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>() = t;
+    variant_index_ = unique_tuple_.template IndexOf<internal::ConfigValueHasType<T>::template Condition>();
+  }
+
+  template <typename T>
   bool Is() {
     return ConfigIndexOf<T> == variant_index_;
   }
@@ -126,7 +132,7 @@ Variant<ConfigValues...> MakeVariant(const std::string& name, ConfigValues&&... 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 ConfigValue<T, Constraints...> MakeVariantValue(Constraints<T>&&... constraints) {
-  return MakeValue("", std::forward<Constraints<T>>(constraints)...);
+  return MakeValue<T, Constraints...>("", std::forward<Constraints<T>>(constraints)...);
 }
 
 }  // namespace rapidschema

@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 
+#include "rapidschema/confignode.h"
 #include "rapidschema/configvalue.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
@@ -75,6 +76,26 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
 
   auto result = variant.Validate();
   ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. Actual: length 5 string: \"hallo\""));
+}
+
+class VariantTestTestNode : public ConfigNode {
+ public:
+  VariantTestTestNode()
+      : ConfigNode("testNode", {&variant})
+      , variant(MakeVariant<ConfigValue<int64_t>, ConfigValue<std::string>>(
+          "value", MakeVariantValue<int64_t>(), MakeVariantValue<std::string>())) {}
+
+  Variant<ConfigValue<int64_t>, ConfigValue<std::string>> variant;
+};
+
+TEST(VariantTest, WhenSerialize_ThenCorrectResult) {
+  VariantTestTestNode node;
+  node.variant.SetVariant<std::string>("my_string");
+  std::string result = SerializeConfig(node);
+  ASSERT_EQ(R"({"value":"my_string"})", result);
+  node.variant.SetVariant<int64_t>(123);
+  result = SerializeConfig(node);
+  ASSERT_EQ(R"({"value":123})", result);
 }
 
 }  // namespace rapidschema

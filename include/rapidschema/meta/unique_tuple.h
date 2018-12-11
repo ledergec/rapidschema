@@ -112,6 +112,13 @@ class UniqueTuple {
   template<template<typename> class Condition>
   using ElementWithCondition = TupleElementWithCondition<std::tuple<Ts...>, Condition, sizeof...(Ts)>;
 
+  /// \brief retrieves the index of the tuple element for which the type meets the Condition
+  /// if no element meets the condition there will be a compilation error.
+  template <template<typename> class Condition>
+  constexpr size_t IndexOf() {
+    return ElementWithCondition<Condition>::Index;
+  }
+
   /// \brief retrieves the (first from the back) tuple element for which the type meets the Condition
   /// if no element meets the condition there will be a compilation error.
   template <template<typename> class Condition>

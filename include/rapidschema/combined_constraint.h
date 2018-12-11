@@ -62,7 +62,7 @@ class CombinedConstraint {
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
-  return CombinedConstraint(internal::UniqueTuple<Constraints<T>...>(
+  return CombinedConstraint<T, Constraints...>(internal::UniqueTuple<Constraints<T>...>(
       std::make_tuple(std::forward<Constraints<T>>(constraints)...)));
 }
 

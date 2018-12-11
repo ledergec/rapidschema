@@ -97,7 +97,7 @@ class ConfigValue : public Config {
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints) {
-  return ConfigValue(name, MakeConstraint(std::forward<Constraints<T>>(constraints)...));
+  return ConfigValue(name, MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
 }
 
 }  // namespace rapidschema
