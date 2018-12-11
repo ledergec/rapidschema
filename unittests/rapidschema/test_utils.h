@@ -30,14 +30,14 @@ std::string CreateLeafString(const T& t) {
                 )", ToJsonLiteral<T>::Convert(t));
 }
 
-static TransformResult ParseObject(const std::string &json, Config * config) {
+inline TransformResult ParseObject(const std::string &json, Config * config) {
     rapidjson::Document document;
     rapidjson::ParseResult result = document.Parse(json.c_str());
     EXPECT_FALSE(result.IsError());
     return config->Parse(document);
 }
 
-static TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
+inline TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
     rapidjson::Document document;
     rapidjson::ParseResult result = document.Parse(json.c_str());
     EXPECT_FALSE(result.IsError());
@@ -46,7 +46,7 @@ static TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
 }
 
 template <typename T>
-static TransformResult ParseLeaf(const T& t, Config * config) {
+TransformResult ParseLeaf(const T& t, Config * config) {
     auto leaf_str = CreateLeafString(t);
     rapidjson::Document document;
     rapidjson::ParseResult result = document.Parse(leaf_str.c_str());
@@ -56,7 +56,7 @@ static TransformResult ParseLeaf(const T& t, Config * config) {
 }
 
 template <typename T>
-static TransformResult ValidateLeaf(const T& t, Config * config) {
+TransformResult ValidateLeaf(const T& t, Config * config) {
     auto result = ParseLeaf(t, config);
     EXPECT_TRUE(result.Success());
     return config->Validate();

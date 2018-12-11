@@ -18,6 +18,7 @@
 #include "rapidschema/configvalue.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/meta/unique_tuple.h"
+#include "rapidschema/rapidjson_type_to_string.h"
 
 namespace rapidschema {
 

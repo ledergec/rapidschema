@@ -35,7 +35,7 @@ struct Failure {
   std::string message_;
 };
 
-static bool operator==(const Failure & lhs, const Failure& rhs) {
+inline bool operator==(const Failure & lhs, const Failure& rhs) {
   return lhs.GetMessage() == rhs.GetMessage() && lhs.GetPath() == rhs.GetPath();
 }
 

@@ -11,7 +11,7 @@
 
 namespace rapidschema {
 
-static std::string JsonTypeToString(rapidjson::Type type) {
+inline std::string JsonTypeToString(rapidjson::Type type) {
     switch (type) {
         case rapidjson::kArrayType:
             return "array";

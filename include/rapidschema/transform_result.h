@@ -126,11 +126,11 @@ class TransformResult {
   std::optional<internal::FailureCollection> failure_collection_;
 };
 
-static TransformResult FailResult(const std::string & message) {
+inline TransformResult FailResult(const std::string & message) {
   return TransformResult(Failure(message));
 }
 
-static bool operator== (const TransformResult& lhs, const TransformResult& rhs) {
+inline bool operator== (const TransformResult& lhs, const TransformResult& rhs) {
   return lhs.GetFailures() == rhs.GetFailures();
 }
 
