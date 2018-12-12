@@ -9,10 +9,9 @@
 #include <string>
 
 #include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 
 #include "rapidschema/transform_result.h"
+#include "rapidschema/writer_base.h"
 
 namespace rapidschema {
 
@@ -30,7 +29,7 @@ class Config {
 
   virtual TransformResult Validate() const = 0;
 
-  virtual void Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const = 0;
+  virtual void Serialize(WriterBase* writer) const = 0;
 
   const std::string& GetName() const {
     return name_;

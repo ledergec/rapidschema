@@ -33,7 +33,7 @@ struct TypeProperties<std::chrono::milliseconds> {
     return std::chrono::milliseconds(value.GetUint64());
   }
 
-  static void Serialize(const std::chrono::milliseconds& milli, rapidjson::Writer<rapidjson::StringBuffer> * writer) {
+  static void Serialize(const std::chrono::milliseconds& milli, WriterBase * writer) {
     writer->Int64(milli.count());
   }
 };

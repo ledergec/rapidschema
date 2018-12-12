@@ -104,7 +104,7 @@ class Variant : public Config {
     return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
 
-  void Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const override {
+  void Serialize(WriterBase* writer) const override {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 

@@ -16,6 +16,7 @@
 #include <rapidjson/document.h>
 
 #include "rapidschema/configvalue.h"
+#include "rapidschema/generic_writer.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/to_json_literal.h"
 
@@ -70,7 +71,7 @@ TransformResult TestLeafType(ConfigType c) {
 
 inline std::string SerializeConfig(const Config& config) {
     rapidjson::StringBuffer buffer;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    GenericWriter<rapidjson::Writer<rapidjson::StringBuffer>> writer(buffer);
     config.Serialize(&writer);
     return buffer.GetString();
 }

@@ -79,7 +79,7 @@ class ConfigValue : public Config {
     return checker_.Check(t_);
   }
 
-  void Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const override {
+  void Serialize(WriterBase* writer) const override {
     TypeProperties<T>::Serialize(t_, writer);
   }
 
