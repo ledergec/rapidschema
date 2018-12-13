@@ -1,0 +1,7 @@
+- Support multiple encodings
+- Implement SAX style parser using iterative API
+- Implement CrossValidation API
+- Implement Schema generation
+- Implement overlay feature
+- Think about version evolution
+-
