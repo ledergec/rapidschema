@@ -33,14 +33,14 @@ struct TypeProperties<std::chrono::milliseconds> {
     return std::chrono::milliseconds(value.GetUint64());
   }
 
-  static void Serialize(const std::chrono::milliseconds& milli, WriterBase * writer) {
+  static void Serialize(const std::chrono::milliseconds& milli, WriterBase<> * writer) {
     writer->Int64(milli.count());
   }
 };
 
 TEST(Int64ConfigValueTest, CanParseCustomType) {
   auto json = R"({"leaf": 123})";
-  ConfigValue<std::chrono::milliseconds> value;
+  Value<std::chrono::milliseconds> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ(std::chrono::milliseconds(123), value.Get());

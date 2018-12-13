@@ -33,28 +33,28 @@ TEST(Int64ConfigValueTest, WhenParsingDomBool_ThenFails) {
 
 TEST(Int64ConfigValueTest, WhenParsingDomOutOfLowerRange_ThenFails) {
   auto json = R"({"leaf": -9223372036854775809})";
-  ConfigValue<int64_t> value;
+  Value<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_FALSE(result.Success());
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomLowerRange_ThenSucceeds) {
   auto json = R"({"leaf": -9223372036854775807})";
-  ConfigValue<int64_t> value;
+  Value<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_THAT(result, TransformSucceeded());
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomOutOfUpperRange_ThenFails) {
   auto json = R"({"leaf": 9223372036854775808})";
-  ConfigValue<int64_t> value;
+  Value<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_FALSE(result.Success());
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomUpperRange_ThenSucceeds) {
   auto json = R"({"leaf": 9223372036854775806})";
-  ConfigValue<int64_t> value;
+  Value<int64_t> value;
   auto result = ParseJsonLeaf(json, &value);
   ASSERT_THAT(result, TransformSucceeded());
 }
@@ -75,13 +75,13 @@ TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
 }
 
 
-class Int64ConfigValueTestNode : public ConfigNode {
+class Int64ConfigValueTestNode : public Node {
  public:
   Int64ConfigValueTestNode()
-      : ConfigNode("testNode", {&value})
+      : Node("testNode", {&value})
       , value("value") {}
 
-  ConfigValue<int64_t> value;
+  Value<int64_t> value;
 };
 
 TEST(Int64ConfigValueTest, WhenSerialize_ThenCorrectResult) {

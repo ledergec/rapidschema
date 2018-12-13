@@ -58,13 +58,13 @@ TEST(Int32ConfigValueTest, WhenParsingUpperLimit_ThenParsedCorrectly) {
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-class Int32ConfigValueTestNode : public ConfigNode {
+class Int32ConfigValueTestNode : public Node {
  public:
   Int32ConfigValueTestNode()
-      : ConfigNode("testNode", {&value})
+      : Node("testNode", {&value})
       , value("value") {}
 
-  ConfigValue<int32_t> value;
+  Value<int32_t> value;
 };
 
 TEST(Int32ConfigValueTest, WhenSerialize_ThenCorrectResult) {

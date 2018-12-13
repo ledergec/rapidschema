@@ -35,7 +35,7 @@ TEST(StringConfigValueTest, WhenParsingDomBool_ThenFails) {
 }
 
 TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingDomString_ThenSuccess) {
-  ConfigValue<std::string> value("leaf");
+  Value<std::string> value("leaf");
   auto result = ParseLeaf("ein string", &value);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ("ein string", value.Get());
@@ -44,7 +44,7 @@ TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingDomString_ThenSuccess)
 /////////////////////////// Validate /////////////////////////////////////////////
 
 TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenValidatingShortString_ThenFails) {
-  ConfigValue<std::string, MinLength> value("leaf");
+  Value<std::string, MinLength> value("leaf");
   value.GetConstraint<MinLength>().SetMinLength(20);
   value = "ein string";
   auto result = value.Validate();
@@ -53,7 +53,7 @@ TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenValidatingShortString_T
 }
 
 TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatingShortString_ThenFails) {
-  auto value = MakeValue("leaf", MinLength(20));
+  auto value = MakeUtf8Value("leaf", MinLength(20));
   value.GetConstraint<MinLength>().SetMinLength(20);
   value = "ein string";
   auto result = value.Validate();
@@ -62,7 +62,7 @@ TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatin
 }
 
 TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenValidatingLongString_ThenFails) {
-  ConfigValue<std::string, MaxLength> value("leaf");
+  Value<std::string, MaxLength> value("leaf");
   value.GetConstraint<MaxLength>().SetMaxLength(2);
   value = "ein string";
   auto result = value.Validate();

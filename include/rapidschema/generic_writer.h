@@ -9,8 +9,9 @@
 
 namespace rapidschema {
 
-template<typename Writer>
-class GenericWriter : public WriterBase {
+template<typename Writer, typename Encoding = rapidjson::UTF8<>>
+class GenericWriter : public WriterBase<Encoding> {
+  using Ch = typename WriterBase<Encoding>::Ch;
  public:
   template<typename ... Args>
   explicit GenericWriter(Args&&... args)
@@ -56,15 +57,15 @@ class GenericWriter : public WriterBase {
     return writer_.Double(d);
   }
 
-  bool RawNumber(const char *str, rapidjson::SizeType length, bool copy = false) override {
+  bool RawNumber(const Ch *str, rapidjson::SizeType length, bool copy = false) override {
     return writer_.RawNumber(str, length, copy);
   }
 
-  bool String(const char *str, rapidjson::SizeType length, bool copy = false) override {
+  bool String(const Ch *str, rapidjson::SizeType length, bool copy = false) override {
     return writer_.String(str, length, copy);
   }
 
-  bool String(const std::basic_string<char> &str) override {
+  bool String(const std::basic_string<Ch> &str) override {
     return writer_.String(str);
   }
 
@@ -72,11 +73,11 @@ class GenericWriter : public WriterBase {
     return writer_.StartObject();
   }
 
-  bool Key(const char *str, rapidjson::SizeType length, bool copy = false) override {
+  bool Key(const Ch *str, rapidjson::SizeType length, bool copy = false) override {
     return writer_.Key(str, length, copy);
   }
 
-  bool Key(const std::basic_string<char> &str) override {
+  bool Key(const std::basic_string<Ch> &str) override {
     return writer_.Key(str);
   }
 
@@ -92,15 +93,15 @@ class GenericWriter : public WriterBase {
     return writer_.EndArray(elementCount);
   }
 
-  bool String(const char *const &str) override {
+  bool String(const Ch *const &str) override {
     return writer_.String(str);
   }
 
-  bool Key(const char *const &str) override {
+  bool Key(const Ch *const &str) override {
     return writer_.Key(str);
   }
 
-  bool RawValue(const char *json, size_t length, rapidjson::Type type) override {
+  bool RawValue(const Ch *json, size_t length, rapidjson::Type type) override {
     return writer_.RawValue(json, length, type);
   }
 

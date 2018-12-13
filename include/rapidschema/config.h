@@ -15,33 +15,39 @@
 
 namespace rapidschema {
 
-class Config {
+template <typename Encoding = rapidjson::UTF8<>>
+class GenericConfig {
+ protected:
+  using Ch = typename Encoding::Ch;
+
  public:
-  Config()
+  GenericConfig()
       : name_("") {}
 
-  explicit Config(const std::string &name)
+  explicit GenericConfig(const std::basic_string<Ch> &name)
       : name_(name) {}
 
-  virtual ~Config() = default;
+  virtual ~GenericConfig() = default;
 
   virtual TransformResult Parse(const rapidjson::Value &document) = 0;
 
   virtual TransformResult Validate() const = 0;
 
-  virtual void Serialize(WriterBase* writer) const = 0;
+  virtual void Serialize(WriterBase<Encoding>* writer) const = 0;
 
   const std::string& GetName() const {
     return name_;
   }
 
-  void SetName(const std::string &name) {
+  void SetName(const std::basic_string<Ch> &name) {
     name_ = name;
   }
 
  private:
-  std::string name_;
+  std::basic_string<Ch> name_;
 };
+
+using Config = GenericConfig<>;
 
 }  // namespace rapidschema
 

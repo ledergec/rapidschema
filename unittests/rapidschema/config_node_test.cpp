@@ -12,27 +12,27 @@ namespace rapidschema {
 
 using testing::Test;
 
-class ConfigExampleTest : public ConfigNode {
+class ConfigExampleTest : public Node {
  public:
   ConfigExampleTest()
-      : ConfigNode("example", {&integer_value, &string_value})
-      , integer_value(MakeValue("integerValue", Maximum(4)))
-      , string_value(MakeValue("stringValue", MinLength(3), MaxLength(4))) {}
+      : Node("example", {&integer_value, &string_value})
+      , integer_value(MakeUtf8Value("integerValue", Maximum(4)))
+      , string_value(MakeUtf8Value("stringValue", MinLength(3), MaxLength(4))) {}
 
-  ConfigValue<int, Maximum> integer_value;
-  ConfigValue<std::string, MinLength, MaxLength> string_value;
+  Value<int, Maximum> integer_value;
+  Value<std::string, MinLength, MaxLength> string_value;
 };
 
-class NestedConfigExampleTest : public ConfigNode {
+class NestedConfigExampleTest : public Node {
  public:
   NestedConfigExampleTest()
-      : ConfigNode("nestedExample", {&example, &integer_value, &string_value})
+      : Node("nestedExample", {&example, &integer_value, &string_value})
       , integer_value("integerValue")
       , string_value("stringValue") {}
 
   ConfigExampleTest example;
-  ConfigValue<int> integer_value;
-  ConfigValue<std::string> string_value;
+  Value<int> integer_value;
+  Value<std::string> string_value;
 };
 
 class ConfigNodeTest : public Test {
@@ -151,22 +151,22 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWi
     ASSERT_EQ(expected, result);
 }
 
-class ConfigNodeTestTestSubNode : public ConfigNode {
+class ConfigNodeTestTestSubNode : public Node {
  public:
   ConfigNodeTestTestSubNode()
-      : ConfigNode("testSubNode", {&value})
+      : Node("testSubNode", {&value})
       , value("value") {}
 
-  ConfigValue<int32_t> value;
+  Value<int32_t> value;
 };
 
-class ConfigNodeTestTestNode : public ConfigNode {
+class ConfigNodeTestTestNode : public Node {
  public:
   ConfigNodeTestTestNode()
-      : ConfigNode("testNode", {&value, &sub_node})
+      : Node("testNode", {&value, &sub_node})
       , value("value") {}
 
-  ConfigValue<int32_t> value;
+  Value<int32_t> value;
   ConfigNodeTestTestSubNode sub_node;
 };
 

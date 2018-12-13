@@ -16,10 +16,12 @@
 
 namespace rapidschema {
 
-class ConfigNode : public Config {
+template<typename Encoding = rapidjson::UTF8<>>
+class GenericNode : public GenericConfig<Encoding> {
+  using Ch = typename Encoding::Ch;
  public:
-  ConfigNode(const std::string& name, const std::vector<Config*>& sub_configs)
-      : Config(name)
+  GenericNode(const std::basic_string<Ch>& name, const std::vector<GenericConfig<Encoding>*>& sub_configs)
+      : GenericConfig<Encoding>(name)
       , sub_configs_(sub_configs) {}
 
   TransformResult Parse(const rapidjson::Value & document) override {
@@ -54,7 +56,7 @@ class ConfigNode : public Config {
     return result;
   }
 
-  void Serialize(WriterBase* writer) const override {
+  void Serialize(WriterBase<Encoding>* writer) const override {
     writer->StartObject();
     for (const auto & sub_config : sub_configs_) {
       writer->Key(sub_config->GetName().c_str());
@@ -64,8 +66,10 @@ class ConfigNode : public Config {
   }
 
  private:
-  std::vector<Config*> sub_configs_;
+  std::vector<GenericConfig<Encoding>*> sub_configs_;
 };
+
+using Node = GenericNode<>;
 
 }  // namespace rapidschema
 

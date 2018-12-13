@@ -22,28 +22,33 @@
 
 namespace rapidschema {
 
-template<typename T, template<typename> class ... Constraints>
+template<typename Encoding, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-class ConfigValue;
+class GenericValue;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints);
+GenericValue<rapidjson::UTF8<>, T, Constraints...>
+    MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints);
 
-template<typename T, template<typename> class ... Constraints>
+template<typename Encoding, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-class ConfigValue : public Config {
+class GenericValue : public GenericConfig<Encoding> {
+ protected:
+  using Ch = typename Encoding::Ch;
+
+ private:
   using ValueChecker = CombinedConstraint<T, Constraints...>;
 
  public:
-  ConfigValue() = default;
+  GenericValue() = default;
 
-  explicit ConfigValue(const std::string& name)
-      : Config(name) {}
+  explicit GenericValue(const std::basic_string<Ch>& name)
+      : GenericConfig<Encoding>(name) {}
 
   using Type = T;
 
-  ConfigValue<T, Constraints...>& operator=(const T& t) {
+  GenericValue<Encoding, T, Constraints...>& operator=(const T& t) {
     t_ = t;
     return *this;
   }
@@ -79,25 +84,29 @@ class ConfigValue : public Config {
     return checker_.Check(t_);
   }
 
-  void Serialize(WriterBase* writer) const override {
+  void Serialize(WriterBase<Encoding>* writer) const override {
     TypeProperties<T>::Serialize(t_, writer);
   }
 
  private:
-  ConfigValue(const std::string& name, ValueChecker&& checker)
-      : Config(name)
+  GenericValue(const std::string& name, ValueChecker&& checker)
+      : GenericConfig<Encoding>(name)
       , checker_(std::forward<ValueChecker>(checker)) {}
 
   T t_;
   ValueChecker checker_;
 
-  friend ConfigValue MakeValue<T, Constraints...>(const std::string& name, Constraints<T>&&... constraints);
+  friend GenericValue MakeUtf8Value<T, Constraints...>(const std::string& name, Constraints<T>&&... constraints);
 };
+
+template <typename T, template<typename> class ... Constraints>
+using Value = GenericValue<rapidjson::UTF8<>, T, Constraints...>;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-ConfigValue<T, Constraints...> MakeValue(const std::string& name, Constraints<T>&&... constraints) {
-  return ConfigValue(name, MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
+GenericValue<rapidjson::UTF8<>, T, Constraints...> MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints) {
+  return GenericValue<rapidjson::UTF8<>, T, Constraints...>(
+      name, MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
 }
 
 }  // namespace rapidschema

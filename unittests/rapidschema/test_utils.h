@@ -65,7 +65,7 @@ TransformResult ValidateLeaf(const T& t, Config * config) {
 
 template <typename ValueType, typename ConfigType>
 TransformResult TestLeafType(ConfigType c) {
-    ConfigValue<ValueType> value("leaf");
+    Value<ValueType> value("leaf");
     return ParseLeaf(c, &value);
 }
 

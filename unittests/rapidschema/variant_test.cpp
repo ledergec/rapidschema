@@ -17,21 +17,21 @@ namespace rapidschema {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST(VariantTest, GivenSingleVariantNoConstraints_WhenParsingDomVariant_ThenVariantCanBeParsed) {
-  Variant<ConfigValue<int32_t>> variant("variant");
+  Variant<Value<int32_t>> variant("variant");
   auto result = ParseLeaf<int32_t>(124, &variant);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ(124, variant.GetVariant<int32_t>().Get());
 }
 
 TEST(VariantTest, GivenWrongJsonType_WhenParsingDomVariant_ThenVariantFails) {
-  Variant<ConfigValue<int32_t>> variant("variant");
+  Variant<Value<int32_t>> variant("variant");
   auto result = ParseLeaf<std::string>("hallo", &variant);
   ASSERT_THAT(result, TransformFailed("No type in variant matched. Actual type: string"));
 }
 
 TEST(VariantTest, GivenMultipleVariants_WhenParsingDomVariant_ThenCorrectVariantParsed) {
-  Variant<ConfigValue<int32_t>,
-          ConfigValue<std::string>> variant("variant");
+  Variant<Value<int32_t>,
+          Value<std::string>> variant("variant");
   auto result = ParseLeaf<std::string>("hallo", &variant);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_FALSE(variant.Is<int32_t>());
@@ -42,50 +42,53 @@ TEST(VariantTest, GivenMultipleVariants_WhenParsingDomVariant_ThenCorrectVariant
 /////////////////////////// Validate /////////////////////////////////////////////
 
 TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_ThenConstraintsApplied) {
-  Variant<ConfigValue<int32_t, Minimum>,
-          ConfigValue<std::string, MaxLength>> variant("variant");
+  Variant<Value<int32_t, Minimum>,
+          Value<std::string, MaxLength>> variant("variant");
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0. Actual: length 5 string: \"hallo\""));
+  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0."
+                                      "Actual: length 5 string: \"hallo\""));
 }
 
 TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVariant_ThenConstraintsApplied) {
-  auto variant = MakeVariant(
+  auto variant = MakeUtf8Variant(
       "variant",
-      MakeVariantValue<int32_t, Minimum>(Minimum(10)),
-      MakeVariantValue<std::string, MaxLength>(MaxLength(4)));
+      MakeUtf8VariantValue<int32_t, Minimum>(Minimum(10)),
+      MakeUtf8VariantValue<std::string, MaxLength>(MaxLength(4)));
 
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. Actual: length 5 string: \"hallo\""));
+  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. "
+                                      "Actual: length 5 string: \"hallo\""));
 }
 
 TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidatingVariant_ThenConstraintsApplied) {
-  Variant<ConfigValue<int32_t, Minimum>,
-          ConfigValue<std::string, MaxLength>> variant("variant");
+  Variant<Value<int32_t, Minimum>,
+          Value<std::string, MaxLength>> variant("variant");
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
 
   variant.GetVariant<std::string>().GetConstraint<MaxLength>().SetMaxLength(4);
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. Actual: length 5 string: \"hallo\""));
+  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. "
+                                      "Actual: length 5 string: \"hallo\""));
 }
 
-class VariantTestTestNode : public ConfigNode {
+class VariantTestTestNode : public Node {
  public:
   VariantTestTestNode()
-      : ConfigNode("testNode", {&variant})
-      , variant(MakeVariant<ConfigValue<int64_t>, ConfigValue<std::string>>(
-          "value", MakeVariantValue<int64_t>(), MakeVariantValue<std::string>())) {}
+      : Node("testNode", {&variant})
+      , variant(MakeUtf8Variant<Value<int64_t>, Value<std::string>>(
+          "value", MakeUtf8VariantValue<int64_t>(), MakeUtf8VariantValue<std::string>())) {}
 
-  Variant<ConfigValue<int64_t>, ConfigValue<std::string>> variant;
+  Variant<Value<int64_t>, Value<std::string>> variant;
 };
 
 TEST(VariantTest, WhenSerialize_ThenCorrectResult) {
