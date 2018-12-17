@@ -21,6 +21,7 @@ include_directories(unittests)
 add_subdirectory(extern/googletest)
 add_subdirectory(extern/rapidjson)
 add_subdirectory(extern/fmt)
+add_subdirectory(include)
 add_subdirectory(unittests)
 
 if (test)

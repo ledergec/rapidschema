@@ -19,6 +19,7 @@ namespace rapidschema {
 template<typename Encoding = rapidjson::UTF8<>>
 class GenericNode : public GenericConfig<Encoding> {
   using Ch = typename Encoding::Ch;
+
  public:
   GenericNode(const std::basic_string<Ch>& name, const std::vector<GenericConfig<Encoding>*>& sub_configs)
       : GenericConfig<Encoding>(name)

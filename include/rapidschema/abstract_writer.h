@@ -2,8 +2,8 @@
 // Created by root on 12/12/18.
 //
 
-#ifndef INCLUDE_RAPIDSCHEMA_WRITER_BASE_H_
-#define INCLUDE_RAPIDSCHEMA_WRITER_BASE_H_
+#ifndef INCLUDE_RAPIDSCHEMA_ABSTRACT_WRITER_H_
+#define INCLUDE_RAPIDSCHEMA_ABSTRACT_WRITER_H_
 
 #include <cinttypes>
 #include <string>
@@ -21,7 +21,7 @@ template <typename SourceEncoding = rapidjson::UTF8<>>
 class AbstractWriter {
  public:
   using Ch = typename SourceEncoding::Ch;
-  
+
   virtual bool IsComplete() const = 0;
 
   virtual int GetMaxDecimalPlaces() const = 0;
@@ -64,4 +64,4 @@ class AbstractWriter {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_WRITER_BASE_H_
+#endif  // INCLUDE_RAPIDSCHEMA_ABSTRACT_WRITER_H_

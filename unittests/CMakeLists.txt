@@ -8,4 +8,4 @@ add_executable(unittest ${UNITTEST_SRC})
 
 target_link_libraries(unittest gtest gmock fmt)
 
-setup_cpplint(unittest ${UNITTEST_SRC} ${HDR_BINARY})
+setup_cpplint(unittest ${UNITTEST_SRC})

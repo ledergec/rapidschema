@@ -104,7 +104,8 @@ using Value = GenericValue<rapidjson::UTF8<>, T, Constraints...>;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-GenericValue<rapidjson::UTF8<>, T, Constraints...> MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints) {
+GenericValue<rapidjson::UTF8<>, T, Constraints...>
+    MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints) {
   return GenericValue<rapidjson::UTF8<>, T, Constraints...>(
       name, MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
 }
