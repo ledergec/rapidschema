@@ -49,7 +49,7 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0."
+  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0. "
                                       "Actual: length 5 string: \"hallo\""));
 }
 
@@ -80,6 +80,8 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
   ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. "
                                       "Actual: length 5 string: \"hallo\""));
 }
+
+/////////////////////////// Serialization /////////////////////////////////////////////
 
 class VariantTestTestNode : public Node {
  public:

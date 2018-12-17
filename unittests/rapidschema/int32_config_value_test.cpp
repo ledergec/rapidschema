@@ -58,6 +58,8 @@ TEST(Int32ConfigValueTest, WhenParsingUpperLimit_ThenParsedCorrectly) {
   ASSERT_THAT(result, TransformSucceeded());
 }
 
+/////////////////////////// Serialization /////////////////////////////////////////////
+
 class Int32ConfigValueTestNode : public Node {
  public:
   Int32ConfigValueTestNode()

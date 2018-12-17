@@ -74,6 +74,7 @@ TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
   ASSERT_THAT(result, TransformSucceeded());
 }
 
+/////////////////////////// Serialization /////////////////////////////////////////////
 
 class Int64ConfigValueTestNode : public Node {
  public:

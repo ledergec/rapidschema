@@ -41,6 +41,8 @@ class ConfigNodeTest : public Test {
   NestedConfigExampleTest nested_example_;
 };
 
+/////////////////////////// Parse DOM Style /////////////////////////////////////////////
+
 TEST_F(ConfigNodeTest, GivenSuccess_WhenParsingNode_ThenAllMembersCorrectlySet) {
     ParseObject(R"(
                 {
@@ -151,32 +153,18 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWi
     ASSERT_EQ(expected, result);
 }
 
-class ConfigNodeTestTestSubNode : public Node {
- public:
-  ConfigNodeTestTestSubNode()
-      : Node("testSubNode", {&value})
-      , value("value") {}
 
-  Value<int32_t> value;
-};
-
-class ConfigNodeTestTestNode : public Node {
- public:
-  ConfigNodeTestTestNode()
-      : Node("testNode", {&value, &sub_node})
-      , value("value") {}
-
-  Value<int32_t> value;
-  ConfigNodeTestTestSubNode sub_node;
-};
+/////////////////////////// Serialization /////////////////////////////////////////////
 
 TEST_F(ConfigNodeTest, WhenSerialize_ThenCorrectResult) {
-    ConfigNodeTestTestNode node;
-    node.value = 123;
-    node.sub_node.value = 432;
+    NestedConfigExampleTest node;
+    node.integer_value = 123;
+    node.string_value = "hallo";
+    node.example.integer_value = 443;
+    node.example.string_value = "du";
 
     std::string result = SerializeConfig(node);
-    ASSERT_EQ(R"({"value":123,"testSubNode":{"value":432}})", result);
+    ASSERT_EQ(R"({"example":{"integerValue":443,"stringValue":"du"},"integerValue":123,"stringValue":"hallo"})", result);
 }
 
 
