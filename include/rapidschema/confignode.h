@@ -25,6 +25,11 @@ class GenericNode : public GenericConfig<Encoding> {
       : GenericConfig<Encoding>(name)
       , sub_configs_(sub_configs) {}
 
+  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+    assert(false);
+    return TransformResult();
+  }
+
   TransformResult Parse(const rapidjson::Value & document) override {
     if (document.IsObject() == false) {
       TransformResult(Failure(fmt::format("Expected object but was: {} ",

@@ -6,6 +6,7 @@
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
+#include "rapidschema/abstract_reader.h"
 
 namespace rapidschema {
 
@@ -57,6 +58,8 @@ TEST(Int32ConfigValueTest, WhenParsingUpperLimit_ThenParsedCorrectly) {
   auto result = TestLeafType<int32_t, int32_t>(std::numeric_limits<int32_t>::max());
   ASSERT_THAT(result, TransformSucceeded());
 }
+
+/////////////////////////// Parse SAX Style /////////////////////////////////////////////
 
 /////////////////////////// Serialization /////////////////////////////////////////////
 

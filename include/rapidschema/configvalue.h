@@ -66,6 +66,11 @@ class GenericValue : public GenericConfig<Encoding> {
     return checker_.template Get<Constraint>();
   }
 
+  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+    assert(false);
+    return TransformResult();
+  }
+
   TransformResult Parse(const rapidjson::Value& document) override {
     if (TypeProperties<T>::IsType(document) == false) {
       rapidjson::StringBuffer buffer;

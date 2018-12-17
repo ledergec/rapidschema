@@ -61,6 +61,11 @@ class GenericVariant : public GenericConfig<Encoding> {
   explicit GenericVariant(const std::basic_string<Ch>& name)
       : GenericConfig<Encoding>(name) {}
 
+  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+    assert(false);
+    return TransformResult();
+  }
+
   TransformResult Parse(const rapidjson::Value& document) override {
     variant_index_ = unique_tuple_.ApplyUntilSuccess(
         [&document](auto& config_value) {
