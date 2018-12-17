@@ -18,7 +18,7 @@ namespace rapidschema {
 
 /// \brief for documentation of the interface please refer to the documentation of rapidjson::Writer.
 template <typename SourceEncoding = rapidjson::UTF8<>>
-class WriterBase {
+class AbstractWriter {
  public:
   using Ch = typename SourceEncoding::Ch;
   

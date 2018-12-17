@@ -5,13 +5,13 @@
 #ifndef INCLUDE_RAPIDSCHEMA_GENERIC_WRITER_H_
 #define INCLUDE_RAPIDSCHEMA_GENERIC_WRITER_H_
 
-#include "rapidschema/writer_base.h"
+#include "rapidschema/abstract_writer.h"
 
 namespace rapidschema {
 
 template<typename Writer, typename Encoding = rapidjson::UTF8<>>
-class GenericWriter : public WriterBase<Encoding> {
-  using Ch = typename WriterBase<Encoding>::Ch;
+class GenericWriter : public AbstractWriter<Encoding> {
+  using Ch = typename AbstractWriter<Encoding>::Ch;
  public:
   template<typename ... Args>
   explicit GenericWriter(Args&&... args)

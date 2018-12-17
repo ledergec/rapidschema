@@ -84,7 +84,7 @@ class GenericValue : public GenericConfig<Encoding> {
     return checker_.Check(t_);
   }
 
-  void Serialize(WriterBase<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Encoding>* writer) const override {
     TypeProperties<T>::Serialize(t_, writer);
   }
 

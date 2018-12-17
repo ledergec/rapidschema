@@ -56,7 +56,7 @@ class GenericNode : public GenericConfig<Encoding> {
     return result;
   }
 
-  void Serialize(WriterBase<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Encoding>* writer) const override {
     writer->StartObject();
     for (const auto & sub_config : sub_configs_) {
       writer->Key(sub_config->GetName().c_str());

@@ -11,7 +11,7 @@
 #include <rapidjson/document.h>
 
 #include "rapidschema/transform_result.h"
-#include "rapidschema/writer_base.h"
+#include "rapidschema/abstract_writer.h"
 
 namespace rapidschema {
 
@@ -33,7 +33,7 @@ class GenericConfig {
 
   virtual TransformResult Validate() const = 0;
 
-  virtual void Serialize(WriterBase<Encoding>* writer) const = 0;
+  virtual void Serialize(AbstractWriter<Encoding>* writer) const = 0;
 
   const std::string& GetName() const {
     return name_;

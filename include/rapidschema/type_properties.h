@@ -10,7 +10,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/writer_base.h"
+#include "rapidschema/abstract_writer.h"
 
 namespace rapidschema {
 
@@ -41,7 +41,7 @@ struct TypeProperties<std::string> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const std::string& str, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const std::string& str, AbstractWriter<SourceEncoding> * writer) {
     writer->String(str.c_str());
   }
 };
@@ -60,7 +60,7 @@ struct TypeProperties<int32_t> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const int32_t& i, WriterBase<SourceEncoding>* writer) {
+  static void Serialize(const int32_t& i, AbstractWriter<SourceEncoding>* writer) {
     writer->Int(i);
   }
 };
@@ -79,7 +79,7 @@ struct TypeProperties<uint32_t> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const uint32_t& i, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const uint32_t& i, AbstractWriter<SourceEncoding> * writer) {
     writer->Uint(i);
   }
 };
@@ -98,7 +98,7 @@ struct TypeProperties<int64_t> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const int64_t& i, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const int64_t& i, AbstractWriter<SourceEncoding> * writer) {
     writer->Int64(i);
   }
 };
@@ -118,7 +118,7 @@ struct TypeProperties<uint64_t> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const uint64_t& i, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const uint64_t& i, AbstractWriter<SourceEncoding> * writer) {
     writer->Uint64(i);
   }
 };
@@ -137,7 +137,7 @@ struct TypeProperties<bool> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const bool& b, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const bool& b, AbstractWriter<SourceEncoding> * writer) {
     writer->Bool(b);
   }
 };
@@ -157,7 +157,7 @@ struct TypeProperties<float> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const float& f, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const float& f, AbstractWriter<SourceEncoding> * writer) {
     writer->Double(f);
   }
 };
@@ -176,7 +176,7 @@ struct TypeProperties<double> {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const double& d, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const double& d, AbstractWriter<SourceEncoding> * writer) {
     writer->Double(d);
   }
 };
@@ -195,7 +195,7 @@ struct TypeProperties<std::nullptr_t > {
   }
 
   template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const nullptr_t& n, WriterBase<SourceEncoding> * writer) {
+  static void Serialize(const nullptr_t& n, AbstractWriter<SourceEncoding> * writer) {
     (void) n;
     writer->Null();
   }

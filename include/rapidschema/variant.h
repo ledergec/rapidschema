@@ -108,7 +108,7 @@ class GenericVariant : public GenericConfig<Encoding> {
     return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
 
-  void Serialize(WriterBase<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Encoding>* writer) const override {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
