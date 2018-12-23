@@ -20,6 +20,6 @@ docker run -it \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v `pwd`/.java:/root/.java:delegated \
     -v ${HOME}/.Xauthority:/home/dev/.Xauthority \
-    -v `pwd`/.CLion2018.2:/root/.CLion2018.2:delegated \
+    -v `pwd`/.CLion2018.2:/root/.CLion2018.3:delegated \
     -v `pwd`/../../..:/home/dev/rapidschema:delegated \
     rapidschema-dev-image
