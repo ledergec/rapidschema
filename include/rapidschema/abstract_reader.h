@@ -8,7 +8,6 @@
 #include <rapidjson/encodings.h>
 
 #include "rapidschema/abstract_handler.h"
-#include "rapidschema/abstract_intput_stream.h"
 
 namespace rapidschema {
 
@@ -19,6 +18,8 @@ class AbstractReader {
   virtual void Init() = 0;
 
   virtual bool Next(AbstractHandler<Ch>* handler) = 0;
+
+  virtual bool HasParseError() = 0;
 
   virtual bool Complete() = 0;
 };

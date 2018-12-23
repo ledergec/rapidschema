@@ -27,6 +27,8 @@ class GenericConfig {
 
   virtual TransformResult Validate() const = 0;
 
+  virtual TransformResult HandleMissing() const = 0;
+
   virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 };
 

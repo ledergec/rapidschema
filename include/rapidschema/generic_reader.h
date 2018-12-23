@@ -9,28 +9,36 @@
 
 namespace rapidschema {
 
-template <typename Reader, typename SourceEncoding = rapidjson::UTF8<>, typename TargetEncoding = rapidjson::UTF8<>>
-class GenericReader : public AbstractReader<TargetEncoding> {
+template <typename Reader, typename InputStream, typename SourceEncoding = rapidjson::UTF8<>,
+    typename TargetEncoding = rapidjson::UTF8<>>
+class GenericReader : public AbstractReader<typename SourceEncoding::Ch> {
  public:
   using Ch = typename SourceEncoding::Ch;
 
-  GenericReader(AbstractInputStream<SourceEncoding>* is)
-      : is_(is) {}
+  GenericReader(InputStream* is)
+      : is_(is) {
+    assert(is != nullptr);
+  }
 
   void Init() override {
     reader_.IterativeParseInit();
   }
 
-  bool Next(AbstractHandler<TargetEncoding>* handler) override {
-    return reader_.IterativeParseNext(*is_, *handler);
+  bool Next(AbstractHandler<typename SourceEncoding::Ch>* handler) override {
+    return reader_.template IterativeParseNext<
+        rapidjson::kParseDefaultFlags, InputStream, AbstractHandler<typename TargetEncoding::Ch>>(*is_, *handler);
   };
 
+  bool HasParseError() override  {
+    return reader_.HasParseError();
+  }
+
   bool Complete() override {
-    return reader_.Complete();
+    return reader_.IterativeParseComplete();
   };
 
  private:
-  AbstractInputStream<SourceEncoding>* is_;
+  InputStream* is_;
   Reader reader_;
 };
 

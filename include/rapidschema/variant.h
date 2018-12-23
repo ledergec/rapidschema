@@ -113,6 +113,10 @@ class GenericVariant : public GenericConfig<Ch> {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
+  TransformResult HandleMissing() const {
+    return FailResult("is missing");
+  }
+
  private:
   int32_t variant_index_ = INVALID_VARIANT_INDEX;
   // must be a tuple because each config value and its constraints must be stored
@@ -121,8 +125,7 @@ class GenericVariant : public GenericConfig<Ch> {
   GenericVariant(Tuple&& data)
       : unique_tuple_(std::forward<Tuple>(data)) {}
 
-  friend GenericVariant<Ch, Values...> MakeUtf8Variant<Values...>(
-      Values&&... values);
+  friend GenericVariant<Ch, Values...> MakeUtf8Variant<Values...>(Values&&... values);
 };
 
 template <typename... Values>

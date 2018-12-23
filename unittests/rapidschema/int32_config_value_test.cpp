@@ -3,10 +3,10 @@
 
 #include "rapidschema/confignode.h"
 #include "rapidschema/configvalue.h"
+#include "rapidschema/generic_reader.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
-#include "rapidschema/abstract_reader.h"
 
 namespace rapidschema {
 
@@ -59,8 +59,6 @@ TEST(Int32ConfigValueTest, WhenParsingUpperLimit_ThenParsedCorrectly) {
   ASSERT_THAT(result, TransformSucceeded());
 }
 
-/////////////////////////// Parse SAX Style /////////////////////////////////////////////
-
 /////////////////////////// Serialization /////////////////////////////////////////////
 
 class Int32ConfigValueTestNode : public Node {
@@ -78,6 +76,28 @@ TEST(Int32ConfigValueTest, WhenSerialize_ThenCorrectResult) {
   node.value = 123;
   std::string result = SerializeConfig(node);
   ASSERT_EQ(R"({"value":123})", result);
+}
+
+/////////////////////////// Parse SAX Style /////////////////////////////////////////////
+
+TEST(Int32ConfigValueTest, GivenMissingMember_WhenParsingSax_ThenFails) {
+  auto json_string = R"({"leaf": 23})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result, TransformFailed("is missing"));
+}
+
+TEST(Int32ConfigValueTest, GivenFloat_WhenParsingSax_ThenFails) {
+  auto json_string = R"({"value": 23.5})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result, TransformFailed("is missing"));
 }
 
 }  // namespace rapidschema
