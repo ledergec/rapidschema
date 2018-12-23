@@ -21,9 +21,8 @@ class GenericNode : public GenericConfig<Encoding> {
   using Ch = typename Encoding::Ch;
 
  public:
-  GenericNode(const std::basic_string<Ch>& name, const std::vector<GenericConfig<Encoding>*>& sub_configs)
-      : GenericConfig<Encoding>(name)
-      , sub_configs_(sub_configs) {}
+  GenericNode()
+  : mapping_initialized_(false) {}
 
   TransformResult Parse(AbstractReader<Encoding> * reader) override {
     assert(false);
@@ -31,21 +30,23 @@ class GenericNode : public GenericConfig<Encoding> {
   }
 
   TransformResult Parse(const rapidjson::Value & document) override {
+    UpdateMapping();
+
     if (document.IsObject() == false) {
       TransformResult(Failure(fmt::format("Expected object but was: {} ",
                                           JsonTypeToString(document.GetType()))));
     }
 
     TransformResult result;
-    for (auto config : sub_configs_) {
-      if (document.HasMember(config->GetName().c_str()) == false) {
-        result.Append(Failure(fmt::format("Missing member: \"{}\"", config->GetName())));
+    for (auto pair : name_config_mapping_) {
+      if (document.HasMember(pair.first.c_str()) == false) {
+        result.Append(Failure(fmt::format("Missing member: \"{}\"", pair.first)));
         continue;
       }
 
-      auto tmp = config->Parse(document.FindMember(config->GetName().c_str())->value);
+      auto tmp = const_cast<Config*>(pair.second)->Parse(document.FindMember(pair.first.c_str())->value);
       if (tmp.Success() == false) {
-        tmp.AddPath(config->GetName());
+        tmp.AddPath(pair.first);
         result.Append(tmp);
       }
     }
@@ -54,25 +55,40 @@ class GenericNode : public GenericConfig<Encoding> {
   }
 
   TransformResult Validate() const override {
+    UpdateMapping();
+
     TransformResult result;
-    for (auto config : sub_configs_) {
-      result.Append(config->Validate());
+    for (auto pair : name_config_mapping_) {
+      result.Append(pair.second->Validate());
     }
 
     return result;
   }
 
   void Serialize(AbstractWriter<Encoding>* writer) const override {
+    UpdateMapping();
+
     writer->StartObject();
-    for (const auto & sub_config : sub_configs_) {
-      writer->Key(sub_config->GetName().c_str());
-      sub_config->Serialize(writer);
+    for (const auto & pair : name_config_mapping_) {
+      writer->Key(pair.first.c_str());
+      pair.second->Serialize(writer);
     }
     writer->EndObject();
   }
 
+ protected:
+  virtual std::map<std::string, const GenericConfig<Encoding>*> CreateMemberMapping() const = 0;
+
  private:
-  std::vector<GenericConfig<Encoding>*> sub_configs_;
+  void UpdateMapping() const {
+    if (mapping_initialized_ == false) {
+      name_config_mapping_ = CreateMemberMapping();
+      mapping_initialized_ = true;
+    }
+  }
+
+  mutable bool mapping_initialized_;
+  mutable std::map<std::string, const GenericConfig<Encoding>*> name_config_mapping_;
 };
 
 using Node = GenericNode<>;

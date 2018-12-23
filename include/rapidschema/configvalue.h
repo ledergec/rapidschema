@@ -29,7 +29,7 @@ class GenericValue;
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<rapidjson::UTF8<>, T, Constraints...>
-    MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints);
+    MakeUtf8Value(Constraints<T>&&... constraints);
 
 template<typename Encoding, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
@@ -42,9 +42,6 @@ class GenericValue : public GenericConfig<Encoding> {
 
  public:
   GenericValue() = default;
-
-  explicit GenericValue(const std::basic_string<Ch>& name)
-      : GenericConfig<Encoding>(name) {}
 
   using Type = T;
 
@@ -94,14 +91,13 @@ class GenericValue : public GenericConfig<Encoding> {
   }
 
  private:
-  GenericValue(const std::string& name, ValueChecker&& checker)
-      : GenericConfig<Encoding>(name)
-      , checker_(std::forward<ValueChecker>(checker)) {}
+  GenericValue(ValueChecker&& checker)
+      : checker_(std::forward<ValueChecker>(checker)) {}
 
   T t_;
   ValueChecker checker_;
 
-  friend GenericValue MakeUtf8Value<T, Constraints...>(const std::string& name, Constraints<T>&&... constraints);
+  friend GenericValue MakeUtf8Value<T, Constraints...>(Constraints<T>&&... constraints);
 };
 
 template <typename T, template<typename> class ... Constraints>
@@ -110,9 +106,8 @@ using Value = GenericValue<rapidjson::UTF8<>, T, Constraints...>;
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<rapidjson::UTF8<>, T, Constraints...>
-    MakeUtf8Value(const std::string& name, Constraints<T>&&... constraints) {
-  return GenericValue<rapidjson::UTF8<>, T, Constraints...>(
-      name, MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
+    MakeUtf8Value(Constraints<T>&&... constraints) {
+  return GenericValue<rapidjson::UTF8<>, T, Constraints...>(MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
 }
 
 }  // namespace rapidschema

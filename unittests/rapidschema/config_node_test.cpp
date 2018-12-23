@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <map>
+
 #include "rapidschema/configvalue.h"
 #include "rapidschema/confignode.h"
 #include "rapidschema/range_constraints.h"
@@ -15,24 +17,33 @@ using testing::Test;
 class ConfigExampleTest : public Node {
  public:
   ConfigExampleTest()
-      : Node("example", {&integer_value, &string_value})
-      , integer_value(MakeUtf8Value("integerValue", Maximum(4)))
-      , string_value(MakeUtf8Value("stringValue", MinLength(3), MaxLength(4))) {}
+  : integer_value(MakeUtf8Value(Maximum(4)))
+  , string_value(MakeUtf8Value(MinLength(3), MaxLength(4))) {}
 
   Value<int, Maximum> integer_value;
   Value<std::string, MinLength, MaxLength> string_value;
+
+ protected:
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value}};
+  }
 };
 
 class NestedConfigExampleTest : public Node {
  public:
-  NestedConfigExampleTest()
-      : Node("nestedExample", {&example, &integer_value, &string_value})
-      , integer_value("integerValue")
-      , string_value("stringValue") {}
+  NestedConfigExampleTest() {}
 
   ConfigExampleTest example;
   Value<int> integer_value;
   Value<std::string> string_value;
+
+ protected:
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
+    return {{"example", &example},
+            {"integerValue", &integer_value},
+            {"stringValue", &string_value}};
+  }
 };
 
 class ConfigNodeTest : public Test {

@@ -22,12 +22,6 @@ class GenericConfig {
   using Ch = typename Encoding::Ch;
 
  public:
-  GenericConfig()
-      : name_("") {}
-
-  explicit GenericConfig(const std::basic_string<Ch> &name)
-      : name_(name) {}
-
   virtual ~GenericConfig() = default;
 
   virtual TransformResult Parse(AbstractReader<Encoding> * reader) = 0;
@@ -37,17 +31,6 @@ class GenericConfig {
   virtual TransformResult Validate() const = 0;
 
   virtual void Serialize(AbstractWriter<Encoding>* writer) const = 0;
-
-  const std::string& GetName() const {
-    return name_;
-  }
-
-  void SetName(const std::basic_string<Ch> &name) {
-    name_ = name;
-  }
-
- private:
-  std::basic_string<Ch> name_;
 };
 
 using Config = GenericConfig<>;

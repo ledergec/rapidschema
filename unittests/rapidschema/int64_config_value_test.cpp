@@ -78,11 +78,12 @@ TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
 
 class Int64ConfigValueTestNode : public Node {
  public:
-  Int64ConfigValueTestNode()
-      : Node("testNode", {&value})
-      , value("value") {}
-
   Value<int64_t> value;
+
+ protected:
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
+    return {{"value", &value}};
+  }
 };
 
 TEST(Int64ConfigValueTest, WhenSerialize_ThenCorrectResult) {

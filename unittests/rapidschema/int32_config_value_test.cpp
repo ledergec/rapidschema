@@ -65,11 +65,12 @@ TEST(Int32ConfigValueTest, WhenParsingUpperLimit_ThenParsedCorrectly) {
 
 class Int32ConfigValueTestNode : public Node {
  public:
-  Int32ConfigValueTestNode()
-      : Node("testNode", {&value})
-      , value("value") {}
-
   Value<int32_t> value;
+
+ protected:
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
+    return {{"value", &value}};
+  }
 };
 
 TEST(Int32ConfigValueTest, WhenSerialize_ThenCorrectResult) {

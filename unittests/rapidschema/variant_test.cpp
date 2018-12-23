@@ -17,21 +17,21 @@ namespace rapidschema {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST(VariantTest, GivenSingleVariantNoConstraints_WhenParsingDomVariant_ThenVariantCanBeParsed) {
-  Variant<Value<int32_t>> variant("variant");
+  Variant<Value<int32_t>> variant;
   auto result = ParseLeaf<int32_t>(124, &variant);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ(124, variant.GetVariant<int32_t>().Get());
 }
 
 TEST(VariantTest, GivenWrongJsonType_WhenParsingDomVariant_ThenVariantFails) {
-  Variant<Value<int32_t>> variant("variant");
+  Variant<Value<int32_t>> variant;
   auto result = ParseLeaf<std::string>("hallo", &variant);
   ASSERT_THAT(result, TransformFailed("No type in variant matched. Actual type: string"));
 }
 
 TEST(VariantTest, GivenMultipleVariants_WhenParsingDomVariant_ThenCorrectVariantParsed) {
   Variant<Value<int32_t>,
-          Value<std::string>> variant("variant");
+          Value<std::string>> variant;
   auto result = ParseLeaf<std::string>("hallo", &variant);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_FALSE(variant.Is<int32_t>());
@@ -43,7 +43,7 @@ TEST(VariantTest, GivenMultipleVariants_WhenParsingDomVariant_ThenCorrectVariant
 
 TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_ThenConstraintsApplied) {
   Variant<Value<int32_t, Minimum>,
-          Value<std::string, MaxLength>> variant("variant");
+          Value<std::string, MaxLength>> variant;
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
@@ -55,7 +55,6 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
 
 TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVariant_ThenConstraintsApplied) {
   auto variant = MakeUtf8Variant(
-      "variant",
       MakeUtf8VariantValue<int32_t, Minimum>(Minimum(10)),
       MakeUtf8VariantValue<std::string, MaxLength>(MaxLength(4)));
 
@@ -70,7 +69,7 @@ TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVari
 
 TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidatingVariant_ThenConstraintsApplied) {
   Variant<Value<int32_t, Minimum>,
-          Value<std::string, MaxLength>> variant("variant");
+          Value<std::string, MaxLength>> variant;
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
 
@@ -86,11 +85,15 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
 class VariantTestTestNode : public Node {
  public:
   VariantTestTestNode()
-      : Node("testNode", {&variant})
-      , variant(MakeUtf8Variant<Value<int64_t>, Value<std::string>>(
-          "value", MakeUtf8VariantValue<int64_t>(), MakeUtf8VariantValue<std::string>())) {}
+    : variant(MakeUtf8Variant<Value<int64_t>, Value<std::string>>(
+          MakeUtf8VariantValue<int64_t>(), MakeUtf8VariantValue<std::string>())) {}
 
   Variant<Value<int64_t>, Value<std::string>> variant;
+
+ protected:
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
+    return {{"value", &variant}};
+  }
 };
 
 TEST(VariantTest, WhenSerialize_ThenCorrectResult) {

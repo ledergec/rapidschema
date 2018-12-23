@@ -36,7 +36,7 @@ template<typename Encoding, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonT
 class GenericVariant;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-GenericVariant<rapidjson::UTF8<>, Values...> MakeUtf8Variant(const std::string& name, Values&&... values);
+GenericVariant<rapidjson::UTF8<>, Values...> MakeUtf8Variant(Values&&... values);
 
 template<typename Encoding, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
 class GenericVariant : public GenericConfig<Encoding> {
@@ -58,8 +58,7 @@ class GenericVariant : public GenericConfig<Encoding> {
   static constexpr int INVALID_VARIANT_INDEX = -1;
 
  public:
-  explicit GenericVariant(const std::basic_string<Ch>& name)
-      : GenericConfig<Encoding>(name) {}
+  GenericVariant() = default;
 
   TransformResult Parse(AbstractReader<Encoding> * reader) override {
     assert(false);
@@ -122,12 +121,10 @@ class GenericVariant : public GenericConfig<Encoding> {
   // must be a tuple because each config value and its constraints must be stored
   Tuple unique_tuple_;
 
-  GenericVariant(const std::basic_string<Ch>& name, Tuple&& data)
-      : GenericConfig<Encoding>(name)
-      , unique_tuple_(std::forward<Tuple>(data)) {}
+  GenericVariant(Tuple&& data)
+      : unique_tuple_(std::forward<Tuple>(data)) {}
 
   friend GenericVariant<rapidjson::UTF8<>, Values...> MakeUtf8Variant<Values...>(
-      const std::string& name,
       Values&&... values);
 };
 
@@ -135,9 +132,8 @@ template <typename... Values>
 using Variant = GenericVariant<rapidjson::UTF8<>, Values...>;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-Variant<Values...> MakeUtf8Variant(const std::string& name, Values&&... values) {
+Variant<Values...> MakeUtf8Variant(Values&&... values) {
   return Variant<Values...>(
-      name,
       internal::UniqueTuple<Values...>(
           std::make_tuple<Values...>(std::forward<Values>(values)...)));
 }
@@ -145,7 +141,7 @@ Variant<Values...> MakeUtf8Variant(const std::string& name, Values&&... values) 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 Value<T, Constraints...> MakeUtf8VariantValue(Constraints<T>&&... constraints) {
-  return MakeUtf8Value<T, Constraints...>("", std::forward<Constraints<T>>(constraints)...);
+  return MakeUtf8Value<T, Constraints...>(std::forward<Constraints<T>>(constraints)...);
 }
 
 }  // namespace rapidschema
