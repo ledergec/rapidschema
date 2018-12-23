@@ -12,6 +12,8 @@ docker rm rapidschema-dev-container
 
 docker run -it \
     --entrypoint /bin/bash \
+    --cap-add=SYS_PTRACE \
+    --security-opt seccomp=unconfined \
     -u root \
     -e DISPLAY=$IP:0 \
     --name rapidschema-dev-container \
