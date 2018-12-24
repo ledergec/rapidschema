@@ -165,6 +165,50 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWi
 }
 
 
+////////////////////////// Copy Construction and Assignment work ///////////////////////////////////////
+
+TEST_F(ConfigNodeTest, GivenCopiedObject_WhenParsingNestedNode_ThenAllMembersCorrectlySet) {
+  NestedConfigExampleTest copied_nested_example(nested_example_);
+
+  auto result = ParseObject(R"(
+                {
+                  "example": {
+                    "integerValue": 43,
+                    "stringValue": "nested_value"
+                  },
+                  "integerValue": 23,
+                  "stringValue": "hallo"
+                }
+                )", &copied_nested_example);
+
+  ASSERT_EQ(43, copied_nested_example.example.integer_value.Get());
+  ASSERT_EQ("nested_value", copied_nested_example.example.string_value.Get());
+  ASSERT_EQ(23, copied_nested_example.integer_value.Get());
+  ASSERT_EQ("hallo", copied_nested_example.string_value.Get());
+}
+
+TEST_F(ConfigNodeTest, GivenCopyAssignedObject_WhenParsingNestedNode_ThenAllMembersCorrectlySet) {
+  NestedConfigExampleTest copy_assigned_nested_example;
+
+  copy_assigned_nested_example = nested_example_;
+
+  auto result = ParseObject(R"(
+                {
+                  "example": {
+                    "integerValue": 43,
+                    "stringValue": "nested_value"
+                  },
+                  "integerValue": 23,
+                  "stringValue": "hallo"
+                }
+                )", &copy_assigned_nested_example);
+
+  ASSERT_EQ(43, copy_assigned_nested_example.example.integer_value.Get());
+  ASSERT_EQ("nested_value", copy_assigned_nested_example.example.string_value.Get());
+  ASSERT_EQ(23, copy_assigned_nested_example.integer_value.Get());
+  ASSERT_EQ("hallo", copy_assigned_nested_example.string_value.Get());
+}
+
 /////////////////////////// Serialization /////////////////////////////////////////////
 
 TEST_F(ConfigNodeTest, WhenSerialize_ThenCorrectResult) {

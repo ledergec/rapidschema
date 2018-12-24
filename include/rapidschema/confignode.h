@@ -22,7 +22,21 @@ class GenericNode : public GenericConfig<Encoding> {
 
  public:
   GenericNode()
-  : mapping_initialized_(false) {}
+    : mapping_initialized_(false) {}
+
+  GenericNode(const GenericNode<Encoding>& other)
+    : mapping_initialized_(false) {}
+
+  GenericNode(GenericNode<Encoding>&& other)
+      : mapping_initialized_(false) {}
+
+  GenericNode & operator= (const GenericNode & other) {
+    if (this != &other) {
+      mapping_initialized_ = false;
+      name_config_mapping_ = std::map<std::string, const GenericConfig<Encoding>*>();
+    }
+    return *this;
+  }
 
   TransformResult Parse(AbstractReader<Encoding> * reader) override {
     assert(false);
@@ -88,6 +102,7 @@ class GenericNode : public GenericConfig<Encoding> {
   }
 
   mutable bool mapping_initialized_;
+  // TODO(cledergerber) should be std::basic_string<Ch> not std::string.
   mutable std::map<std::string, const GenericConfig<Encoding>*> name_config_mapping_;
 };
 
