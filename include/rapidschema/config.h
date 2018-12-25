@@ -16,21 +16,18 @@
 
 namespace rapidschema {
 
-template <typename Encoding = rapidjson::UTF8<>>
+template <typename Ch = char>
 class GenericConfig {
- protected:
-  using Ch = typename Encoding::Ch;
-
  public:
   virtual ~GenericConfig() = default;
 
-  virtual TransformResult Parse(AbstractReader<Encoding> * reader) = 0;
+  virtual TransformResult Parse(AbstractReader<Ch> * reader) = 0;
 
   virtual TransformResult Parse(const rapidjson::Value &document) = 0;
 
   virtual TransformResult Validate() const = 0;
 
-  virtual void Serialize(AbstractWriter<Encoding>* writer) const = 0;
+  virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 };
 
 using Config = GenericConfig<>;

@@ -36,13 +36,10 @@ template<typename Encoding, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonT
 class GenericVariant;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-GenericVariant<rapidjson::UTF8<>, Values...> MakeUtf8Variant(Values&&... values);
+GenericVariant<char, Values...> MakeUtf8Variant(Values&&... values);
 
-template<typename Encoding, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-class GenericVariant : public GenericConfig<Encoding> {
- protected:
-  using Ch = typename GenericConfig<Encoding>::Ch;
-
+template<typename Ch, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
+class GenericVariant : public GenericConfig<Ch> {
  private:
   using Tuple = internal::UniqueTuple<Values...>;
 
@@ -60,7 +57,7 @@ class GenericVariant : public GenericConfig<Encoding> {
  public:
   GenericVariant() = default;
 
-  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+  TransformResult Parse(AbstractReader<Ch> * reader) override {
     assert(false);
     return TransformResult();
   }
@@ -80,7 +77,7 @@ class GenericVariant : public GenericConfig<Encoding> {
   }
 
   template <typename T>
-  GenericVariant<Encoding, Values...>& operator=(const T& t) {
+  GenericVariant<Ch, Values...>& operator=(const T& t) {
     variant_index_ = ConfigIndexOf<T>;
     GetVariant<T>() = t;
     return *this;
@@ -112,7 +109,7 @@ class GenericVariant : public GenericConfig<Encoding> {
     return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
 
-  void Serialize(AbstractWriter<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Ch>* writer) const override {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
@@ -124,12 +121,12 @@ class GenericVariant : public GenericConfig<Encoding> {
   GenericVariant(Tuple&& data)
       : unique_tuple_(std::forward<Tuple>(data)) {}
 
-  friend GenericVariant<rapidjson::UTF8<>, Values...> MakeUtf8Variant<Values...>(
+  friend GenericVariant<Ch, Values...> MakeUtf8Variant<Values...>(
       Values&&... values);
 };
 
 template <typename... Values>
-using Variant = GenericVariant<rapidjson::UTF8<>, Values...>;
+using Variant = GenericVariant<char, Values...>;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
 Variant<Values...> MakeUtf8Variant(Values&&... values) {

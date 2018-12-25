@@ -9,10 +9,8 @@
 
 namespace rapidschema {
 
-template<typename Writer, typename Encoding = rapidjson::UTF8<>>
-class GenericWriter : public AbstractWriter<Encoding> {
-  using Ch = typename AbstractWriter<Encoding>::Ch;
-
+template<typename Writer, typename Ch = char>
+class GenericWriter : public AbstractWriter<Ch> {
  public:
   template<typename ... Args>
   explicit GenericWriter(Args&&... args)

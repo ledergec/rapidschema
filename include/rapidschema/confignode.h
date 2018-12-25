@@ -16,29 +16,29 @@
 
 namespace rapidschema {
 
-template<typename Encoding = rapidjson::UTF8<>>
-class GenericNode : public GenericConfig<Encoding> {
-  using Ch = typename Encoding::Ch;
-
+template<typename Ch = char>
+class GenericNode : public GenericConfig<Ch> {
  public:
+  using CharType = Ch;
+
   GenericNode()
     : mapping_initialized_(false) {}
 
-  GenericNode(const GenericNode<Encoding>& other)
+  GenericNode(const GenericNode<Ch>& other)
     : mapping_initialized_(false) {}
 
-  GenericNode(GenericNode<Encoding>&& other)
+  GenericNode(GenericNode<Ch>&& other)
       : mapping_initialized_(false) {}
 
   GenericNode & operator= (const GenericNode & other) {
     if (this != &other) {
       mapping_initialized_ = false;
-      name_config_mapping_ = std::map<std::string, const GenericConfig<Encoding>*>();
+      name_config_mapping_ = std::map<std::basic_string<Ch>, const GenericConfig<Ch>*>();
     }
     return *this;
   }
 
-  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+  TransformResult Parse(AbstractReader<Ch> * reader) override {
     assert(false);
     return TransformResult();
   }
@@ -79,7 +79,7 @@ class GenericNode : public GenericConfig<Encoding> {
     return result;
   }
 
-  void Serialize(AbstractWriter<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Ch>* writer) const override {
     UpdateMapping();
 
     writer->StartObject();
@@ -91,7 +91,7 @@ class GenericNode : public GenericConfig<Encoding> {
   }
 
  protected:
-  virtual std::map<std::string, const GenericConfig<Encoding>*> CreateMemberMapping() const = 0;
+  virtual std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> CreateMemberMapping() const = 0;
 
  private:
   void UpdateMapping() const {
@@ -102,8 +102,7 @@ class GenericNode : public GenericConfig<Encoding> {
   }
 
   mutable bool mapping_initialized_;
-  // TODO(cledergerber) should be std::basic_string<Ch> not std::string.
-  mutable std::map<std::string, const GenericConfig<Encoding>*> name_config_mapping_;
+  mutable std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_config_mapping_;
 };
 
 using Node = GenericNode<>;

@@ -11,11 +11,9 @@
 namespace rapidschema {
 
 /// \brief for documentation of the interface please refer to the documentation of rapidjson::Writer.
-template <typename TargetEncoding = rapidjson::UTF8<>>
+template <typename Ch = char>
 class AbstractHandler {
  public:
-  using Ch = typename TargetEncoding::Ch;
-
   virtual bool Null() = 0;
   virtual bool Bool(bool b) = 0;
   virtual bool Int(int i) = 0;

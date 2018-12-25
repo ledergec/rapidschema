@@ -22,21 +22,18 @@
 
 namespace rapidschema {
 
-template<typename Encoding, typename T, template<typename> class ... Constraints>
+template<typename Ch, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class GenericValue;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-GenericValue<rapidjson::UTF8<>, T, Constraints...>
+GenericValue<char, T, Constraints...>
     MakeUtf8Value(Constraints<T>&&... constraints);
 
-template<typename Encoding, typename T, template<typename> class ... Constraints>
+template<typename Ch, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-class GenericValue : public GenericConfig<Encoding> {
- protected:
-  using Ch = typename Encoding::Ch;
-
+class GenericValue : public GenericConfig<Ch> {
  private:
   using ValueChecker = CombinedConstraint<T, Constraints...>;
 
@@ -45,7 +42,7 @@ class GenericValue : public GenericConfig<Encoding> {
 
   using Type = T;
 
-  GenericValue<Encoding, T, Constraints...>& operator=(const T& t) {
+  GenericValue<Ch, T, Constraints...>& operator=(const T& t) {
     t_ = t;
     return *this;
   }
@@ -63,7 +60,7 @@ class GenericValue : public GenericConfig<Encoding> {
     return checker_.template Get<Constraint>();
   }
 
-  TransformResult Parse(AbstractReader<Encoding> * reader) override {
+  TransformResult Parse(AbstractReader<Ch> * reader) override {
     assert(false);
     return TransformResult();
   }
@@ -86,7 +83,7 @@ class GenericValue : public GenericConfig<Encoding> {
     return checker_.Check(t_);
   }
 
-  void Serialize(AbstractWriter<Encoding>* writer) const override {
+  void Serialize(AbstractWriter<Ch>* writer) const override {
     TypeProperties<T>::Serialize(t_, writer);
   }
 
@@ -101,13 +98,13 @@ class GenericValue : public GenericConfig<Encoding> {
 };
 
 template <typename T, template<typename> class ... Constraints>
-using Value = GenericValue<rapidjson::UTF8<>, T, Constraints...>;
+using Value = GenericValue<char, T, Constraints...>;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-GenericValue<rapidjson::UTF8<>, T, Constraints...>
+GenericValue<char, T, Constraints...>
     MakeUtf8Value(Constraints<T>&&... constraints) {
-  return GenericValue<rapidjson::UTF8<>, T, Constraints...>(MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
+  return GenericValue<char, T, Constraints...>(MakeConstraint<T, Constraints...>(std::forward<Constraints<T>>(constraints)...));
 }
 
 }  // namespace rapidschema

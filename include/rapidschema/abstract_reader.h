@@ -13,12 +13,12 @@
 namespace rapidschema {
 
 /// \brief for documentation of the interface please refer to the documentation of rapidjson::GenericReader.
-template <typename TargetEncoding = rapidjson::UTF8<>>
+template <typename Ch = char>
 class AbstractReader {
  public:
   virtual void Init() = 0;
 
-  virtual bool Next(AbstractHandler<TargetEncoding>* handler) = 0;
+  virtual bool Next(AbstractHandler<Ch>* handler) = 0;
 
   virtual bool Complete() = 0;
 };

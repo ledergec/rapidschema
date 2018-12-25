@@ -17,11 +17,9 @@ class OutputStream;
 namespace rapidschema {
 
 /// \brief for documentation of the interface please refer to the documentation of rapidjson::Writer.
-template <typename SourceEncoding = rapidjson::UTF8<>>
+template <typename Ch = char>
 class AbstractWriter {
  public:
-  using Ch = typename SourceEncoding::Ch;
-
   virtual bool IsComplete() const = 0;
 
   virtual int GetMaxDecimalPlaces() const = 0;
