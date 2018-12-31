@@ -2,8 +2,8 @@
 // Created by root on 12/17/18.
 //
 
-#ifndef INCLUDE_RAPIDSCHEMA_ABSTRACT_HANDLER_H_
-#define INCLUDE_RAPIDSCHEMA_ABSTRACT_HANDLER_H_
+#ifndef INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_HANDLER_H_
+#define INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_HANDLER_H_
 
 #include <rapidjson/rapidjson.h>
 #include <rapidjson/encodings.h>
@@ -32,4 +32,4 @@ class AbstractHandler {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_ABSTRACT_HANDLER_H_
+#endif  // INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_HANDLER_H_

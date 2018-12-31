@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "rapidschema/configvalue.h"
+#include "rapidschema/value.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"

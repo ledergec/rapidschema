@@ -5,7 +5,7 @@
 #ifndef INCLUDE_RAPIDSCHEMA_GENERIC_READER_H_
 #define INCLUDE_RAPIDSCHEMA_GENERIC_READER_H_
 
-#include "rapidschema/abstract_reader.h"
+#include "rapidschema/sax/abstract_reader.h"
 
 namespace rapidschema {
 
@@ -15,7 +15,7 @@ class GenericReader : public AbstractReader<typename SourceEncoding::Ch> {
  public:
   using Ch = typename SourceEncoding::Ch;
 
-  GenericReader(InputStream* is)
+  explicit GenericReader(InputStream* is)
       : is_(is) {
     assert(is != nullptr);
   }

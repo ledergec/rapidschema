@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "rapidschema/configvalue.h"
-#include "rapidschema/confignode.h"
+#include "rapidschema/value.h"
+#include "rapidschema/object.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
@@ -14,7 +14,7 @@ namespace rapidschema {
 
 using testing::Test;
 
-class ConfigExampleTest : public Node {
+class ConfigExampleTest : public Object {
  public:
   ConfigExampleTest()
   : integer_value(MakeUtf8Value(Maximum(4)))
@@ -30,7 +30,7 @@ class ConfigExampleTest : public Node {
   }
 };
 
-class NestedConfigExampleTest : public Node {
+class NestedConfigExampleTest : public Object {
  public:
   NestedConfigExampleTest() {}
 

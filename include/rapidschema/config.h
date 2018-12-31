@@ -10,7 +10,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/abstract_reader.h"
+#include "rapidschema/sax/abstract_reader.h"
 #include "rapidschema/abstract_writer.h"
 #include "rapidschema/transform_result.h"
 

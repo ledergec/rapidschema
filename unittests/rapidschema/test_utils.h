@@ -15,7 +15,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/configvalue.h"
+#include "rapidschema/value.h"
 #include "rapidschema/generic_writer.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/to_json_literal.h"

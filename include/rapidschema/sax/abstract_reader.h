@@ -2,12 +2,12 @@
 // Created by root on 12/17/18.
 //
 
-#ifndef INCLUDE_RAPIDSCHEMA_ABSTRACT_READER_H_
-#define INCLUDE_RAPIDSCHEMA_ABSTRACT_READER_H_
+#ifndef INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_READER_H_
+#define INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_READER_H_
 
 #include <rapidjson/encodings.h>
 
-#include "rapidschema/abstract_handler.h"
+#include "rapidschema/sax/abstract_handler.h"
 
 namespace rapidschema {
 
@@ -26,4 +26,4 @@ class AbstractReader {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_ABSTRACT_READER_H_
+#endif  // INCLUDE_RAPIDSCHEMA_SAX_ABSTRACT_READER_H_

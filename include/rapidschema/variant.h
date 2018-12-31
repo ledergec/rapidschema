@@ -15,7 +15,7 @@
 #include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/concepts/unique_json_types.h"
-#include "rapidschema/configvalue.h"
+#include "rapidschema/value.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/meta/unique_tuple.h"
 #include "rapidschema/rapidjson_type_to_string.h"
@@ -122,7 +122,7 @@ class GenericVariant : public GenericConfig<Ch> {
   // must be a tuple because each config value and its constraints must be stored
   Tuple unique_tuple_;
 
-  GenericVariant(Tuple&& data)
+  explicit GenericVariant(Tuple&& data)
       : unique_tuple_(std::forward<Tuple>(data)) {}
 
   friend GenericVariant<Ch, Values...> MakeUtf8Variant<Values...>(Values&&... values);

@@ -4,8 +4,8 @@
 
 #include <gtest/gtest.h>
 
-#include "rapidschema/confignode.h"
-#include "rapidschema/configvalue.h"
+#include "rapidschema/object.h"
+#include "rapidschema/value.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
@@ -82,7 +82,7 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
 
 /////////////////////////// Serialization /////////////////////////////////////////////
 
-class VariantTestTestNode : public Node {
+class VariantTestTestNode : public Object {
  public:
   VariantTestTestNode()
     : variant(MakeUtf8Variant<Value<int64_t>, Value<std::string>>(

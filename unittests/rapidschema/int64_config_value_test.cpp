@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "rapidschema/confignode.h"
-#include "rapidschema/configvalue.h"
+#include "rapidschema/object.h"
+#include "rapidschema/value.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
@@ -76,7 +76,7 @@ TEST(Int64ConfigValueTest, WhenParsingDomUpperLimit_ThenParsedCorrectly) {
 
 /////////////////////////// Serialization /////////////////////////////////////////////
 
-class Int64ConfigValueTestNode : public Node {
+class Int64ConfigValueTestNode : public Object {
  public:
   Value<int64_t> value;
 
