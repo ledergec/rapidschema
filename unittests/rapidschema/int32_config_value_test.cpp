@@ -130,4 +130,15 @@ TEST(Int32ConfigValueTest, GivenArray_WhenParsingSax_ThenFails) {
   ASSERT_THAT(result, TransformFailed("Expected int but was array", "value"));
 }
 
+TEST(Int32ConfigValueTest, GivenSyntaxError_WhenParsingSax_ThenFails) {
+  auto json_string = R"({"value": [}})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result,
+      TransformFailed("Encountered the following json syntax error at offset 11: Invalid value.", ""));
+}
+
 }  // namespace rapidschema

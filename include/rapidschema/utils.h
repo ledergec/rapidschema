@@ -7,19 +7,23 @@
 
 #include <string>
 
-#include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
+#include <rapidjson/error/en.h>
 
 namespace rapidschema {
+namespace internal {
 
-std::string ValueToString(const rapidjson::Value& document) {
-  rapidjson::StringBuffer buffer;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-  document.Accept(writer);
-  return buffer.GetString();
-}
+class Utils {
+ public:
+  template <typename Ch = char>
+  static TransformResult ParseSyntaxError(AbstractReader<Ch> *reader) {
+    return TransformResult(
+        Failure(fmt::format("Encountered the following json syntax error at offset {}: {}",
+                            static_cast<unsigned>(reader->GetErrorOffset()),
+                            rapidjson::GetParseError_En(reader->GetParseErrorCode()))));
+  }
+};
 
+}  // namespace internal
 }  // namespace rapidschema
 
 #endif  // INCLUDE_RAPIDSCHEMA_UTILS_H_

@@ -20,6 +20,7 @@
 #include "rapidschema/sax/value_handler.h"
 #include "rapidschema/transform_result.h"
 #include "rapidschema/type_properties.h"
+#include "rapidschema/utils.h"
 
 namespace rapidschema {
 
@@ -67,8 +68,7 @@ class GenericValue : public GenericConfig<Ch> {
       reader->Next(&handler);
     }
     if (reader->HasParseError()) {
-      // TODO(cledergerber) convert rapidjson message to string
-      return TransformResult(Failure(fmt::format("Encountered errors while parsing.")));
+      return internal::Utils::ParseSyntaxError(reader);
     }
     return handler.GetResult();
   }

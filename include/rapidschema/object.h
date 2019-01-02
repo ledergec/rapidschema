@@ -16,6 +16,7 @@
 #include "rapidschema/sax/object_handler.h"
 #include "rapidschema/sax/skip_handler.h"
 #include "rapidschema/transform_result.h"
+#include "rapidschema/utils.h"
 
 namespace rapidschema {
 
@@ -71,8 +72,7 @@ class GenericObject : public GenericConfig<Ch> {
       }
     }
     if (reader->HasParseError()) {
-      // TODO(cledergerber) convert rapidjson message to string
-      return TransformResult(Failure(fmt::format("Encountered errors while parsing.")));
+      return internal::Utils::ParseSyntaxError(reader);
     }
 
     if (encountered_members.size() < name_config_mapping_.size()) {

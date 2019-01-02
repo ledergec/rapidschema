@@ -33,6 +33,14 @@ class GenericReader : public AbstractReader<typename SourceEncoding::Ch> {
     return reader_.HasParseError();
   }
 
+  size_t GetErrorOffset() override {
+    return reader_.GetErrorOffset();
+  }
+
+  rapidjson::ParseErrorCode GetParseErrorCode() {
+    return reader_.GetParseErrorCode();
+  }
+
   bool Complete() override {
     return reader_.IterativeParseComplete();
   };
