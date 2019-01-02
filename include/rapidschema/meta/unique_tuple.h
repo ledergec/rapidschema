@@ -46,8 +46,27 @@ struct TupleElementWithCondition<
     0> {};
 
 template <typename BaseClass, typename Tuple, size_t Index>
-struct TupleAccessor {
+struct ConstTupleAccessor {
   static const BaseClass* Get(const Tuple& tuple, size_t index) {
+    if (index == Index - 1) {
+      return &std::get<Index - 1>(tuple);
+    } else {
+      return ConstTupleAccessor<BaseClass, Tuple, Index - 1>::Get(tuple, index);
+    }
+  }
+};
+
+template <typename BaseClass, typename Tuple>
+struct ConstTupleAccessor<BaseClass, Tuple, 0> {
+  static const BaseClass* Get(const Tuple& tuple, size_t index) {
+    assert(false);
+    return nullptr;
+  }
+};
+
+template <typename BaseClass, typename Tuple, size_t Index>
+struct TupleAccessor {
+  static BaseClass* Get(Tuple& tuple, size_t index) {
     if (index == Index - 1) {
       return &std::get<Index - 1>(tuple);
     } else {
@@ -58,7 +77,7 @@ struct TupleAccessor {
 
 template <typename BaseClass, typename Tuple>
 struct TupleAccessor<BaseClass, Tuple, 0> {
-  static const BaseClass* Get(const Tuple& tuple, size_t index) {
+  static BaseClass* Get(Tuple& tuple, size_t index) {
     assert(false);
     return nullptr;
   }
@@ -148,6 +167,11 @@ class UniqueTuple {
 
   template <typename BaseClass>
   const BaseClass* Get(size_t index) const {
+    return ConstTupleAccessor<BaseClass, TupleT, sizeof...(Ts)>::Get(tuple_, index);
+  }
+
+  template <typename BaseClass>
+  BaseClass* Get(size_t index) {
     return TupleAccessor<BaseClass, TupleT, sizeof...(Ts)>::Get(tuple_, index);
   }
 
@@ -160,6 +184,10 @@ class UniqueTuple {
   void ForEach(Function &&f) const {
     constexpr std::size_t N = std::tuple_size<std::remove_reference_t<TupleT>>::value;
     ForEachImpl(tuple_, std::forward<Function>(f), std::make_index_sequence<N>{});
+  }
+
+  size_t Size() const {
+    return std::tuple_size<TupleT>::value;
   }
 
  private:

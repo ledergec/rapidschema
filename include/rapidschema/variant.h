@@ -58,8 +58,13 @@ class GenericVariant : public GenericConfig<Ch> {
   GenericVariant() = default;
 
   TransformResult Parse(AbstractReader<Ch> * reader) override {
-    assert(false);
-    return TransformResult();
+    for (size_t i = 0; i < unique_tuple_.Size(); ++i) {
+      auto result = unique_tuple_.template Get<Config>(i)->Parse(reader);
+      if (result.Success()) {
+        return result;
+      }
+    }
+    return FailResult("No matching variant found.");
   }
 
   TransformResult Parse(const rapidjson::Value& document) override {
