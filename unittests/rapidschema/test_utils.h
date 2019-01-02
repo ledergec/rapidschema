@@ -31,7 +31,7 @@ std::string CreateLeafString(const T& t) {
                 )", ToJsonLiteral<T>::Convert(t));
 }
 
-inline TransformResult ParseObject(const std::string &json, Config * config) {
+inline TransformResult ParseConfig(const std::string &json, Config *config) {
     rapidjson::Document document;
     rapidjson::ParseResult result = document.Parse(json.c_str());
     EXPECT_FALSE(result.IsError());

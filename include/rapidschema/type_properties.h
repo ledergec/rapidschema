@@ -168,7 +168,7 @@ struct TypeProperties<double> {
   static constexpr char name[] = "double";
 
   static bool IsType(const rapidjson::Value &value) {
-      return value.IsDouble();
+      return value.IsNumber();
   }
 
   static double FromJson(const rapidjson::Value &value) {

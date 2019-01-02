@@ -57,7 +57,7 @@ class ConfigObjectTest : public Test {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlySet) {
-  ParseObject(R"(
+  ParseConfig(R"(
                 {
                   "integerValue": 23,
                   "stringValue": "hallo"
@@ -69,7 +69,7 @@ TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlyS
 }
 
 TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenOtherMembersSetCorrectly) {
-  ParseObject(R"(
+  ParseConfig(R"(
                 {
                   "stringValue": "hallo"
                 }
@@ -79,7 +79,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenOtherMembersSe
 }
 
 TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorrectFailure) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "stringValue": "hallo"
                 }
@@ -90,7 +90,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorre
 }
 
 TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingObject_ThenFailsWithCorrectFailure) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "integerValue": "shouldBeInt",
                   "stringValue": "hallo"
@@ -102,7 +102,7 @@ TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingObject_ThenFailsWith
 }
 
 TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "integerValue": 43,
@@ -120,7 +120,7 @@ TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingNestedObject_ThenAllMembersCorr
 }
 
 TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenOtherMembersSetCorrectly) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "stringValue": "nested_value"
@@ -136,7 +136,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenOtherMem
 }
 
 TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWithCorrectFailure) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "stringValue": "nested_value"
@@ -151,7 +151,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWit
 }
 
 TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFailsWithCorrectFailure) {
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "integerValue": "shouldBeInt",
@@ -172,7 +172,7 @@ TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFai
 TEST_F(ConfigObjectTest, GivenCopiedObject_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
   NestedConfigExampleTest copied_nested_example(nested_example_);
 
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "integerValue": 43,
@@ -194,7 +194,7 @@ TEST_F(ConfigObjectTest, GivenCopyAssignedObject_WhenParsingNestedObject_ThenAll
 
   copy_assigned_nested_example = nested_example_;
 
-  auto result = ParseObject(R"(
+  auto result = ParseConfig(R"(
                 {
                   "example": {
                     "integerValue": 43,

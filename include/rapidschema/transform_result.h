@@ -122,6 +122,10 @@ class TransformResult {
     }
   }
 
+  inline bool HasFailures() {
+    return failure_collection_.has_value();
+  }
+
  private:
   std::optional<internal::FailureCollection> failure_collection_;
 };
