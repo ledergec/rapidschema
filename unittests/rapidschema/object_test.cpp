@@ -48,7 +48,7 @@ class NestedConfigExampleTest : public Object {
   }
 };
 
-class ConfigNodeTest : public Test {
+class ConfigObjectTest : public Test {
  public:
   ConfigExampleTest example_;
   NestedConfigExampleTest nested_example_;
@@ -56,7 +56,7 @@ class ConfigNodeTest : public Test {
 
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
-TEST_F(ConfigNodeTest, GivenSuccess_WhenParsingNode_ThenAllMembersCorrectlySet) {
+TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlySet) {
   ParseObject(R"(
                 {
                   "integerValue": 23,
@@ -68,7 +68,7 @@ TEST_F(ConfigNodeTest, GivenSuccess_WhenParsingNode_ThenAllMembersCorrectlySet) 
   ASSERT_EQ("hallo", example_.string_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNode_ThenOtherMembersSetCorrectly) {
+TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenOtherMembersSetCorrectly) {
   ParseObject(R"(
                 {
                   "stringValue": "hallo"
@@ -78,7 +78,7 @@ TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNode_ThenOtherMembersSetCor
   ASSERT_EQ(23, example_.integer_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNode_ThenFailsWithCorrectFailure) {
+TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorrectFailure) {
   auto result = ParseObject(R"(
                 {
                   "stringValue": "hallo"
@@ -89,7 +89,7 @@ TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNode_ThenFailsWithCorrectFa
   ASSERT_EQ(expected, result);
 }
 
-TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNode_ThenFailsWithCorrectFailure) {
+TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingObject_ThenFailsWithCorrectFailure) {
   auto result = ParseObject(R"(
                 {
                   "integerValue": "shouldBeInt",
@@ -101,7 +101,7 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNode_ThenFailsWithCorr
   ASSERT_EQ(expected, result);
 }
 
-TEST_F(ConfigNodeTest, GivenSuccess_WhenParsingNestedNode_ThenAllMembersCorrectlySet) {
+TEST_F(ConfigObjectTest, GivenSuccess_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
   auto result = ParseObject(R"(
                 {
                   "example": {
@@ -119,7 +119,7 @@ TEST_F(ConfigNodeTest, GivenSuccess_WhenParsingNestedNode_ThenAllMembersCorrectl
   ASSERT_EQ("hallo", nested_example_.string_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNestedNode_ThenOtherMembersSetCorrectly) {
+TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenOtherMembersSetCorrectly) {
   auto result = ParseObject(R"(
                 {
                   "example": {
@@ -135,7 +135,7 @@ TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNestedNode_ThenOtherMembers
   ASSERT_EQ("hallo", nested_example_.string_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNestedNode_ThenFailsWithCorrectFailure) {
+TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWithCorrectFailure) {
   auto result = ParseObject(R"(
                 {
                   "example": {
@@ -150,7 +150,7 @@ TEST_F(ConfigNodeTest, GivenMissingMember_WhenParsingNestedNode_ThenFailsWithCor
   ASSERT_EQ(expected, result);
 }
 
-TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWithCorrectFailure) {
+TEST_F(ConfigObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFailsWithCorrectFailure) {
   auto result = ParseObject(R"(
                 {
                   "example": {
@@ -169,7 +169,7 @@ TEST_F(ConfigNodeTest, GivenParsingMemberFails_WhenParsingNestedNode_ThenFailsWi
 
 ////////////////////////// Copy Construction and Assignment work ///////////////////////////////////////
 
-TEST_F(ConfigNodeTest, GivenCopiedObject_WhenParsingNestedNode_ThenAllMembersCorrectlySet) {
+TEST_F(ConfigObjectTest, GivenCopiedObject_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
   NestedConfigExampleTest copied_nested_example(nested_example_);
 
   auto result = ParseObject(R"(
@@ -189,7 +189,7 @@ TEST_F(ConfigNodeTest, GivenCopiedObject_WhenParsingNestedNode_ThenAllMembersCor
   ASSERT_EQ("hallo", copied_nested_example.string_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenCopyAssignedObject_WhenParsingNestedNode_ThenAllMembersCorrectlySet) {
+TEST_F(ConfigObjectTest, GivenCopyAssignedObject_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
   NestedConfigExampleTest copy_assigned_nested_example;
 
   copy_assigned_nested_example = nested_example_;
@@ -213,7 +213,7 @@ TEST_F(ConfigNodeTest, GivenCopyAssignedObject_WhenParsingNestedNode_ThenAllMemb
 
 /////////////////////////// Serialization /////////////////////////////////////////////
 
-TEST_F(ConfigNodeTest, WhenSerialize_ThenCorrectResult) {
+TEST_F(ConfigObjectTest, WhenSerialize_ThenCorrectResult) {
   NestedConfigExampleTest node;
   node.integer_value = 123;
   node.string_value = "hallo";
@@ -226,7 +226,7 @@ TEST_F(ConfigNodeTest, WhenSerialize_ThenCorrectResult) {
 
 /////////////////////////// Parse SAX Style /////////////////////////////////////////////
 
-TEST_F(ConfigNodeTest, GivenCorrectInput_WhenParsingSax_ThenCorrectlyParsed) {
+TEST_F(ConfigObjectTest, GivenCorrectInput_WhenParsingSax_ThenCorrectlyParsed) {
   auto json_string = R"(
                 {
                   "example": {
@@ -249,7 +249,7 @@ TEST_F(ConfigNodeTest, GivenCorrectInput_WhenParsingSax_ThenCorrectlyParsed) {
   ASSERT_EQ("hallo", nested_example_.string_value.Get());
 }
 
-TEST_F(ConfigNodeTest, GivenErrors_WhenParsingSax_ThenCorrectErrorsReported) {
+TEST_F(ConfigObjectTest, GivenErrors_WhenParsingSax_ThenCorrectErrorsReported) {
   auto json_string = R"(
                 {
                   "example": {
