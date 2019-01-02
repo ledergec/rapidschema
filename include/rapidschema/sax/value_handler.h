@@ -7,45 +7,76 @@
 
 namespace rapidschema {
 
-template<typename Type, typename Ch = char>
-class ValueHandler : public AbstractHandler<Ch> {
+
+template<typename Ch>
+class ValueHandlerBase : public AbstractHandler<Ch> {
  public:
-  explicit ValueHandler(Type *t) {
-    (void) t;
-  }
+  explicit ValueHandlerBase(const std::string & expected_type)
+      : expected_type_(expected_type)
+      , finished_(false)
+      , object_count_(0)
+      , array_count_(0) {}
 
   bool Null() override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was null", expected_type_));
     return true;
   }
 
   bool Bool(bool b) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was bool", expected_type_));
     return true;
   }
 
   bool Int(int i) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was int", expected_type_));
     return true;
   }
 
   bool Uint(unsigned i) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was uint", expected_type_));
     return true;
   }
 
   bool Int64(int64_t i) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was int64", expected_type_));
     return true;
   }
 
   bool Uint64(uint64_t i) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was uint64", expected_type_));
     return true;
   }
 
   bool Double(double d) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was double", expected_type_));
     return true;
   }
 
@@ -55,159 +86,385 @@ class ValueHandler : public AbstractHandler<Ch> {
   }
 
   bool String(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    assert(false);
+    if (object_count_ > 0 || array_count_ > 0) {
+      return true;
+    }
+    finished_ = true;
+    result_ = FailResult(fmt::format("Expected {} but was string", expected_type_));
     return true;
   }
 
   bool StartObject() override {
-    assert(false);
+    finished_ = true;
+    if (object_count_ == 0 && array_count_ == 0) {
+      result_ = FailResult(fmt::format("Expected {} but was object", expected_type_));
+    }
+    object_count_++;
     return true;
   }
 
   bool Key(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    assert(false);
     return true;
   }
 
   bool EndObject(rapidjson::SizeType memberCount) override {
-    assert(false);
+    object_count_--;
     return true;
   }
 
   bool StartArray() override {
-    assert(false);
+    finished_ = true;
+    if (object_count_ == 0 && array_count_ == 0) {
+      result_ = FailResult(fmt::format("Expected {} but was array", expected_type_));
+    }
+    array_count_++;
     return true;
   }
 
   bool EndArray(rapidjson::SizeType elementCount) override {
-    assert(false);
+    array_count_--;
     return true;
   }
 
   bool IsFinished() {
-    assert(false);
-    return true;
+    return finished_ && object_count_ == 0 && array_count_ == 0;
   }
 
   const TransformResult &GetResult() {
-    assert(false);
     return result_;
   }
 
- private:
+ protected:
+  std::string expected_type_;
   TransformResult result_;
+  bool finished_;
+  unsigned object_count_;
+  unsigned array_count_;
 };
 
+template<typename Type, typename Ch = char>
+class ValueHandler;
+
 template<typename Ch>
-class ValueHandler<int32_t, Ch> : public AbstractHandler<Ch> {
+class ValueHandler<int, Ch> : public ValueHandlerBase<Ch> {
  public:
-  explicit ValueHandler(int32_t *t)
-      : t_(t) {}
-
-  bool Null() override {
-    finished_ = true;
-    result_ = FailResult("Expected int32 but was null");
-    return true;
-  }
-
-  bool Bool(bool b) override {
-    finished_ = true;
-    result_ = FailResult("Expected int32 but was bool");
-    return true;
-  }
+  explicit ValueHandler(int *t)
+      : ValueHandlerBase<Ch>("int")
+      , t_(t) {}
 
   bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
     *t_ = i;
     return true;
   }
 
   bool Uint(unsigned i) override {
-    if (i < std::numeric_limits<int32_t>::max()) {
-      *t_ = static_cast<int32_t>(i);
-      return true;
-    } else {
-      finished_ = true;
-      result_ = FailResult("Expected int32 but was uint32");
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
       return true;
     }
+
+    this->finished_ = true;
+    if (i <= std::numeric_limits<int>::max()) {
+      *t_ = static_cast<int>(i);
+    } else {
+      this->result_ = FailResult("Expected int but was uint32");
+    }
+    return true;
   }
 
   bool Int64(int64_t i) override {
-    if (std::numeric_limits<int32_t>::min() < i && i < std::numeric_limits<int32_t>::max()) {
-      *t_ = static_cast<int32_t>(i);
-      return true;
-    } else {
-      finished_ = true;
-      result_ = FailResult("Expected int32 but was int64");
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
       return true;
     }
+
+    this->finished_ = true;
+    if (std::numeric_limits<int>::min() <= i && i <= std::numeric_limits<int>::max()) {
+      *t_ = static_cast<int>(i);
+    } else {
+      this->result_ = FailResult("Expected int but was int64");
+    }
+    return true;
   }
 
   bool Uint64(uint64_t i) override {
-    if (i < std::numeric_limits<int32_t>::max()) {
-      *t_ = static_cast<int32_t>(i);
-      return true;
-    } else {
-      finished_ = true;
-      result_ = FailResult("Expected int32 but was uint64");
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
       return true;
     }
-  }
 
-  bool Double(double d) override {
-    finished_ = true;
-    result_ = FailResult("Expected int32 but was double");
+    this->finished_ = true;
+    if (i <= std::numeric_limits<int>::max()) {
+      *t_ = static_cast<int>(i);
+    } else {
+      this->result_ = FailResult("Expected int but was uint64");
+    }
     return true;
-  }
-
-  bool RawNumber(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    assert(false);
-    return true;
-  }
-
-  bool String(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    finished_ = true;
-    result_ = FailResult("Expected int32 but was string");
-    return true;
-  }
-
-  bool StartObject() override {
-    assert(false);
-    return true;
-  }
-
-  bool Key(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    assert(false);
-    return true;
-  }
-
-  bool EndObject(rapidjson::SizeType memberCount) override {
-    assert(false);
-    return true;
-  }
-
-  bool StartArray() override {
-    assert(false);
-    return true;
-  }
-
-  bool EndArray(rapidjson::SizeType elementCount) override {
-    assert(false);
-    return true;
-  }
-
-  bool IsFinished() {
-    return finished_;
-  }
-
-  const TransformResult &GetResult() {
-    return result_;
   }
 
  private:
-  int32_t *t_;
-  TransformResult result_;
-  bool finished_;
+  int *t_;
+};
+
+template<typename Ch>
+class ValueHandler<unsigned, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(unsigned *t)
+      : ValueHandlerBase<Ch>("unsigned int")
+      , t_(t) {}
+
+  bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i >= 0) {
+      *t_ = static_cast<unsigned>(i);
+    } else {
+      this->result_ = FailResult("Expected unsigned int but was int");
+    }
+    return true;
+  }
+
+  bool Uint(unsigned i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+  bool Int64(int64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (std::numeric_limits<unsigned>::min() <= i && i <= std::numeric_limits<unsigned>::max()) {
+      *t_ = static_cast<unsigned>(i);
+    } else {
+      this->result_ = FailResult("Expected unsigned int but was int64");
+    }
+    return true;
+  }
+
+  bool Uint64(uint64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i <= std::numeric_limits<unsigned>::max()) {
+      *t_ = static_cast<unsigned>(i);
+    } else {
+      this->result_ = FailResult("Expected unsigned int but was uint64");
+    }
+    return true;
+  }
+
+ private:
+  unsigned *t_;
+};
+
+template<typename Ch>
+class ValueHandler<int64_t, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(int64_t *t)
+      : ValueHandlerBase<Ch>("int64")
+      , t_(t) {}
+
+  bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+  bool Uint(unsigned i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+  bool Int64(int64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+  bool Uint64(uint64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i <= std::numeric_limits<int64_t>::max()) {
+      *t_ = static_cast<int32_t>(i);
+    } else {
+      this->result_ = FailResult("Expected int64 but was uint64");
+    }
+    return true;
+  }
+
+ private:
+  int64_t *t_;
+};
+
+template<typename Ch>
+class ValueHandler<uint64_t, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(uint64_t * t)
+      : ValueHandlerBase<Ch>("uint64")
+      , t_(t) {}
+
+  bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i >= 0) {
+      *t_ = i;
+    } else {
+      this->result_ = FailResult("Expected uint64 but was int");
+    }
+    return true;
+  }
+
+  bool Uint(unsigned i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+  bool Int64(int64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i >= 0 && i <= std::numeric_limits<uint64_t>::max()) {
+      *t_ = static_cast<uint64_t>(i);
+    } else {
+      this->result_ = FailResult("Expected uint64 but was int64");
+    }
+    return true;
+  }
+
+  bool Uint64(uint64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = i;
+    return true;
+  }
+
+ private:
+  uint64_t * t_;
+};
+
+template<typename Ch>
+class ValueHandler<double, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(double *t)
+      : ValueHandlerBase<Ch>("double")
+      , t_(t) {}
+
+  bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = static_cast<double>(i);
+    return true;
+  }
+
+  bool Uint(unsigned i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = static_cast<double>(i);
+    return true;
+  }
+
+  bool Int64(int64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = static_cast<double>(i);
+    return true;
+  }
+
+  bool Uint64(uint64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = static_cast<double>(i);
+    return true;
+  }
+
+  bool Double(double d) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = d;
+    return true;
+  }
+
+ private:
+  double *t_;
+};
+
+template<typename Ch>
+class ValueHandler<std::string, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(std::string * t)
+      : ValueHandlerBase<Ch>("string")
+      , t_(t) {}
+
+  bool String(const Ch *str, rapidjson::SizeType length, bool copy) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = std::string(str, length);
+    return true;
+  }
+
+ private:
+  std::string * t_;
 };
 
 }  // namespace rapidschema

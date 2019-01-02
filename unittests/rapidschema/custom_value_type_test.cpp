@@ -38,6 +38,63 @@ struct TypeProperties<std::chrono::milliseconds> {
   }
 };
 
+
+template<typename Ch>
+class ValueHandler<std::chrono::milliseconds, Ch> : public ValueHandlerBase<Ch> {
+ public:
+  explicit ValueHandler(std::chrono::milliseconds *t)
+      : ValueHandlerBase<Ch>("milliseconds")
+      , t_(t) {}
+
+  bool Int(int i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = std::chrono::milliseconds(i);
+    return true;
+  }
+
+  bool Uint(unsigned i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = std::chrono::milliseconds(i);
+    return true;
+  }
+
+  bool Int64(int64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    *t_ = std::chrono::milliseconds(i);
+    return true;
+  }
+
+  bool Uint64(uint64_t i) override {
+    if (this->object_count_ > 0 || this->array_count_ > 0) {
+      return true;
+    }
+
+    this->finished_ = true;
+    if (i <= std::numeric_limits<uint64_t>::max()) {
+      *t_ = std::chrono::milliseconds(static_cast<int64_t>(i));
+    } else {
+      this->result_ = FailResult("Expected int64 but was uint64");
+    }
+    return true;
+  }
+
+ private:
+  std::chrono::milliseconds *t_;
+};
+
+
 TEST(Int64ConfigValueTest, CanParseCustomType) {
   auto json = R"({"leaf": 123})";
   Value<std::chrono::milliseconds> value;

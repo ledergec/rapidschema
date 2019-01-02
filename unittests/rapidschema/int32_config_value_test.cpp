@@ -97,7 +97,37 @@ TEST(Int32ConfigValueTest, GivenFloat_WhenParsingSax_ThenFails) {
 
   Int32ConfigValueTestNode test_node;
   auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformFailed("Expected int32 but was double", "value"));
+  ASSERT_THAT(result, TransformFailed("Expected int but was double", "value"));
+}
+
+TEST(Int32ConfigValueTest, GivenInt_WhenParsingSax_ThenSucceeds) {
+  auto json_string = R"({"value": 23})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result, TransformSucceeded());
+}
+
+TEST(Int32ConfigValueTest, GivenObject_WhenParsingSax_ThenFails) {
+  auto json_string = R"({"value": {"array":[1,2,3],"string":"a_string"}})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result, TransformFailed("Expected int but was object", "value"));
+}
+
+TEST(Int32ConfigValueTest, GivenArray_WhenParsingSax_ThenFails) {
+  auto json_string = R"({"value": [[1,2,3], 32.4, {"string":"a_string"}]})";
+  rapidjson::StringStream string_stream(json_string);
+  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
+
+  Int32ConfigValueTestNode test_node;
+  auto result = test_node.Parse(&reader);
+  ASSERT_THAT(result, TransformFailed("Expected int but was array", "value"));
 }
 
 }  // namespace rapidschema
