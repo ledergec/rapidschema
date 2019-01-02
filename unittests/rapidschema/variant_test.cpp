@@ -49,7 +49,7 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 0. "
+  ASSERT_THAT(result, TransformFailed("Expected string of length at most 0. "
                                       "Actual: length 5 string: \"hallo\"", ""));
 }
 
@@ -63,7 +63,7 @@ TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVari
   ASSERT_EQ("hallo", variant.GetVariant<std::string>().Get());
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. "
+  ASSERT_THAT(result, TransformFailed("Expected string of length at most 4. "
                                       "Actual: length 5 string: \"hallo\"", ""));
 }
 
@@ -76,7 +76,7 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
   variant.GetVariant<std::string>().GetConstraint<MaxLength>().SetMaxLength(4);
 
   auto result = variant.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected std::string of length at most 4. "
+  ASSERT_THAT(result, TransformFailed("Expected string of length at most 4. "
                                       "Actual: length 5 string: \"hallo\"", ""));
 }
 

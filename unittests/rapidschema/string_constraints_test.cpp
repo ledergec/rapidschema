@@ -13,7 +13,7 @@ TEST(StringConstraintsTest, GivenShortEnoughString_WhenMaxLengthConstraintChecke
 TEST(StringConstraintsTest, GivenTooLongString_WhenMaxLengthConstraintChecked_ThenFails) {
   MaxLength max_length(3);
   ASSERT_THAT(max_length.Check("miau"),
-      CheckFailed("Expected std::string of length at most 3. Actual: length 4 string: \"miau\""));
+      CheckFailed("Expected string of length at most 3. Actual: length 4 string: \"miau\""));
 }
 
 TEST(StringConstraintsTest, GivenLongEnoughString_WhenMinLengthConstraintChecked_ThenSuccess) {
@@ -24,7 +24,7 @@ TEST(StringConstraintsTest, GivenLongEnoughString_WhenMinLengthConstraintChecked
 TEST(StringConstraintsTest, GivenTooShortString_WhenMinLengthConstraintChecked_ThenFails) {
   MinLength min_length(3);
   ASSERT_THAT(min_length.Check("ma"),
-      CheckFailed("Expected std::string of length at least 3. Actual: length 2 string: \"ma\""));
+      CheckFailed("Expected string of length at least 3. Actual: length 2 string: \"ma\""));
 }
 
 }  // namespace rapidschema

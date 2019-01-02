@@ -92,7 +92,7 @@ class GenericValue : public GenericConfig<Ch> {
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
-    TypeProperties<T>::Serialize(t_, writer);
+    TypeProperties<T>::template Serialize<Ch>(t_, writer);
   }
 
   TransformResult HandleMissing() const override {

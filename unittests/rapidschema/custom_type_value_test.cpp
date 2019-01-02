@@ -33,7 +33,8 @@ struct TypeProperties<std::chrono::milliseconds> {
     return std::chrono::milliseconds(value.GetUint64());
   }
 
-  static void Serialize(const std::chrono::milliseconds& milli, AbstractWriter<> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const std::chrono::milliseconds& milli, AbstractWriter<TargetCh> * writer) {
     writer->Int64(milli.count());
   }
 };

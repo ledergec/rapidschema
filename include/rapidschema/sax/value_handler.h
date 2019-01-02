@@ -447,9 +447,9 @@ class ValueHandler<double, Ch> : public ValueHandlerBase<Ch> {
 };
 
 template<typename Ch>
-class ValueHandler<std::string, Ch> : public ValueHandlerBase<Ch> {
+class ValueHandler<std::basic_string<Ch>, Ch> : public ValueHandlerBase<Ch> {
  public:
-  explicit ValueHandler(std::string * t)
+  explicit ValueHandler(std::basic_string<Ch> * t)
       : ValueHandlerBase<Ch>("string")
       , t_(t) {}
 
@@ -459,12 +459,12 @@ class ValueHandler<std::string, Ch> : public ValueHandlerBase<Ch> {
     }
 
     this->finished_ = true;
-    *t_ = std::string(str, length);
+    *t_ = std::basic_string<Ch>(str, length);
     return true;
   }
 
  private:
-  std::string * t_;
+  std::basic_string<Ch> * t_;
 };
 
 }  // namespace rapidschema

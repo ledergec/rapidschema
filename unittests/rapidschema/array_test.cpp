@@ -82,6 +82,7 @@ TEST_F(ArrayTest, WhenSerializingObjectArray_ThenCorrectResult) {
 }
 
 /////////////////////////// Parse SAX Style /////////////////////////////////////////////
+
 // TODO(cledergerber)
 
 

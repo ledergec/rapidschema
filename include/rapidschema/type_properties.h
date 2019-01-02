@@ -27,10 +27,10 @@ enum struct JsonType {
 template<typename T>
 struct TypeProperties;
 
-template<>
-struct TypeProperties<std::string> {
+template<typename Ch>
+struct TypeProperties<std::basic_string<Ch>> {
   static constexpr JsonType json_type = JsonType::STRING;
-  static constexpr char name[] = "std::string";
+  static constexpr char name[] = "string";
 
   static bool IsType(const rapidjson::Value &value) {
       return value.IsString();
@@ -40,8 +40,8 @@ struct TypeProperties<std::string> {
       return value.GetString();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const std::string& str, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const std::basic_string<Ch>& str, AbstractWriter<TargetCh> * writer) {
     writer->String(str.c_str());
   }
 };
@@ -59,8 +59,8 @@ struct TypeProperties<int32_t> {
       return value.GetInt();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const int32_t& i, AbstractWriter<SourceEncoding>* writer) {
+  template <typename TargetCh>
+  static void Serialize(const int32_t& i, AbstractWriter<TargetCh>* writer) {
     writer->Int(i);
   }
 };
@@ -78,8 +78,8 @@ struct TypeProperties<uint32_t> {
       return value.GetUint();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const uint32_t& i, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const uint32_t& i, AbstractWriter<TargetCh> * writer) {
     writer->Uint(i);
   }
 };
@@ -97,8 +97,8 @@ struct TypeProperties<int64_t> {
       return value.GetInt64();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const int64_t& i, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const int64_t& i, AbstractWriter<TargetCh> * writer) {
     writer->Int64(i);
   }
 };
@@ -117,8 +117,8 @@ struct TypeProperties<uint64_t> {
       return value.GetUint64();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const uint64_t& i, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const uint64_t& i, AbstractWriter<TargetCh> * writer) {
     writer->Uint64(i);
   }
 };
@@ -136,8 +136,8 @@ struct TypeProperties<bool> {
       return value.GetBool();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const bool& b, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const bool& b, AbstractWriter<TargetCh> * writer) {
     writer->Bool(b);
   }
 };
@@ -156,8 +156,8 @@ struct TypeProperties<float> {
       return value.GetFloat();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const float& f, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const float& f, AbstractWriter<TargetCh> * writer) {
     writer->Double(f);
   }
 };
@@ -175,8 +175,8 @@ struct TypeProperties<double> {
       return value.GetDouble();
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const double& d, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const double& d, AbstractWriter<TargetCh> * writer) {
     writer->Double(d);
   }
 };
@@ -184,7 +184,7 @@ struct TypeProperties<double> {
 template<>
 struct TypeProperties<std::nullptr_t > {
   static constexpr JsonType json_type = JsonType::NULLTYPE;
-  static constexpr char name[] = "nullptr_t";
+  static constexpr char name[] = "nullptr";
 
   static bool IsType(const rapidjson::Value &value) {
       return value.IsNull();
@@ -194,8 +194,8 @@ struct TypeProperties<std::nullptr_t > {
       return nullptr;
   }
 
-  template <typename SourceEncoding = rapidjson::UTF8<>>
-  static void Serialize(const nullptr_t& n, AbstractWriter<SourceEncoding> * writer) {
+  template <typename TargetCh>
+  static void Serialize(const nullptr_t& n, AbstractWriter<TargetCh> * writer) {
     (void) n;
     writer->Null();
   }

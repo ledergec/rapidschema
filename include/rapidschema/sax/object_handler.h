@@ -123,7 +123,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
     }
 
     has_key_ = true;
-    key_ = std::string(str, length);
+    key_ = std::basic_string<Ch>(str, length);
     return true;
   }
 
