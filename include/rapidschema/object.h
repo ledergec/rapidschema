@@ -94,7 +94,7 @@ class GenericObject : public GenericConfig<Ch> {
     UpdateMapping();
 
     if (document.IsObject() == false) {
-      TransformResult(Failure(fmt::format("Expected object but was: {} ",
+      return TransformResult(Failure(fmt::format("Expected object but was: {} ",
                                           JsonTypeToString(document.GetType()))));
     }
 
@@ -137,7 +137,7 @@ class GenericObject : public GenericConfig<Ch> {
     writer->EndObject();
   }
 
-  TransformResult HandleUnexpectedMember(const std::basic_string<Ch>& key) {
+  virtual TransformResult HandleUnexpectedMember(const std::basic_string<Ch>& key) {
     return TransformResult();
   }
 
