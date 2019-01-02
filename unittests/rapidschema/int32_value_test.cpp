@@ -3,7 +3,7 @@
 
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
-#include "rapidschema/generic_reader.h"
+#include "rapidschema/sax/generic_reader.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"

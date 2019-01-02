@@ -2,8 +2,8 @@
 // Created by root on 12/17/18.
 //
 
-#ifndef INCLUDE_RAPIDSCHEMA_GENERIC_READER_H_
-#define INCLUDE_RAPIDSCHEMA_GENERIC_READER_H_
+#ifndef INCLUDE_RAPIDSCHEMA_SAX_GENERIC_READER_H_
+#define INCLUDE_RAPIDSCHEMA_SAX_GENERIC_READER_H_
 
 #include "rapidschema/sax/abstract_reader.h"
 
@@ -52,4 +52,4 @@ class GenericReader : public AbstractReader<typename SourceEncoding::Ch> {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_GENERIC_READER_H_
+#endif  // INCLUDE_RAPIDSCHEMA_SAX_GENERIC_READER_H_
