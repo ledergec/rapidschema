@@ -31,7 +31,7 @@ MATCHER(TransformSucceeded, "") {
   return arg.Success();
 }
 
-MATCHER_P(TransformFailed, message, "") {
+MATCHER_P2(TransformFailed, message, path, "") {
   if (arg.GetFailures().size() != 1) {
     std::cout << "Expected one failure, but was " << arg.GetFailures().size() << std::endl;
     return false;
@@ -39,6 +39,11 @@ MATCHER_P(TransformFailed, message, "") {
   if (arg.GetFailures()[0].GetMessage().compare(message) != 0) {
     std::cout << "Expected message: \"" << message << "\" actual message: \""
               << arg.GetFailures()[0] << "\"" << std::endl;
+    return false;
+  }
+  if (arg.GetFailures()[0].GetPath().compare(path) != 0) {
+    std::cout << "Expected path: \"" << path << "\" actual path: \"" << arg.GetFailures()[0].GetPath() << "\"" <<
+    std::endl;
     return false;
   }
   return true;

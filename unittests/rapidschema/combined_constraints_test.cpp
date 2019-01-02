@@ -25,12 +25,12 @@ TEST_F(CombinedConstraintTest, GivenMultipleConstraintsSatisfied_WhenParsingValu
 
 TEST_F(CombinedConstraintTest, GivenFirstConstraintNotSatisfied_WhenParsingValue_ThenParsingFails) {
     auto result = constraint.Check(0);
-    ASSERT_THAT(result, TransformFailed("Expected: >= 3. Actual: 0"));
+    ASSERT_THAT(result, TransformFailed("Expected: >= 3. Actual: 0", ""));
 }
 
 TEST_F(CombinedConstraintTest, GivenSecondConstraintNotSatisfied_WhenParsingValue_ThenParsingFails) {
     auto result = constraint.Check(10);
-    ASSERT_THAT(result, TransformFailed("Expected: MultipleOf 6. Actual: 10"));
+    ASSERT_THAT(result, TransformFailed("Expected: MultipleOf 6. Actual: 10", ""));
 }
 
 TEST_F(CombinedConstraintTest, GivenBothConstraintsNotSatisfied_WhenParsingValue_ThenBothReported) {

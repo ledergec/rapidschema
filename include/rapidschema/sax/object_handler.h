@@ -13,22 +13,13 @@ class GenericObject;
 template<typename Ch>
 class ObjectHandler : public AbstractHandler<Ch> {
  public:
-  ObjectHandler(AbstractReader<Ch> *reader,
-              GenericObject<Ch> *object,
-              const std::map<std::basic_string<Ch>, const GenericConfig<Ch> *> &members)
-      : finished_(false),
-        unexpected_member_(false),
-        reader_(reader),
-        object_(object),
-        members_(members),
-        encountered_members_(0) {
-    assert(reader != nullptr);
-    assert(object != nullptr);
-  }
+  ObjectHandler()
+      : finished_(false)
+      , has_key_(false)
+      , array_count_(0) {}
 
   bool Null() override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -38,8 +29,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Bool(bool b) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -49,8 +39,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Int(int i) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -60,8 +49,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Uint(unsigned i) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -71,8 +59,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Int64(int64_t i) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -82,8 +69,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Uint64(uint64_t i) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -93,8 +79,7 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool Double(double d) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -104,14 +89,17 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool RawNumber(const Ch *str, rapidjson::SizeType length, bool copy) override {
+    if (array_count_ > 0) {
+      return true;
+    }
+
     assert(false);
     finished_ = true;
     return true;
   }
 
   bool String(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    if (unexpected_member_) {
-      unexpected_member_ = false;
+    if (array_count_ > 0) {
       return true;
     }
 
@@ -121,44 +109,44 @@ class ObjectHandler : public AbstractHandler<Ch> {
   }
 
   bool StartObject() override {
+    if (array_count_ > 0) {
+      return true;
+    }
+
+    has_key_ = false;
     return true;
   }
 
   bool Key(const Ch *str, rapidjson::SizeType length, bool copy) override {
-    std::basic_string<Ch> key = std::string(str, length);
-    if (members_.find(key) != members_.end()) {
-      result_.Append(const_cast<GenericConfig<Ch> *>(members_.at(key))->Parse(reader_));
-      member_parsed_[key] = true;
-      encountered_members_++;
-    } else {
-      result_.Append(object_->HandleUnexpectedMember(key));
-      unexpected_member_ = true;
+    if (array_count_ > 0) {
+      return true;
     }
+
+    has_key_ = true;
+    key_ = std::string(str, length);
     return true;
   }
 
   bool EndObject(rapidjson::SizeType memberCount) override {
-    if (encountered_members_ < members_.size()) {
-      for (const auto &pair : members_) {
-        if (member_parsed_[pair.first] == false) {
-          TransformResult tmp = pair.second->HandleMissing();
-          tmp.AddPath(pair.first);
-          result_.Append(tmp);
-        }
-      }
+    if (array_count_ > 0) {
+      return true;
     }
+
+    has_key_ = false;
     finished_ = true;
     return true;
   }
 
   bool StartArray() override {
-    assert(false);
+    array_count_++;
+    has_key_ = false;
     result_ = FailResult("Expected Object, encountered array");
     return true;
   }
 
   bool EndArray(rapidjson::SizeType elementCount) override {
-    assert(false);
+    array_count_--;
+    has_key_ = false;
     return false;
   }
 
@@ -166,18 +154,23 @@ class ObjectHandler : public AbstractHandler<Ch> {
     return finished_;
   }
 
-  const TransformResult &GetResult() const {
+  bool HasKey() const {
+    return has_key_;
+  }
+
+  const std::basic_string<Ch>& GetKey() const {
+    return key_;
+  }
+
+  const TransformResult& GetResult() const {
     return result_;
   }
 
  private:
   bool finished_;
-  bool unexpected_member_;
-  AbstractReader<Ch> *reader_;
-  GenericObject<Ch> *object_;
-  const std::map<std::basic_string<Ch>, const GenericConfig<Ch> *> &members_;
-  std::unordered_map<std::basic_string<Ch>, bool> member_parsed_;
-  size_t encountered_members_;
+  bool has_key_;
+  uint32_t array_count_;
+  std::basic_string<Ch> key_;
   TransformResult result_;
 };
 
