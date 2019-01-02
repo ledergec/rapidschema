@@ -1,7 +1,20 @@
-- Support multiple encodings
-- Implement SAX style parser using iterative API
+High level:
+
+- Support multiple encodings                            DONE
+- Implement SAX style parser using iterative API        PARTIALLY DONE
 - Implement CrossValidation API
 - Implement Schema generation
 - Implement overlay feature
-- Think about version evolution
--
+- Think about version evolution                         SEEMS TO BE PRESENT IN JSON SCHEMA (Default values)
+- Benchmark performance between rapidjson, rapidschema, different ways of parsing
+- Add MIT licence
+- Is dependency on fmt really necessary?
+- How to internationalize the error messages?
+- Add release memory function.
+
+Lower level:
+
+- Multiple encodings: check for std::string in project.
+- Implement SAX parsing for variant
+- Allow setting a factory function on array (for default values, constraints etc.)
+- Multiple encodings: test it!
