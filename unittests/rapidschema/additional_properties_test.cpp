@@ -3,18 +3,18 @@
 
 #include <map>
 
-#include "rapidschema/value.h"
-#include "rapidschema/object.h"
+#include "rapidschema/additional_properties.h"
 #include "rapidschema/no_additional_properties.h"
+#include "rapidschema/object.h"
 #include "rapidschema/test_utils.h"
-#include "rapidschema/transform_result_matchers.h"
+#include "rapidschema/value.h"
 
 namespace rapidschema {
 
 using testing::Test;
 using testing::UnorderedElementsAre;
 
-class NoAdditionalPropertiesTestObject : public NoAdditionalProperties<Object> {
+class AdditionalPropertiesTestObject : public NoAdditionalProperties<Object> {
  public:
   Value<int> integer_value;
   Value<std::string> string_value;
@@ -28,8 +28,9 @@ class NoAdditionalPropertiesTestObject : public NoAdditionalProperties<Object> {
 
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
-TEST(NoAdditionalPropertiesTest, WhenParsingJsonStringWithAdditionalProperties_ThenFailsWithCorrectMessage) {
-  NoAdditionalPropertiesTestObject example;
+TEST(NoAdditionalPropertiesTest,
+    GivenNoAdditionalPropertiesAllowed_WhenParsingAdditionalProperties_ThenFailsWithCorrectMessage) {
+  AdditionalPropertiesTestObject example;
   auto result = ParseConfig(R"(
                 {
                   "integerValue": 32,
@@ -40,6 +41,20 @@ TEST(NoAdditionalPropertiesTest, WhenParsingJsonStringWithAdditionalProperties_T
 
   TransformResult expected(Failure("", "Unexpected member encountered: additionalProperty"));
   ASSERT_EQ(expected, result);
+}
+
+TEST(NoAdditionalPropertiesTest,
+    GivenAdditionalPropertiesAllowed_WhenParsingAdditionalProperties_ThenSucceeds) {
+  AdditionalProperties<AdditionalPropertiesTestObject> example;
+  auto result = ParseConfig(R"(
+                {
+                  "integerValue": 32,
+                  "stringValue": "hallo",
+                  "additionalProperty": 23
+                }
+                )", &example);
+
+  ASSERT_TRUE(result.Success());
 }
 
 }  // namespace rapidschema
