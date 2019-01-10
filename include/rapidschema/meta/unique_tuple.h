@@ -66,9 +66,9 @@ struct ConstTupleAccessor<BaseClass, Tuple, 0> {
 
 template <typename BaseClass, typename Tuple, size_t Index>
 struct TupleAccessor {
-  static BaseClass* Get(Tuple& tuple, size_t index) {
+  static BaseClass* Get(Tuple* tuple, size_t index) {
     if (index == Index - 1) {
-      return &std::get<Index - 1>(tuple);
+      return &std::get<Index - 1>(*tuple);
     } else {
       return TupleAccessor<BaseClass, Tuple, Index - 1>::Get(tuple, index);
     }
@@ -77,7 +77,7 @@ struct TupleAccessor {
 
 template <typename BaseClass, typename Tuple>
 struct TupleAccessor<BaseClass, Tuple, 0> {
-  static BaseClass* Get(Tuple& tuple, size_t index) {
+  static BaseClass* Get(Tuple* tuple, size_t index) {
     assert(false);
     return nullptr;
   }
@@ -172,7 +172,7 @@ class UniqueTuple {
 
   template <typename BaseClass>
   BaseClass* Get(size_t index) {
-    return TupleAccessor<BaseClass, TupleT, sizeof...(Ts)>::Get(tuple_, index);
+    return TupleAccessor<BaseClass, TupleT, sizeof...(Ts)>::Get(&tuple_, index);
   }
 
   template <typename Operation>
