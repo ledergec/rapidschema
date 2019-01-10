@@ -18,3 +18,7 @@ Lower level:
 - Allow setting a factory function on array (for default values, constraints etc.)
 - Multiple encodings: test it!
 - Cleanup copyright messages
+- Implement AllOf, AnyOf, OneOf, Enum
+- Write a readme and examples / documentation
+- Publish on github
+- Setup build server on github
