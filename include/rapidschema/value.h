@@ -40,6 +40,7 @@ class GenericValue : public GenericConfig<Ch> {
  public:
   GenericValue() = default;
 
+  using CharType = Ch;
   using Type = T;
 
   GenericValue<Ch, T, Constraints...>& operator=(const T& t) {
