@@ -8,10 +8,10 @@ High level:
 - Implement overlay feature
 - Think about version evolution                         SEEMS TO BE PRESENT IN JSON SCHEMA (Default values)
 - Benchmark performance between rapidjson, rapidschema
-- Add MIT licence
+- Add MIT licence                                       DONE
 - Is dependency on fmt really necessary?
 - How to internationalize the error messages?
-- Add release memory function.                           DONE
+- Add release memory function.                          DONE
 
 Lower level:
 
