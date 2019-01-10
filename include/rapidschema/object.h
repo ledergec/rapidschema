@@ -48,11 +48,13 @@ class GenericObject : public GenericConfig<Ch> {
     }
 
     TransformResult result;
+    int missing_count = 0;
     for (auto pair : name_config_mapping_) {
       if (document.HasMember(pair.first.c_str()) == false) {
         auto tmp = pair.second->HandleMissing();
         tmp.AddPath(pair.first);
         result.Append(tmp);
+        missing_count++;
         continue;
       }
 
@@ -63,6 +65,16 @@ class GenericObject : public GenericConfig<Ch> {
       }
     }
 
+    if (document.MemberCount() + missing_count > name_config_mapping_.size()) {
+      auto member_it = document.MemberBegin();
+      while (member_it != document.MemberEnd()) {
+        auto name = std::basic_string<Ch>(member_it->name.GetString(), member_it->name.GetStringLength());
+        if (name_config_mapping_.find(name) == name_config_mapping_.end()) {
+          result.Append(HandleUnexpectedMember(name));
+        }
+        member_it++;
+      }
+    }
     return result;
   }
 
