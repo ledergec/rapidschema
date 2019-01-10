@@ -108,6 +108,17 @@ class GenericObject : public GenericConfig<Ch> {
     return FailResult("Object is missing in config.");
   }
 
+  void CollectMemory() const override {
+    if (mapping_initialized_) {
+      for (const auto & pair : name_config_mapping_) {
+        pair.second->CollectMemory();
+      }
+
+      mapping_initialized_ = false;
+      name_config_mapping_.clear();
+    }
+  }
+
  protected:
   virtual std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> CreateMemberMapping() const = 0;
 

@@ -63,6 +63,12 @@ class Array : public GenericConfig<Ch> {
     return TransformResult(Failure("Array is missing"));
   }
 
+  void CollectMemory() const override {
+    for (const auto & element : elements) {
+      element.CollectMemory();
+    }
+  }
+
   void push_back(const T& t) {
     elements.push_back(t);
   }

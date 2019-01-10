@@ -210,6 +210,40 @@ TEST_F(ObjectTest, GivenCopyAssignedObject_WhenParsingNestedObject_ThenAllMember
   ASSERT_EQ("hallo", copy_assigned_nested_example.string_value.Get());
 }
 
+TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
+  auto result = ParseConfig(R"(
+                {
+                  "example": {
+                    "integerValue": 0,
+                    "stringValue": ""
+                  },
+                  "integerValue": 0,
+                  "stringValue": ""
+                }
+                )", &nested_example_);
+
+  ASSERT_TRUE(result.Success());
+
+  nested_example_.CollectMemory();
+
+  result = ParseConfig(R"(
+                {
+                  "example": {
+                    "integerValue": 43,
+                    "stringValue": "nested_value"
+                  },
+                  "integerValue": 23,
+                  "stringValue": "hallo"
+                }
+                )", &nested_example_);
+
+  ASSERT_TRUE(result.Success());
+  ASSERT_EQ(43, nested_example_.example.integer_value.Get());
+  ASSERT_EQ("nested_value", nested_example_.example.string_value.Get());
+  ASSERT_EQ(23, nested_example_.integer_value.Get());
+  ASSERT_EQ("hallo", nested_example_.string_value.Get());
+}
+
 /////////////////////////// Serialization /////////////////////////////////////////////
 
 TEST_F(ObjectTest, WhenSerialize_ThenCorrectResult) {
