@@ -12,7 +12,6 @@
 #include "rapidschema/config.h"
 #include "rapidschema/rapidjson_type_to_string.h"
 #include "rapidschema/transform_result.h"
-#include "rapidschema/utils.h"
 
 namespace rapidschema {
 
@@ -20,11 +19,6 @@ template<typename T, typename Ch = char>
 class Array : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
-
-  TransformResult Parse(AbstractReader<Ch> * reader) override {
-    assert(false);
-    return TransformResult();
-  }
 
   TransformResult Parse(const rapidjson::Value & document) override {
     if (document.IsArray() == false) {

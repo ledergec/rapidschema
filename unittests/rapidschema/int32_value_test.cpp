@@ -3,7 +3,6 @@
 
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
-#include "rapidschema/sax/generic_reader.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
@@ -76,69 +75,6 @@ TEST(Int32ConfigValueTest, WhenSerialize_ThenCorrectResult) {
   node.value = 123;
   std::string result = SerializeConfig(node);
   ASSERT_EQ(R"({"value":123})", result);
-}
-
-/////////////////////////// Parse SAX Style /////////////////////////////////////////////
-
-TEST(Int32ConfigValueTest, GivenMissingMember_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"leaf": 23})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformFailed("is missing", "value"));
-}
-
-TEST(Int32ConfigValueTest, GivenFloat_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"value": 23.5})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformFailed("Expected int but was double", "value"));
-}
-
-TEST(Int32ConfigValueTest, GivenInt_WhenParsingSax_ThenSucceeds) {
-  auto json_string = R"({"value": 23})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformSucceeded());
-}
-
-TEST(Int32ConfigValueTest, GivenObject_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"value": {"array":[1,2,3],"string":"a_string"}})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformFailed("Expected int but was object", "value"));
-}
-
-TEST(Int32ConfigValueTest, GivenArray_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"value": [[1,2,3], 32.4, {"string":"a_string"}]})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result, TransformFailed("Expected int but was array", "value"));
-}
-
-TEST(Int32ConfigValueTest, GivenSyntaxError_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"value": [}})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  Int32ConfigValueTestNode test_node;
-  auto result = test_node.Parse(&reader);
-  ASSERT_THAT(result,
-      TransformFailed("Encountered the following json syntax error at offset 11: Invalid value.", ""));
 }
 
 }  // namespace rapidschema

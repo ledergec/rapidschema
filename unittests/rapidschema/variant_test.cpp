@@ -7,7 +7,6 @@
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
 #include "rapidschema/range_constraints.h"
-#include "rapidschema/sax/generic_reader.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
@@ -107,25 +106,4 @@ TEST(VariantTest, WhenSerialize_ThenCorrectResult) {
   ASSERT_EQ(R"({"value":123})", result);
 }
 
-/////////////////////////// Parse SAX Style /////////////////////////////////////////////
-
-TEST(VariantTest, DISABLED_GivenInt_WhenParsingSax_ThenSucceeds) {
-  auto json_string = R"({"value": 23})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  VariantTestTestNode node;
-  auto result = node.Parse(&reader);
-  ASSERT_THAT(result, TransformSucceeded());
-}
-
-TEST(VariantTest, DISABLED_GivenNull_WhenParsingSax_ThenFails) {
-  auto json_string = R"({"value": null})";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  VariantTestTestNode node;
-  auto result = node.Parse(&reader);
-  ASSERT_THAT(result, TransformSucceeded());
-}
 }  // namespace rapidschema

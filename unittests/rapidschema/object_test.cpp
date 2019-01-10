@@ -6,7 +6,6 @@
 #include "rapidschema/value.h"
 #include "rapidschema/object.h"
 #include "rapidschema/range_constraints.h"
-#include "rapidschema/sax/generic_reader.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
@@ -222,50 +221,6 @@ TEST_F(ConfigObjectTest, WhenSerialize_ThenCorrectResult) {
 
   std::string result = SerializeConfig(node);
   ASSERT_EQ(R"({"example":{"integerValue":443,"stringValue":"du"},"integerValue":123,"stringValue":"hallo"})", result);
-}
-
-/////////////////////////// Parse SAX Style /////////////////////////////////////////////
-
-TEST_F(ConfigObjectTest, GivenCorrectInput_WhenParsingSax_ThenCorrectlyParsed) {
-  auto json_string = R"(
-                {
-                  "example": {
-                    "integerValue": 43,
-                    "stringValue": "nested_value"
-                  },
-                  "integerValue": 23,
-                  "stringValue": "hallo"
-                }
-                )";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  auto result = nested_example_.Parse(&reader);
-  ASSERT_THAT(result, TransformSucceeded());
-
-  ASSERT_EQ(43, nested_example_.example.integer_value.Get());
-  ASSERT_EQ("nested_value", nested_example_.example.string_value.Get());
-  ASSERT_EQ(23, nested_example_.integer_value.Get());
-  ASSERT_EQ("hallo", nested_example_.string_value.Get());
-}
-
-TEST_F(ConfigObjectTest, GivenErrors_WhenParsingSax_ThenCorrectErrorsReported) {
-  auto json_string = R"(
-                {
-                  "example": {
-                    "integerValue": 43,
-                    "stringValue": 23.2
-                  },
-                  "stringValue": "hallo"
-                }
-                )";
-  rapidjson::StringStream string_stream(json_string);
-  GenericReader<rapidjson::Reader, rapidjson::StringStream> reader(&string_stream);
-
-  auto result = nested_example_.Parse(&reader);
-  ASSERT_THAT(result.GetFailures(),
-              UnorderedElementsAre(Failure("integerValue", "is missing"),
-                                   Failure("example.stringValue", "Expected string but was double")));
 }
 
 }  // namespace rapidschema

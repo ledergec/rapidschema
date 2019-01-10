@@ -13,10 +13,7 @@
 
 #include "rapidschema/config.h"
 #include "rapidschema/rapidjson_type_to_string.h"
-#include "rapidschema/sax/object_handler.h"
-#include "rapidschema/sax/skip_handler.h"
 #include "rapidschema/transform_result.h"
-#include "rapidschema/utils.h"
 
 namespace rapidschema {
 
@@ -40,54 +37,6 @@ class GenericObject : public GenericConfig<Ch> {
       name_config_mapping_ = std::map<std::basic_string<Ch>, const GenericConfig<Ch>*>();
     }
     return *this;
-  }
-
-  TransformResult Parse(AbstractReader<Ch> * reader) override {
-    UpdateMapping();
-
-    TransformResult result;
-    std::unordered_set<std::basic_string<Ch>> encountered_members;
-
-    ObjectHandler<Ch> handler;
-    while (handler.IsFinished() == false && reader->HasParseError() == false) {
-      reader->Next(&handler);
-
-      if (handler.HasKey() == false) {
-        continue;
-      }
-
-      if (name_config_mapping_.find(handler.GetKey()) == name_config_mapping_.end()) {
-        result.Append(HandleUnexpectedMember(handler.GetKey()));
-
-        // skip the content of the unexpected member
-        SkipHandler<Ch> skip_handler;
-        while (skip_handler.IsFinished() == false) {
-          reader->Next(&skip_handler);
-        }
-      } else {
-        encountered_members.insert(handler.GetKey());
-        auto tmp = const_cast<Config*>(name_config_mapping_[handler.GetKey()])->Parse(reader);
-        tmp.AddPath(handler.GetKey());
-        result.Append(tmp);
-      }
-    }
-    if (reader->HasParseError()) {
-      return internal::Utils::ParseSyntaxError(reader);
-    }
-
-    if (encountered_members.size() < name_config_mapping_.size()) {
-      for (const auto &pair : name_config_mapping_) {
-        if (encountered_members.find(pair.first) == encountered_members.end()) {
-          TransformResult tmp = pair.second->HandleMissing();
-          tmp.AddPath(pair.first);
-          result.Append(tmp);
-        }
-      }
-    }
-
-    result.Append(handler.GetResult());
-
-    return result;
   }
 
   TransformResult Parse(const rapidjson::Value & document) override {

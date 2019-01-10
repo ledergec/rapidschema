@@ -17,10 +17,8 @@
 #include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/config.h"
-#include "rapidschema/sax/value_handler.h"
 #include "rapidschema/transform_result.h"
 #include "rapidschema/type_properties.h"
-#include "rapidschema/utils.h"
 
 namespace rapidschema {
 
@@ -60,17 +58,6 @@ class GenericValue : public GenericConfig<Ch> {
   template <template<typename> class Constraint>
   Constraint<T> & GetConstraint() {
     return checker_.template Get<Constraint>();
-  }
-
-  TransformResult Parse(AbstractReader<Ch> * reader) override {
-    ValueHandler<T, Ch> handler(&t_);
-    while (handler.IsFinished() == false && reader->HasParseError() == false) {
-      reader->Next(&handler);
-    }
-    if (reader->HasParseError()) {
-      return internal::Utils::ParseSyntaxError(reader);
-    }
-    return handler.GetResult();
   }
 
   TransformResult Parse(const rapidjson::Value& document) override {

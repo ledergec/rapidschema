@@ -10,7 +10,6 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/sax/abstract_reader.h"
 #include "rapidschema/abstract_writer.h"
 #include "rapidschema/transform_result.h"
 
@@ -20,8 +19,6 @@ template <typename Ch = char>
 class GenericConfig {
  public:
   virtual ~GenericConfig() = default;
-
-  virtual TransformResult Parse(AbstractReader<Ch> * reader) = 0;
 
   virtual TransformResult Parse(const rapidjson::Value &document) = 0;
 
