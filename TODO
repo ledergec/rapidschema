@@ -19,3 +19,5 @@ Lower level:
 - Allow setting a factory function on array (for default values, constraints etc.)
 - Multiple encodings: test it!
 - Replace node with object project wide!
+- Test different encodings
+- Implement strict parsing of Object where additional members cause errors
