@@ -41,6 +41,20 @@ class GenericReader : public AbstractReader<typename SourceEncoding::Ch> {
     return reader_.GetParseErrorCode();
   }
 
+  void StorePoint() override {
+    // TODO(cledergerber) after this call all event should be recorded, todo this a forwarding / recording handler is
+    //  required
+  }
+
+  void RestToStorePoint() override {
+    // TODO(cledergerber) after this call all recorded events should be replayed, once all have been replayed new events
+    // should be recorded
+  }
+
+  void ClearStorePoint() override {
+    // TODO(cledergerber) after this no recording is needed anymore
+  }
+
   bool Complete() override {
     return reader_.IterativeParseComplete();
   };

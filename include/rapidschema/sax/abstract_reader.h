@@ -25,6 +25,12 @@ class AbstractReader {
 
   virtual rapidjson::ParseErrorCode GetParseErrorCode() = 0;
 
+  virtual void StorePoint() = 0;
+
+  virtual void RestToStorePoint() = 0;
+
+  virtual void ClearStorePoint() = 0;
+
   virtual bool Complete() = 0;
 };
 
