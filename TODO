@@ -17,6 +17,4 @@ Lower level:
 
 - Allow setting a factory function on array (for default values, constraints etc.)
 - Multiple encodings: test it!
-- Add default value: https://json-schema.org/understanding-json-schema/reference/generic.html
-- Add required properties: https://json-schema.org/understanding-json-schema/reference/object.html#required
-- Cleanup copyright message
+- Cleanup copyright messages
