@@ -50,7 +50,9 @@ class GenericObject : public GenericConfig<Ch> {
     TransformResult result;
     for (auto pair : name_config_mapping_) {
       if (document.HasMember(pair.first.c_str()) == false) {
-        result.Append(Failure(fmt::format("Missing member: \"{}\"", pair.first)));
+        auto tmp = pair.second->HandleMissing();
+        tmp.AddPath(pair.first);
+        result.Append(tmp);
         continue;
       }
 
@@ -91,7 +93,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   TransformResult HandleMissing() const override {
-    return FailResult("is missing");
+    return FailResult("Object is missing in config.");
   }
 
  protected:

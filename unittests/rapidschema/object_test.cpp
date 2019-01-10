@@ -84,7 +84,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorre
                 }
                 )", &example_);
 
-  TransformResult expected(Failure("Missing member: \"integerValue\""));
+  TransformResult expected(Failure("integerValue", "Value of type int is missing"));
   ASSERT_EQ(expected, result);
 }
 
@@ -145,7 +145,7 @@ TEST_F(ConfigObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWit
                 }
                 )", &nested_example_);
 
-  TransformResult expected(Failure("example", "Missing member: \"integerValue\""));
+  TransformResult expected(Failure("example.integerValue", "Value of type int is missing"));
   ASSERT_EQ(expected, result);
 }
 

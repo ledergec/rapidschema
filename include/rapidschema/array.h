@@ -60,7 +60,7 @@ class Array : public GenericConfig<Ch> {
   }
 
   TransformResult HandleMissing() const override {
-    return TransformResult(Failure("is missing"));
+    return TransformResult(Failure("Array is missing"));
   }
 
   void push_back(const T& t) {

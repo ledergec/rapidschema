@@ -83,7 +83,7 @@ class GenericValue : public GenericConfig<Ch> {
   }
 
   TransformResult HandleMissing() const override {
-    return FailResult("is missing");
+    return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::name));
   }
 
  private:
