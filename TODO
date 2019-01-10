@@ -1,23 +1,22 @@
 High level:
 
 - Support multiple encodings                            DONE
-- Implement SAX style parser using iterative API        PARTIALLY DONE
+- Implement SAX style parser using iterative API        PARTIALLY DONE -> This seems to be extremely hard to get right
+    in the presence of Variant / AllOff which require that the parsing events can be replayed, potentially nested.
 - Implement CrossValidation API
 - Implement Schema generation
 - Implement overlay feature
 - Think about version evolution                         SEEMS TO BE PRESENT IN JSON SCHEMA (Default values)
-- Benchmark performance between rapidjson, rapidschema, different ways of parsing
+- Benchmark performance between rapidjson, rapidschema
 - Add MIT licence
 - Is dependency on fmt really necessary?
 - How to internationalize the error messages?
-- Add release memory function.
+- Add release memory function.                           DONE
 
 Lower level:
 
-- Multiple encodings: check for std::string in project.
-- Implement SAX parsing for variant
 - Allow setting a factory function on array (for default values, constraints etc.)
 - Multiple encodings: test it!
-- Replace node with object project wide!
-- Test different encodings
-- Implement strict parsing of Object where additional members cause errors
+- Add default value: https://json-schema.org/understanding-json-schema/reference/generic.html
+- Add required properties: https://json-schema.org/understanding-json-schema/reference/object.html#required
+- Cleanup copyright message
