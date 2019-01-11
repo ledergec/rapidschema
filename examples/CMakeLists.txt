@@ -1,7 +1,8 @@
 # Copyright (C) 2019 Christian Ledergerber
 
 set(EXAMPLES
-    simple_parse)
+    simple_parse
+    simple_error)
 
 foreach (example ${EXAMPLES})
     add_executable(${example} ${example}.cpp)

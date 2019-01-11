@@ -86,10 +86,71 @@ try to continue. When done with parsing, rapidschema reports a ParseResult. This
 identified problems with the json string. See the example below:
 
 ~~~~~~~~~~cpp
-TODO
+ #include <iostream>
+ #include <map>
+ 
+ #include <rapidschema/array.h>
+ #include <rapidschema/object.h>
+ #include <rapidschema/value.h>
+ 
+ using namespace rapidschema;  // NOLINT[build/namespaces]
+ 
+ // Definition of the C++ class which will be filled with data from the json
+ class SimpleExample : public Object {
+  public:
+   Value<int> integer_value;
+   Value<std::string> string_value;
+   Array<Value<int>> int_array;
+ 
+  protected:
+   // Definition of the mapping from json property names to members of the C++ class
+   std::map<std::string, const Config *> CreateMemberMapping() const override {
+     return {{"integerValue", &integer_value},
+             {"stringValue", &string_value},
+             {"intArray", &int_array}};
+   }
+ };
+ 
+ int main() {
+   // The object to be filled with data
+   SimpleExample simple_example;
+ 
+   // Json string to be parsed
+   std::string json_string =
+       R"(
+       {
+         "integerValue": 43.3,
+         "stringValue": "Hello World!",
+         "intArray": [1, 2, 3, null]
+       }
+       )";
+ 
+   // Parsing the json string into the object
+   rapidjson::Document document;
+   document.Parse(json_string.c_str());
+   auto result = simple_example.Parse(document);
+ 
+   // Reporting the errors
+   size_t i = 1;
+   for (const auto & failure : result.GetFailures()) {
+     std::cout << "Error " << i << " is located at " << failure.GetPath() << " and the corresponding message is: "
+               << failure.GetMessage() << std::endl;
+     i++;
+   }
+ 
+   return 0;
+ }
 ~~~~~~~~~~
 
-You can decide how to log or report the encountered errors yourself.
+When run the output will be:
+
+~~~~~~~~~~shell
+Error 1 is located at intArray[3] and the corresponding message is: Expected type: int. Actual value was: null
+Error 2 is located at integerValue and the corresponding message is: Expected type: int. Actual value was: 43.3
+~~~~~~~~~~
+
+You can decide how to log or report the encountered errors yourself. Especially in large config files knowing where 
+exactly the config file has a defect can save you some grieve hours.
 
 ### Serialization
 
