@@ -41,6 +41,8 @@ class FailureCollection {
     for (auto& failure : failures_) {
       if (failure.GetPath().empty()) {
         failure.SetPath(path);
+      } else if (failure.GetPath()[0] == '[') {
+        failure.SetPath(path + failure.GetPath());
       } else {
         failure.SetPath(path + "." + failure.GetPath());
       }
