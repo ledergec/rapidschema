@@ -10,6 +10,8 @@ RUN apt-get update && \
 	    gcc-8 \
 	    g++-8 \
 	    git \
+	    libgtkglextmm-x11-1.2-0v5q \ # required for clion / most likely javafx
+	    libxslt1.1 \                 # required for clion / most likely javafx
 	    python-pip \
 	    sudo \
 	    valgrind \
