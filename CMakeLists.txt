@@ -23,6 +23,7 @@ add_subdirectory(extern/rapidjson)
 add_subdirectory(extern/fmt)
 add_subdirectory(include)
 add_subdirectory(unittests)
+add_subdirectory(examples)
 
 if (test)
    if (APPLE)
