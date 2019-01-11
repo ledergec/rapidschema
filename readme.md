@@ -86,60 +86,61 @@ try to continue. When done with parsing, rapidschema reports a ParseResult. This
 identified problems with the json string. See the example below:
 
 ~~~~~~~~~~cpp
- #include <iostream>
- #include <map>
- 
- #include <rapidschema/array.h>
- #include <rapidschema/object.h>
- #include <rapidschema/value.h>
- 
- using namespace rapidschema;  // NOLINT[build/namespaces]
- 
- // Definition of the C++ class which will be filled with data from the json
- class SimpleExample : public Object {
-  public:
-   Value<int> integer_value;
-   Value<std::string> string_value;
-   Array<Value<int>> int_array;
- 
-  protected:
-   // Definition of the mapping from json property names to members of the C++ class
-   std::map<std::string, const Config *> CreateMemberMapping() const override {
-     return {{"integerValue", &integer_value},
-             {"stringValue", &string_value},
-             {"intArray", &int_array}};
-   }
- };
- 
- int main() {
-   // The object to be filled with data
-   SimpleExample simple_example;
- 
-   // Json string to be parsed
-   std::string json_string =
-       R"(
-       {
-         "integerValue": 43.3,
-         "stringValue": "Hello World!",
-         "intArray": [1, 2, 3, null]
-       }
-       )";
- 
-   // Parsing the json string into the object
-   rapidjson::Document document;
-   document.Parse(json_string.c_str());
-   auto result = simple_example.Parse(document);
- 
-   // Reporting the errors
-   size_t i = 1;
-   for (const auto & failure : result.GetFailures()) {
-     std::cout << "Error " << i << " is located at " << failure.GetPath() << " and the corresponding message is: "
-               << failure.GetMessage() << std::endl;
-     i++;
-   }
- 
-   return 0;
- }
+//file: examples/simple_error.cpp
+#include <iostream>
+#include <map>
+
+#include <rapidschema/array.h>
+#include <rapidschema/object.h>
+#include <rapidschema/value.h>
+
+using namespace rapidschema;  // NOLINT[build/namespaces]
+
+// Definition of the C++ class which will be filled with data from the json
+class SimpleExample : public Object {
+ public:
+  Value<int> integer_value;
+  Value<std::string> string_value;
+  Array<Value<int>> int_array;
+
+ protected:
+  // Definition of the mapping from json property names to members of the C++ class
+  std::map<std::string, const Config *> CreateMemberMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value},
+            {"intArray", &int_array}};
+  }
+};
+
+int main() {
+  // The object to be filled with data
+  SimpleExample simple_example;
+
+  // Json string to be parsed
+  std::string json_string =
+      R"(
+      {
+        "integerValue": 43.3,
+        "stringValue": "Hello World!",
+        "intArray": [1, 2, 3, null]
+      }
+      )";
+
+  // Parsing the json string into the object
+  rapidjson::Document document;
+  document.Parse(json_string.c_str());
+  auto result = simple_example.Parse(document);
+
+  // Reporting the errors
+  size_t i = 1;
+  for (const auto & failure : result.GetFailures()) {
+    std::cout << "Error " << i << " is located at " << failure.GetPath() << " and the corresponding message is: "
+              << failure.GetMessage() << std::endl;
+    i++;
+  }
+
+  return 0;
+}
 ~~~~~~~~~~
 
 When run the output will be:
@@ -157,7 +158,72 @@ exactly the config file has a defect can save you some grieve hours.
 It is also quite easy to assemble an object in C++ and then serialize it to a json string. See the following example:
 
 ~~~~~~~~~~cpp
-TODO
+//file: examples/simple_serialization.cpp
+#include <iostream>
+#include <map>
+
+#include <rapidjson/prettywriter.h>
+
+#include <rapidschema/array.h>
+#include <rapidschema/generic_writer.h>
+#include <rapidschema/object.h>
+#include <rapidschema/value.h>
+
+using namespace rapidschema;  // NOLINT[build/namespaces]
+
+// Definition of the C++ class which will be filled with data from the json
+class SimpleExample : public Object {
+ public:
+  Value<int> integer_value;
+  Value<std::string> string_value;
+  Array<Value<int>> int_array;
+
+ protected:
+  // Definition of the mapping from json property names to members of the C++ class
+  std::map<std::string, const Config *> CreateMemberMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value},
+            {"intArray", &int_array}};
+  }
+};
+
+int main() {
+  // The object to be filled with data
+  SimpleExample simple_example;
+
+  // Fill the object with data
+  simple_example.integer_value = 43;
+  simple_example.string_value = "My dog wears sunglasses!";
+  simple_example.int_array.push_back(Value<int>());
+  simple_example.int_array.push_back(Value<int>());
+  simple_example.int_array.push_back(Value<int>());
+  simple_example.int_array[0] = 123;
+  simple_example.int_array[0] = 432;
+  simple_example.int_array[0] = 543;
+
+  // Serialize the object to json
+  rapidjson::StringBuffer buffer;
+  rapidschema::GenericWriter<rapidjson::PrettyWriter<rapidjson::StringBuffer>> writer(buffer);
+  simple_example.Serialize(&writer);
+
+  std::cout << buffer.GetString() << std::endl;
+
+  return 0;
+}
+~~~~~~~~~~
+
+Which will output the following json string:
+
+~~~~~~~~~~json
+{
+    "intArray": [
+        543,
+        0,
+        0
+    ],
+    "integerValue": 43,
+    "stringValue": "My dog wears sunglasses!"
+}
 ~~~~~~~~~~
 
 As you can see, there are assignment operators and implicit operators which allow you to use the rapidschema class 

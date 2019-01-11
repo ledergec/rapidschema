@@ -2,7 +2,8 @@
 
 set(EXAMPLES
     simple_parse
-    simple_error)
+    simple_error
+    simple_serialization)
 
 foreach (example ${EXAMPLES})
     add_executable(${example} ${example}.cpp)

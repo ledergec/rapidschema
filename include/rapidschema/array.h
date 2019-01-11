@@ -69,6 +69,10 @@ class Array : public GenericConfig<Ch> {
     }
   }
 
+  void reserve(size_t size) {
+    elements.reserve(size);
+  }
+
   void push_back(const T& t) {
     elements.push_back(t);
   }
