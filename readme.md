@@ -63,6 +63,14 @@ int main() {
 }
 ~~~~~~~~~~
 
+When run the output will be:
+
+~~~~~~~~~~shell
+integer_value = 13
+string_value = Hello World!
+int_array = [1, 2, 3]
+~~~~~~~~~~
+
 It shows how to parse a json string into a C++ class. The only significant difference to gson is
 that we need to explicitly provide the information, which member has which json property name, in the 
 CreateMemberMapping function. This is not necessary in gson because gson uses java reflection to infer the json 
