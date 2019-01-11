@@ -63,7 +63,7 @@ int main() {
 }
 ~~~~~~~~~~
 
-It shows how to first parse a json string into a C++ class. The only significant difference to gson is
+It shows how to parse a json string into a C++ class. The only significant difference to gson is
 that we need to explicitly provide the information, which member has which json property name, in the 
 CreateMemberMapping function. This is not necessary in gson because gson uses java reflection to infer the json 
 property names based on the names of the members in the java struct.
