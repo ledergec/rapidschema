@@ -10,8 +10,8 @@ RUN apt-get update && \
 	    gcc-8 \
 	    g++-8 \
 	    git \
-	    libgtkglextmm-x11-1.2-0v5q \ # required for clion / most likely javafx
-	    libxslt1.1 \                 # required for clion / most likely javafx
+	    libgtk2.0-0 \
+	    libxslt1.1 \
 	    python-pip \
 	    sudo \
 	    valgrind \
@@ -25,12 +25,12 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /u
 
 RUN mkdir /home/dev
 
-RUN wget https://download.jetbrains.com/cpp/CLion-2018.3.1.tar.gz && \
-    tar -C /home/dev -zxvf CLion-2018.3.1.tar.gz && \
-    rm CLion-2018.3.1.tar.gz
+RUN wget https://download.jetbrains.com/cpp/CLion-2018.3.3.tar.gz && \
+    tar -C /home/dev -zxvf CLion-2018.3.3.tar.gz && \
+    rm CLion-2018.3.3.tar.gz
     
 RUN echo '' >> /home/dev/.bashrc && \
-    echo 'alias clion=/home/dev/clion-2018.3.1/bin/clion.sh' >> /home/dev/.bashrc
+    echo 'alias clion=/home/dev/clion-2018.3.3/bin/clion.sh' >> /home/dev/.bashrc
 
 ENTRYPOINT [ "sh", "-c", "echo $HOME" ]
 
