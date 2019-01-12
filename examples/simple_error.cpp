@@ -42,7 +42,7 @@ int main() {
   // Parsing the json string into the object
   rapidjson::Document document;
   document.Parse(json_string.c_str());
-  auto result = simple_example.Parse(document);
+  auto result = simple_example.Transform(document);
 
   // Reporting the errors
   size_t i = 1;
