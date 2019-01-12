@@ -3,8 +3,6 @@
 #ifndef INCLUDE_RAPIDSCHEMA_COMBINED_CONSTRAINT_H_
 #define INCLUDE_RAPIDSCHEMA_COMBINED_CONSTRAINT_H_
 
-#include <optional>
-
 #include <rapidjson/document.h>
 
 #include "rapidschema/concepts/correct_value_parameters.h"
@@ -12,17 +10,18 @@
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
+namespace internal {
 
 template<typename T, template<typename> class ... Constraints>
-    RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
+RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class CombinedConstraint;
 
 template<typename T, template<typename> class ... Constraints>
-    RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
+RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints);
 
 template<typename T, template<typename> class ... Constraints>
-    RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
+RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class CombinedConstraint {
   using TupleT = internal::UniqueTuple<Constraints<T>...>;
 
@@ -31,18 +30,18 @@ class CombinedConstraint {
 
   TransformResult Check(const T& t) const {
     TransformResult result;
-    constraints_.ForEach([&result, t](const auto &checker) {
+    constraints_.ForEach([&result, t](const auto& checker) {
       result.Append(checker.Check(t));
     });
     return result;
   }
 
-  template <template<typename> class Constraint>
+  template<template<typename> class Constraint>
   Constraint<T>& Get() {
     return constraints_.template GetType<Constraint<T>>();
   }
 
-  template <template<typename> class Constraint>
+  template<template<typename> class Constraint>
   const Constraint<T>& Get() const {
     return constraints_.template GetType<Constraint<T>>();
   }
@@ -58,12 +57,13 @@ class CombinedConstraint {
 };
 
 template<typename T, template<typename> class ... Constraints>
-    RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
+RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 static CombinedConstraint<T, Constraints...> MakeConstraint(Constraints<T>&&... constraints) {
   return CombinedConstraint<T, Constraints...>(internal::UniqueTuple<Constraints<T>...>(
       std::make_tuple(std::forward<Constraints<T>>(constraints)...)));
 }
 
+}  // namespace internal
 }  // namespace rapidschema
 
 #endif  // INCLUDE_RAPIDSCHEMA_COMBINED_CONSTRAINT_H_

@@ -18,7 +18,7 @@ class FailureCollection {
  public:
   FailureCollection() {}
 
-  explicit FailureCollection(const Failure & failure) {
+  explicit FailureCollection(const Failure& failure) {
     failures_.push_back(failure);
   }
 
@@ -130,7 +130,7 @@ class TransformResult {
   std::optional<internal::FailureCollection> failure_collection_;
 };
 
-inline TransformResult FailResult(const std::string & message) {
+inline TransformResult FailResult(const std::string& message) {
   return TransformResult(Failure(message));
 }
 

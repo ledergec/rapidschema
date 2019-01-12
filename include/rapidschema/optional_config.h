@@ -11,7 +11,7 @@ namespace rapidschema {
 template<typename BaseConfig>
 class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
  public:
-  TransformResult Transform(const rapidjson::Value &document) override {
+  TransformResult Transform(const rapidjson::Value& document) override {
     if (HasValue() == false) {
       optional_config_ = BaseConfig();
     }
@@ -46,17 +46,17 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     return optional_config_.has_value();
   }
 
-  const BaseConfig & GetValue() const {
+  const BaseConfig& GetValue() const {
     assert(HasValue());
     return optional_config_.value();
   }
 
-  BaseConfig & GetValue() {
+  BaseConfig& GetValue() {
     assert(HasValue());
     return optional_config_.value();
   }
 
-  OptionalConfig<BaseConfig>& operator=(const std::optional<BaseConfig> & optional_config) {
+  OptionalConfig<BaseConfig>& operator=(const std::optional<BaseConfig>& optional_config) {
     optional_config_ = optional_config;
     return *this;
   }

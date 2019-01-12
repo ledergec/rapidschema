@@ -36,7 +36,7 @@ template<typename Ch, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class GenericValue : public GenericConfig<Ch> {
  private:
-  using ValueChecker = CombinedConstraint<T, Constraints...>;
+  using ValueChecker = internal::CombinedConstraint<T, Constraints...>;
 
  public:
   GenericValue()
@@ -62,7 +62,7 @@ class GenericValue : public GenericConfig<Ch> {
   }
 
   template <template<typename> class Constraint>
-  Constraint<T> & GetConstraint() {
+  Constraint<T>& GetConstraint() {
     return checker_.template Get<Constraint>();
   }
 
@@ -114,7 +114,7 @@ template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<char, T, Constraints...>
     MakeValue(Constraints<T>&&... constraints) {
-  return GenericValue<char, T, Constraints...>(MakeConstraint<T, Constraints...>(
+  return GenericValue<char, T, Constraints...>(internal::MakeConstraint<T, Constraints...>(
       std::forward<Constraints<T>>(constraints)...));
 }
 
@@ -122,7 +122,7 @@ template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<char, T, Constraints...>
     MakeValue(T&& t, Constraints<T>&&... constraints) {
-  return GenericValue<char, T, Constraints...>(std::forward<T>(t), MakeConstraint<T, Constraints...>(
+  return GenericValue<char, T, Constraints...>(std::forward<T>(t), internal::MakeConstraint<T, Constraints...>(
       std::forward<Constraints<T>>(constraints)...));
 }
 

@@ -11,12 +11,12 @@ namespace rapidschema {
 namespace internal {
 
 template<class T, std::size_t = sizeof(T)>
-std::true_type CheckSpecializationExists(T *);
+std::true_type CheckSpecializationExists(T*);
 
 std::false_type CheckSpecializationExists(...);
 
 template<class T>
-using SpecializationExists = decltype(CheckSpecializationExists(std::declval<T *>()));
+using SpecializationExists = decltype(CheckSpecializationExists(std::declval<T*>()));
 
 }  // namespace internal
 

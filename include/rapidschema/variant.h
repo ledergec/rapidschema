@@ -82,7 +82,7 @@ class GenericVariant : public GenericConfig<Ch> {
   }
 
   template <typename T>
-  ConfigTypeOf<T> & GetVariant() {
+  ConfigTypeOf<T>& GetVariant() {
     return unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>();
   }
 

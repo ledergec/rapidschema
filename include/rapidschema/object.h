@@ -29,7 +29,7 @@ class GenericObject : public GenericConfig<Ch> {
   GenericObject(GenericObject<Ch>&& other)
       : mapping_initialized_(false) {}
 
-  GenericObject & operator= (const GenericObject & other) {
+  GenericObject& operator= (const GenericObject& other) {
     if (this != &other) {
       mapping_initialized_ = false;
       name_config_mapping_ = std::map<std::basic_string<Ch>, const GenericConfig<Ch>*>();
@@ -37,7 +37,7 @@ class GenericObject : public GenericConfig<Ch> {
     return *this;
   }
 
-  TransformResult Transform(const rapidjson::Value & document) override {
+  TransformResult Transform(const rapidjson::Value& document) override {
     UpdateMapping();
 
     if (document.IsObject() == false) {
@@ -56,7 +56,7 @@ class GenericObject : public GenericConfig<Ch> {
         continue;
       }
 
-      auto tmp = const_cast<Config *>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
+      auto tmp = const_cast<Config*>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
       if (tmp.Success() == false) {
         tmp.AddPath(pair.first);
         result.Append(tmp);
@@ -93,7 +93,7 @@ class GenericObject : public GenericConfig<Ch> {
     UpdateMapping();
 
     writer->StartObject();
-    for (const auto & pair : name_config_mapping_) {
+    for (const auto& pair : name_config_mapping_) {
       writer->Key(pair.first.c_str());
       pair.second->Serialize(writer);
     }
@@ -110,7 +110,7 @@ class GenericObject : public GenericConfig<Ch> {
 
   void CollectMemory() const override {
     if (mapping_initialized_) {
-      for (const auto & pair : name_config_mapping_) {
+      for (const auto& pair : name_config_mapping_) {
         pair.second->CollectMemory();
       }
 

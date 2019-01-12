@@ -8,6 +8,7 @@
 #include "rapidschema/transform_result_matchers.h"
 
 namespace rapidschema {
+namespace internal {
 
 using testing::Test;
 using testing::UnorderedElementsAre;
@@ -15,7 +16,7 @@ using testing::UnorderedElementsAre;
 class CombinedConstraintTest : public Test {
  public:
   CombinedConstraintTest()
-      : constraint(MakeConstraint(Minimum<uint32_t>(3), MultipleOf<uint32_t >(6))) {}
+      : constraint(MakeConstraint(Minimum<uint32_t>(3), MultipleOf<uint32_t>(6))) {}
 
   CombinedConstraint<uint32_t, Minimum, MultipleOf> constraint;
 };
@@ -43,4 +44,5 @@ TEST_F(CombinedConstraintTest, GivenBothConstraintsNotSatisfied_WhenParsingValue
     ASSERT_THAT(result.GetFailures(), UnorderedElementsAre(failure2, failure1));
 }
 
+}  // namespace internal
 }  // namespace rapidschema

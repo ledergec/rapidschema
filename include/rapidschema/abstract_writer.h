@@ -33,27 +33,27 @@ class AbstractWriter {
 
   virtual bool Double(double d) = 0;
 
-  virtual bool RawNumber(const Ch *str, rapidjson::SizeType length, bool copy = false) = 0;
+  virtual bool RawNumber(const Ch* str, rapidjson::SizeType length, bool copy = false) = 0;
 
-  virtual bool String(const Ch *str, rapidjson::SizeType length, bool copy = false) = 0;
+  virtual bool String(const Ch* str, rapidjson::SizeType length, bool copy = false) = 0;
 
-  virtual bool String(const std::basic_string<Ch> &str) = 0;
+  virtual bool String(const std::basic_string<Ch>& str) = 0;
 
   virtual bool StartObject() = 0;
-  virtual bool Key(const Ch *str, rapidjson::SizeType length, bool copy = false) = 0;
+  virtual bool Key(const Ch* str, rapidjson::SizeType length, bool copy = false) = 0;
 
-  virtual bool Key(const std::basic_string<Ch> &str) = 0;
+  virtual bool Key(const std::basic_string<Ch>& str) = 0;
 
   virtual bool EndObject(rapidjson::SizeType memberCount = 0) = 0;
 
   virtual bool StartArray() = 0;
   virtual bool EndArray(rapidjson::SizeType elementCount = 0) = 0;
 
-  virtual bool String(const Ch *const &str) = 0;
+  virtual bool String(const Ch* const& str) = 0;
 
-  virtual bool Key(const Ch *const &str) = 0;
+  virtual bool Key(const Ch* const& str) = 0;
 
-  virtual bool RawValue(const Ch *json, size_t length, rapidjson::Type type) = 0;
+  virtual bool RawValue(const Ch* json, size_t length, rapidjson::Type type) = 0;
 
   virtual void Flush() = 0;
 };

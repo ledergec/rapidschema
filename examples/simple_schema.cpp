@@ -25,7 +25,7 @@ class SimpleExample : public NoAdditionalProperties<Object> {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config *> CreateMemberMapping() const override {
+  std::map<std::string, const Config*> CreateMemberMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }
@@ -52,7 +52,7 @@ int main() {
 
   // Reporting the errors
   size_t i = 1;
-  for (const auto & failure : result.GetFailures()) {
+  for (const auto& failure : result.GetFailures()) {
     std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
               << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
     i++;
@@ -62,7 +62,7 @@ int main() {
 
   // Reporting the errors
   i = 1;
-  for (const auto & failure : result.GetFailures()) {
+  for (const auto& failure : result.GetFailures()) {
     std::cout << "Validation Error " << i << " is located at \"" << failure.GetPath()
               << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
     i++;

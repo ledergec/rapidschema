@@ -3,9 +3,6 @@
 #ifndef INCLUDE_RAPIDSCHEMA_CONFIG_H_
 #define INCLUDE_RAPIDSCHEMA_CONFIG_H_
 
-#include <optional>
-#include <string>
-
 #include <rapidjson/document.h>
 
 #include "rapidschema/abstract_writer.h"
@@ -18,7 +15,7 @@ class GenericConfig {
  public:
   virtual ~GenericConfig() = default;
 
-  virtual TransformResult Transform(const rapidjson::Value &document) = 0;
+  virtual TransformResult Transform(const rapidjson::Value& document) = 0;
 
   virtual TransformResult Validate() const = 0;
 

@@ -16,10 +16,10 @@ namespace internal {
 
 template<typename T, template<typename> class C>
 struct IsConstraint {
-  template<typename U, std::optional<Failure> (U::*)(const T &) const>
+  template<typename U, std::optional<Failure> (U::*)(const T&) const>
   struct SFINAE {};
   template<typename U>
-  static char Test(SFINAE<U, &U::Check> *);
+  static char Test(SFINAE<U, &U::Check>*);
   template<typename U>
   static int Test(...);
   static const bool value = sizeof(Test<C<T>>(nullptr)) == sizeof(char);

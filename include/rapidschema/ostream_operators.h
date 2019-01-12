@@ -11,12 +11,12 @@
 
 namespace rapidschema {
 
-inline std::ostream &operator<<(std::ostream &stream, const Failure& failure) {
+inline std::ostream& operator<<(std::ostream& stream, const Failure& failure) {
     stream << "Failure: [message = " << failure.GetMessage() << ", path = " << failure.GetPath() << "]";
     return stream;
 }
 
-inline std::ostream &operator<<(std::ostream &stream, const std::optional<Failure>& failure) {
+inline std::ostream& operator<<(std::ostream& stream, const std::optional<Failure>& failure) {
     if (failure.has_value()) {
         stream << failure.value();
     } else {
@@ -25,7 +25,7 @@ inline std::ostream &operator<<(std::ostream &stream, const std::optional<Failur
     return stream;
 }
 
-inline std::ostream &operator<<(std::ostream &stream, const TransformResult& result) {
+inline std::ostream& operator<<(std::ostream& stream, const TransformResult& result) {
     if (result.Success()) {
         stream << "Success" << std::endl;
     } else {

@@ -179,7 +179,7 @@ class UniqueTuple {
   }
 
   template <typename Function>
-  void ForEach(Function &&f) const {
+  void ForEach(Function&& f) const {
     constexpr std::size_t N = std::tuple_size<std::remove_reference_t<TupleT>>::value;
     ForEachImpl(tuple_, std::forward<Function>(f), std::make_index_sequence<N>{});
   }

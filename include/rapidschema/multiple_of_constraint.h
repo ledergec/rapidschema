@@ -26,12 +26,12 @@ class MultipleOf<T, typename std::enable_if<std::is_integral<T>::value>::type> {
   MultipleOf()
       : mul_(1) {}
 
-  explicit MultipleOf(const T &mul)
+  explicit MultipleOf(const T& mul)
       : mul_(mul) {
     assert(mul_ != 0);
   }
 
-  std::optional<Failure> Check(const T &n) const {
+  std::optional<Failure> Check(const T& n) const {
     if (n % mul_ != 0) {
       return Failure(fmt::format("Expected: MultipleOf {}. Actual: {}", mul_, n));
     }
@@ -48,12 +48,12 @@ class MultipleOf<T, typename std::enable_if<std::is_floating_point<T>::value>::t
   MultipleOf() :
       mul_(1) {}
 
-  explicit MultipleOf(const T &mul)
+  explicit MultipleOf(const T& mul)
       : mul_(mul) {
     assert(mul_ != 0);
   }
 
-  std::optional<Failure> Check(const T &n) const {
+  std::optional<Failure> Check(const T& n) const {
     auto lower_diff = n - std::floor(n / mul_) * mul_;
     auto upper_diff = std::ceil(n / mul_) * mul_ - n;
     auto diff = std::min(lower_diff, upper_diff);

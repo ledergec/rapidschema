@@ -18,7 +18,7 @@ class Array : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
 
-  TransformResult Transform(const rapidjson::Value & document) override {
+  TransformResult Transform(const rapidjson::Value& document) override {
     if (document.IsArray() == false) {
       return TransformResult(Failure(fmt::format("Expected array but was: {} ",
                                                  JsonTypeToString(document.GetType()))));
@@ -27,7 +27,7 @@ class Array : public GenericConfig<Ch> {
     TransformResult result;
     size_t count = 0;
     auto dom_array = document.GetArray();
-    for (const auto & dom_element : dom_array) {
+    for (const auto& dom_element : dom_array) {
       elements.emplace_back();
       auto tmp = elements.back().Transform(dom_element);
       if (tmp.HasFailures()) {
@@ -42,7 +42,7 @@ class Array : public GenericConfig<Ch> {
 
   TransformResult Validate() const override {
     TransformResult result;
-    for (auto & e : elements) {
+    for (auto& e : elements) {
       result.Append(e.Validate());
     }
 
@@ -51,7 +51,7 @@ class Array : public GenericConfig<Ch> {
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
     writer->StartArray();
-    for (const auto & e : elements) {
+    for (const auto& e : elements) {
       e.Serialize(writer);
     }
     writer->EndArray();
@@ -62,7 +62,7 @@ class Array : public GenericConfig<Ch> {
   }
 
   void CollectMemory() const override {
-    for (const auto & element : elements) {
+    for (const auto& element : elements) {
       element.CollectMemory();
     }
   }
