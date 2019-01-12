@@ -13,7 +13,7 @@
 
 namespace rapidschema {
 
-template<typename T, typename Ch = char>
+template<typename ConfigType, typename Ch = char>
 class Array : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
@@ -71,15 +71,15 @@ class Array : public GenericConfig<Ch> {
     elements.reserve(size);
   }
 
-  void push_back(const T& t) {
-    elements.push_back(t);
+  void push_back(const ConfigType& config) {
+    elements.push_back(config);
   }
 
-  T& operator[] (size_t i) {
+  ConfigType& operator[] (size_t i) {
     return elements[i];
   }
 
-  const T& operator[] (size_t i) const {
+  const ConfigType& operator[] (size_t i) const {
     return elements[i];
   }
 
@@ -100,7 +100,7 @@ class Array : public GenericConfig<Ch> {
   }
 
  private:
-  std::vector<T> elements;
+  std::vector<ConfigType> elements;
 };
 
 }  // namespace rapidschema
