@@ -1,7 +1,10 @@
-## Gson for C++
+## Parsing and Validating the Structure of Json Data with a Breeze
 
-[Gson](https://github.com/google/gson) is a great java library for serializing struct and other data such as lists and
-maps into json or parsing it from json. rapidschema is not quite as easy to use, but gets close. See below.
+There are a number of json parsers for C / C++. They give the user access to the underlying json structure. Rapidschema
+tries to lift the level of abstraction. It transforms the json data directly into C++ classes which give easy access to
+the parsed information. For java for instance, there exist such libraries, one example is 
+[gson](https://github.com/google/gson). Rapidschema does not quite match the ease of use of gson from a users 
+perspective, but gets close.
 
 ### Parsing
 
@@ -171,7 +174,7 @@ It is also quite easy to assemble an object in C++ and then serialize it to a js
 
 using namespace rapidschema;  // NOLINT[build/namespaces]
 
-// Definition of the C++ class which will be filled with data from the json
+// Definition of the C++ class which will be filled with data and then serialized to json
 class SimpleExample : public Object {
  public:
   Value<int> integer_value;
