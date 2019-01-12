@@ -38,6 +38,10 @@ class GenericValue : public GenericConfig<Ch> {
  public:
   GenericValue() = default;
 
+  GenericValue(const T& t) {
+    t_ = t;
+  }
+
   using CharType = Ch;
   using Type = T;
 
