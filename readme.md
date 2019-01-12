@@ -255,7 +255,88 @@ Maximum. In rapidschema the corresponding code for an object containing such a r
 follows:
 
 ~~~~~~~~~~cpp
-TODO
+//file: examples/simple_schema.cpp
+#include <iostream>
+#include <map>
+
+#include <rapidjson/prettywriter.h>
+
+#include <rapidschema/array.h>
+#include <rapidschema/generic_writer.h>
+#include <rapidschema/no_additional_properties.h>
+#include <rapidschema/object.h>
+#include <rapidschema/range_constraints.h>
+#include <rapidschema/string_constraints.h>
+#include <rapidschema/value.h>
+
+using namespace rapidschema;  // NOLINT[build/namespaces]
+
+// Definition of the C++ class which will be filled with data from the json
+// This class contains additional schema information
+class SimpleExample : public NoAdditionalProperties<Object> {
+ public:
+  Value<int, Minimum> integer_value;
+  Value<std::string, MaxLength> string_value;
+
+  SimpleExample()
+    : integer_value(MakeValue<int, Minimum>(Minimum(10)))
+    , string_value(MakeValue<std::string, MaxLength>(MaxLength(20))) {}
+
+ protected:
+  // Definition of the mapping from json property names to members of the C++ class
+  std::map<std::string, const Config *> CreateMemberMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value}};
+  }
+};
+
+int main() {
+  // The object to be filled with data
+  SimpleExample simple_example;
+
+  // Json string to be parsed
+  std::string json_string =
+      R"(
+      {
+        "integerValue": 5,
+        "stringValue": "My dog wears sunglasses!",
+        "additionalProperty": [1, 2, 3]
+      }
+      )";
+
+  // Parsing the json string into the object
+  rapidjson::Document document;
+  document.Parse(json_string.c_str());
+  auto result = simple_example.Transform(document);
+
+  // Reporting the errors
+  size_t i = 1;
+  for (const auto & failure : result.GetFailures()) {
+    std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
+              << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
+    i++;
+  }
+
+  result = simple_example.Validate();
+
+  // Reporting the errors
+  i = 1;
+  for (const auto & failure : result.GetFailures()) {
+    std::cout << "Validation Error " << i << " is located at \"" << failure.GetPath()
+              << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
+    i++;
+  }
+
+  return 0;
+}
+~~~~~~~~~~
+
+When run this example will output the following:
+
+~~~~~~~~~~shell
+Transform Error 1 is located at: "" and the corresponding message is: Unexpected member encountered: additionalProperty
+Validation Error 1 is located at "integerValue" and the corresponding message is: Expected: >= 10. Actual: 5
+Validation Error 2 is located at "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
 ~~~~~~~~~~
 
 However, with a jsonschema much more can be done. Please consult the [full list of supported json schema features](TODO)
