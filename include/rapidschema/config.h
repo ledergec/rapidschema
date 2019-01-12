@@ -24,6 +24,15 @@ class GenericConfig {
   virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 
   virtual void CollectMemory() const {}
+
+  virtual void SetCrossValidationResults(TransformResult&& cross_validation_results) {
+    cross_validation_results_ = cross_validation_results;
+  }
+
+  virtual TransformResult CollectCrossValidationResults() const = 0;
+
+ protected:
+  TransformResult cross_validation_results_;
 };
 
 using Config = GenericConfig<>;

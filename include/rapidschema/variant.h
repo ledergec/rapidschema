@@ -106,6 +106,12 @@ class GenericVariant : public GenericConfig<Ch> {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
+  TransformResult CollectCrossValidationResults() const override {
+    TransformResult results = this->cross_validation_results_;
+    results.Append(unique_tuple_.template Get<Config>(variant_index_)->CollectCrossValidationResults());
+    return results;
+  }
+
   TransformResult HandleMissing() const {
     return FailResult("is missing");
   }

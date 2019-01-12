@@ -119,6 +119,18 @@ class GenericObject : public GenericConfig<Ch> {
     }
   }
 
+  TransformResult CollectCrossValidationResults() const override {
+    UpdateMapping();
+
+    TransformResult results = this->cross_validation_results_;
+    for (const auto& pair : name_config_mapping_) {
+      auto tmp = pair.second->CollectCrossValidationResults();
+      tmp.AddPath(pair.first);
+      results.Append(tmp);
+    }
+    return results;
+  };
+
  protected:
   virtual std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> CreateMemberMapping() const = 0;
 

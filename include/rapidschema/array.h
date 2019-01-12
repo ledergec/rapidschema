@@ -67,6 +67,16 @@ class Array : public GenericConfig<Ch> {
     }
   }
 
+  TransformResult CollectCrossValidationResults() const override {
+    TransformResult results = this->cross_validation_results_;
+    for (size_t i = 0; i < elements.size(); ++i) {
+      auto tmp = elements[i].CollectCrossValidationResults();
+      tmp.AddPath(fmt::format("[{}]", i));
+      results.Append(tmp);
+    }
+    return results;
+  };
+
   void reserve(size_t size) {
     elements.reserve(size);
   }

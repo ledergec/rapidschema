@@ -88,6 +88,10 @@ class GenericValue : public GenericConfig<Ch> {
     TypeProperties<T>::template Serialize<Ch>(t_, writer);
   }
 
+  TransformResult CollectCrossValidationResults() const override {
+    return this->cross_validation_results_;
+  }
+
   TransformResult HandleMissing() const override {
     return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::name));
   }

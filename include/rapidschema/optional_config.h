@@ -42,6 +42,14 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     }
   }
 
+  TransformResult CollectCrossValidationResults() const override {
+    TransformResult results = this->cross_validation_results_;
+    if (HasValue()) {
+      results.Append(optional_config_.value().CollectCrossValidationResults());
+    }
+    return results;
+  }
+
   bool HasValue() const {
     return optional_config_.has_value();
   }
