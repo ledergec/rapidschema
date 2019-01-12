@@ -33,7 +33,7 @@ inline TransformResult ParseConfig(const std::string &json, Config *config) {
     rapidjson::Document document;
     rapidjson::ParseResult result = document.Parse(json.c_str());
     EXPECT_FALSE(result.IsError());
-    return config->Parse(document);
+    return config->Transform(document);
 }
 
 inline TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
@@ -41,7 +41,7 @@ inline TransformResult ParseJsonLeaf(const std::string &json, Config * config) {
     rapidjson::ParseResult result = document.Parse(json.c_str());
     EXPECT_FALSE(result.IsError());
     EXPECT_TRUE(document.HasMember("leaf"));
-    return config->Parse(document["leaf"]);
+    return config->Transform(document["leaf"]);
 }
 
 template <typename T>
@@ -51,7 +51,7 @@ TransformResult ParseLeaf(const T& t, Config * config) {
     rapidjson::ParseResult result = document.Parse(leaf_str.c_str());
     EXPECT_FALSE(result.IsError());
     EXPECT_TRUE(document.HasMember("leaf"));
-    return config->Parse(document["leaf"]);
+    return config->Transform(document["leaf"]);
 }
 
 template <typename T>

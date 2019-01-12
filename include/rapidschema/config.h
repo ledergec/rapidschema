@@ -18,7 +18,7 @@ class GenericConfig {
  public:
   virtual ~GenericConfig() = default;
 
-  virtual TransformResult Parse(const rapidjson::Value &document) = 0;
+  virtual TransformResult Transform(const rapidjson::Value &document) = 0;
 
   virtual TransformResult Validate() const = 0;
 

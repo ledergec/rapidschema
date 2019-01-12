@@ -55,10 +55,10 @@ class GenericVariant : public GenericConfig<Ch> {
  public:
   GenericVariant() = default;
 
-  TransformResult Parse(const rapidjson::Value& document) override {
+  TransformResult Transform(const rapidjson::Value& document) override {
     variant_index_ = unique_tuple_.ApplyUntilSuccess(
         [&document](auto& config_value) {
-          return config_value.Parse(document).Success();
+          return config_value.Transform(document).Success();
         });
     if (variant_index_ == -1) {
       variant_index_ = INVALID_VARIANT_INDEX;

@@ -66,7 +66,7 @@ class GenericValue : public GenericConfig<Ch> {
     return checker_.template Get<Constraint>();
   }
 
-  TransformResult Parse(const rapidjson::Value& document) override {
+  TransformResult Transform(const rapidjson::Value& document) override {
     if (TypeProperties<T>::IsType(document) == false) {
       rapidjson::StringBuffer buffer;
       rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);

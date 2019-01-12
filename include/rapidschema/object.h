@@ -37,7 +37,7 @@ class GenericObject : public GenericConfig<Ch> {
     return *this;
   }
 
-  TransformResult Parse(const rapidjson::Value & document) override {
+  TransformResult Transform(const rapidjson::Value & document) override {
     UpdateMapping();
 
     if (document.IsObject() == false) {
@@ -56,7 +56,7 @@ class GenericObject : public GenericConfig<Ch> {
         continue;
       }
 
-      auto tmp = const_cast<Config*>(pair.second)->Parse(document.FindMember(pair.first.c_str())->value);
+      auto tmp = const_cast<Config *>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
       if (tmp.Success() == false) {
         tmp.AddPath(pair.first);
         result.Append(tmp);

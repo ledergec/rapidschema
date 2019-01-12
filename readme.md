@@ -53,8 +53,8 @@ int main() {
 
   // Parsing the json string into the object
   rapidjson::Document document;
-  document.Parse(json_string.c_str());
-  simple_example.Parse(document);
+  document.Transform(json_string.c_str());
+  simple_example.Transform(document);
 
   // Writing the contents of the object to std out. Most elements simply convert to basic types.
   std::cout << "integer_value = " << simple_example.integer_value << std::endl;
@@ -131,8 +131,8 @@ int main() {
 
   // Parsing the json string into the object
   rapidjson::Document document;
-  document.Parse(json_string.c_str());
-  auto result = simple_example.Parse(document);
+  document.Transform(json_string.c_str());
+  auto result = simple_example.Transform(document);
 
   // Reporting the errors
   size_t i = 1;
@@ -245,7 +245,7 @@ a quick impression. The [JSON Schema Validator](https://www.jsonschemavalidator.
 schemas and verify your understanding. The [official json schema specification](https://json-schema.org/) is currently 
 at draft-07 and is actively aiming at reaching the RFC status.
 
-So why is this relevant? Rapidschema allows you to define a json schema in code. Parse a json string into the schema and
+So why is this relevant? Rapidschema allows you to define a json schema in code. Transform a json string into the schema and
 validate all the schema constraints. During schema validation, as with parsing, it again collects a list of all errors 
  encountered and reports this error list once done.
 

@@ -11,11 +11,11 @@ namespace rapidschema {
 template<typename BaseConfig>
 class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
  public:
-  TransformResult Parse(const rapidjson::Value &document) override {
+  TransformResult Transform(const rapidjson::Value &document) override {
     if (HasValue() == false) {
       optional_config_ = BaseConfig();
     }
-    return optional_config_.value().Parse(document);
+    return optional_config_.value().Transform(document);
   }
 
   TransformResult Validate() const override {
