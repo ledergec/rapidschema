@@ -53,7 +53,7 @@ int main() {
 
   // Parsing the json string into the object
   rapidjson::Document document;
-  document.Transform(json_string.c_str());
+  document.Parse(json_string.c_str());
   simple_example.Transform(document);
 
   // Writing the contents of the object to std out. Most elements simply convert to basic types.
@@ -131,7 +131,7 @@ int main() {
 
   // Parsing the json string into the object
   rapidjson::Document document;
-  document.Transform(json_string.c_str());
+  document.Parse(json_string.c_str());
   auto result = simple_example.Transform(document);
 
   // Reporting the errors
