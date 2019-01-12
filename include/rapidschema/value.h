@@ -36,11 +36,11 @@ class GenericValue : public GenericConfig<Ch> {
   using ValueChecker = CombinedConstraint<T, Constraints...>;
 
  public:
-  GenericValue() = default;
+  GenericValue()
+    : t_() {}
 
-  GenericValue(const T& t) {  // NOLINT[runtime/explicit]
-    t_ = t;
-  }
+  GenericValue(const T& t)  // NOLINT[runtime/explicit]
+    : t_(t) {}
 
   using CharType = Ch;
   using Type = T;
