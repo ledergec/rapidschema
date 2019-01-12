@@ -134,7 +134,7 @@ Variant<Values...> MakeUtf8Variant(Values&&... values) {
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 Value<T, Constraints...> MakeUtf8VariantValue(Constraints<T>&&... constraints) {
-  return MakeUtf8Value<T, Constraints...>(std::forward<Constraints<T>>(constraints)...);
+  return MakeValue<T, Constraints...>(std::forward<Constraints<T>>(constraints)...);
 }
 
 }  // namespace rapidschema

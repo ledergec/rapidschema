@@ -51,7 +51,7 @@ TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenValidatingShortString_T
 }
 
 TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatingShortString_ThenFails) {
-  auto value = MakeUtf8Value<std::string, MinLength>(MinLength(20));
+  auto value = MakeValue<std::string, MinLength>(MinLength(20));
   value.GetConstraint<MinLength>().SetMinLength(20);
   value = "ein string";
   auto result = value.Validate();

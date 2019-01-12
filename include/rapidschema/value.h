@@ -26,11 +26,11 @@ class GenericValue;
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-GenericValue<char, T, Constraints...> MakeUtf8Value(Constraints<T>&&... constraints);
+GenericValue<char, T, Constraints...> MakeValue(Constraints<T>&&... constraints);
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-GenericValue<char, T, Constraints...> MakeUtf8Value(T&& t, Constraints<T>&&... constraints);
+GenericValue<char, T, Constraints...> MakeValue(T&& t, Constraints<T>&&... constraints);
 
 template<typename Ch, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
@@ -103,8 +103,8 @@ class GenericValue : public GenericConfig<Ch> {
   T t_;
   ValueChecker checker_;
 
-  friend GenericValue MakeUtf8Value<T, Constraints...>(Constraints<T>&&... constraints);
-  friend GenericValue MakeUtf8Value<T, Constraints...>(T&& t, Constraints<T>&&... constraints);
+  friend GenericValue MakeValue<T, Constraints...>(Constraints<T>&&... constraints);
+  friend GenericValue MakeValue<T, Constraints...>(T&& t, Constraints<T>&&... constraints);
 };
 
 template <typename T, template<typename> class ... Constraints>
@@ -113,7 +113,7 @@ using Value = GenericValue<char, T, Constraints...>;
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<char, T, Constraints...>
-    MakeUtf8Value(Constraints<T>&&... constraints) {
+    MakeValue(Constraints<T>&&... constraints) {
   return GenericValue<char, T, Constraints...>(MakeConstraint<T, Constraints...>(
       std::forward<Constraints<T>>(constraints)...));
 }
@@ -121,7 +121,7 @@ GenericValue<char, T, Constraints...>
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 GenericValue<char, T, Constraints...>
-    MakeUtf8Value(T&& t, Constraints<T>&&... constraints) {
+    MakeValue(T&& t, Constraints<T>&&... constraints) {
   return GenericValue<char, T, Constraints...>(std::forward<T>(t), MakeConstraint<T, Constraints...>(
       std::forward<Constraints<T>>(constraints)...));
 }
