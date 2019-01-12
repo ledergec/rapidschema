@@ -21,7 +21,7 @@ class ObjectTestConfigExample : public Object {
  public:
   ObjectTestConfigExample()
       : integer_value(MakeValue(22, Maximum(4)))
-      , string_value(MakeValue(std::string("default"), MinLength(3), MaxLength(4))) {}
+      , string_value(MakeValue(std::string("default"), MinLength(3), MaxLength(20))) {}
 
   Value<int, Maximum> integer_value;
   Value<std::string, MinLength, MaxLength> string_value;
@@ -244,6 +244,14 @@ TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCo
   ASSERT_EQ("nested_value", nested_example_.example.string_value.Get());
   ASSERT_EQ(23, nested_example_.integer_value.Get());
   ASSERT_EQ("hallo", nested_example_.string_value.Get());
+}
+
+/////////////////////////// Validation /////////////////////////////////////////////
+
+TEST_F(ObjectTest, WhenValidateFails_ThenErrorsReportedWithCorrectPath) {
+  example_.integer_value = 20;
+  auto result = example_.Validate();
+  ASSERT_THAT(result, TransformFailed("Expected: <= 4. Actual: 20", "integerValue"));
 }
 
 /////////////////////////// Serialization /////////////////////////////////////////////

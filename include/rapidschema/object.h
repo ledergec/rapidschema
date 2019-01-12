@@ -81,7 +81,9 @@ class GenericObject : public GenericConfig<Ch> {
 
     TransformResult result;
     for (auto pair : name_config_mapping_) {
-      result.Append(pair.second->Validate());
+      auto tmp = pair.second->Validate();
+      tmp.AddPath(pair.first);
+      result.Append(tmp);
     }
 
     return result;
