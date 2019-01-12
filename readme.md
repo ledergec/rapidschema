@@ -339,6 +339,9 @@ Validation Error 1 is located at "integerValue" and the corresponding message is
 Validation Error 2 is located at "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
 ~~~~~~~~~~
 
+The example also shows how to change the behavior of the object class such that errors are reported when additional 
+properties are present in the json string.
+
 However, with a jsonschema much more can be done. Please consult the [full list of supported json schema features](TODO)
 to see which json schema features are supported by rapidschema. Consult the above references for inspiration on what 
 can be done using a json schema.
