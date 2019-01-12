@@ -42,6 +42,7 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     }
   }
 
+#ifdef RAPIDSCHEMA_ENABLE_CROSS_VALIDATION
   TransformResult CollectCrossValidationResults() const override {
     TransformResult results = this->cross_validation_results_;
     if (HasValue()) {
@@ -49,6 +50,7 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     }
     return results;
   }
+#endif
 
   bool HasValue() const {
     return optional_config_.has_value();

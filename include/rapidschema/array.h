@@ -67,6 +67,7 @@ class Array : public GenericConfig<Ch> {
     }
   }
 
+#ifdef RAPIDSCHEMA_ENABLE_CROSS_VALIDATION
   TransformResult CollectCrossValidationResults() const override {
     TransformResult results = this->cross_validation_results_;
     for (size_t i = 0; i < elements.size(); ++i) {
@@ -76,6 +77,7 @@ class Array : public GenericConfig<Ch> {
     }
     return results;
   };
+#endif
 
   void reserve(size_t size) {
     elements.reserve(size);

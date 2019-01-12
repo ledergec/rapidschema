@@ -119,6 +119,7 @@ class GenericObject : public GenericConfig<Ch> {
     }
   }
 
+#ifdef RAPIDSCHEMA_ENABLE_CROSS_VALIDATION
   TransformResult CollectCrossValidationResults() const override {
     UpdateMapping();
 
@@ -130,6 +131,7 @@ class GenericObject : public GenericConfig<Ch> {
     }
     return results;
   };
+#endif
 
  protected:
   virtual std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> CreateMemberMapping() const = 0;

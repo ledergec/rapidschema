@@ -25,6 +25,7 @@ class GenericConfig {
 
   virtual void CollectMemory() const {}
 
+#ifdef RAPIDSCHEMA_ENABLE_CROSS_VALIDATION
   virtual void SetCrossValidationResults(TransformResult&& cross_validation_results) {
     cross_validation_results_ = cross_validation_results;
   }
@@ -33,6 +34,7 @@ class GenericConfig {
 
  protected:
   TransformResult cross_validation_results_;
+#endif
 };
 
 using Config = GenericConfig<>;
