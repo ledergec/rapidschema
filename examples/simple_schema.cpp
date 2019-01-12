@@ -3,10 +3,7 @@
 #include <iostream>
 #include <map>
 
-#include <rapidjson/prettywriter.h>
-
 #include <rapidschema/array.h>
-#include <rapidschema/generic_writer.h>
 #include <rapidschema/no_additional_properties.h>
 #include <rapidschema/object.h>
 #include <rapidschema/range_constraints.h>

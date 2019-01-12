@@ -3,6 +3,8 @@
 #include <iostream>
 #include <map>
 
+#include <rapidjson/document.h>
+
 #include <rapidschema/array.h>
 #include <rapidschema/object.h>
 #include <rapidschema/value.h>
