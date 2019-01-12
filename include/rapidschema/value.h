@@ -38,7 +38,7 @@ class GenericValue : public GenericConfig<Ch> {
  public:
   GenericValue() = default;
 
-  GenericValue(const T& t) {
+  GenericValue(const T& t) {  // NOLINT[runtime/explicit]
     t_ = t;
   }
 

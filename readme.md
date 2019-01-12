@@ -197,12 +197,9 @@ int main() {
   // Fill the object with data
   simple_example.integer_value = 43;
   simple_example.string_value = "My dog wears sunglasses!";
-  simple_example.int_array.push_back(Value<int>());
-  simple_example.int_array.push_back(Value<int>());
-  simple_example.int_array.push_back(Value<int>());
-  simple_example.int_array[0] = 123;
-  simple_example.int_array[0] = 432;
-  simple_example.int_array[0] = 543;
+  simple_example.int_array.push_back(123);
+  simple_example.int_array.push_back(432);
+  simple_example.int_array.push_back(543);
 
   // Serialize the object to json
   rapidjson::StringBuffer buffer;
