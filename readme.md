@@ -342,6 +342,9 @@ Validation Error 2 is located at "stringValue" and the corresponding message is:
 The example also shows how to change the behavior of the object class such that errors are reported when additional 
 properties are present in the json string.
 
+Since transformation and validation are separate steps / functions you can also build an object in C++ as shown in
+ the serialization example and then validate the data against the schema without ever serializing it.
+
 However, with a jsonschema much more can be done. Please consult the [full list of supported json schema features](TODO)
 to see which json schema features are supported by rapidschema. Consult the above references for inspiration on what 
 can be done using a json schema.
