@@ -1,6 +1,4 @@
-//
-// Created by Christian Ledergerber on 15.11.18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_ADDITIONAL_PROPERTIES_H_
 #define INCLUDE_RAPIDSCHEMA_ADDITIONAL_PROPERTIES_H_

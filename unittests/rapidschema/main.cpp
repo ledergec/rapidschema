@@ -1,4 +1,5 @@
-// tests.cpp
+// Copyright (C) 2019 Christian Ledergerber
+
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv) {

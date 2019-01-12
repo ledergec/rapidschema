@@ -1,6 +1,4 @@
-//
-// Created by root on 11/23/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_FAILURE_H_
 #define INCLUDE_RAPIDSCHEMA_FAILURE_H_

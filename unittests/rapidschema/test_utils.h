@@ -1,6 +1,4 @@
-//
-// Created by Christian Ledergerber on 15.11.18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef UNITTESTS_RAPIDSCHEMA_TEST_UTILS_H_
 #define UNITTESTS_RAPIDSCHEMA_TEST_UTILS_H_

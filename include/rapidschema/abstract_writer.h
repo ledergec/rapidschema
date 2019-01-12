@@ -1,6 +1,4 @@
-//
-// Created by root on 12/12/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_ABSTRACT_WRITER_H_
 #define INCLUDE_RAPIDSCHEMA_ABSTRACT_WRITER_H_

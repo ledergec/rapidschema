@@ -1,6 +1,4 @@
-//
-// Created by root on 12/2/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #include <gtest/gtest.h>
 

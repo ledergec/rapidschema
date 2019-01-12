@@ -1,6 +1,4 @@
-//
-// Created by root on 11/28/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_META_UNIQUE_TUPLE_H_
 #define INCLUDE_RAPIDSCHEMA_META_UNIQUE_TUPLE_H_

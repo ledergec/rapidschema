@@ -1,6 +1,4 @@
-//
-// Created by root on 12/10/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_CORRECT_VALUE_PARAMETERS_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_CORRECT_VALUE_PARAMETERS_H_

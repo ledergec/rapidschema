@@ -1,3 +1,5 @@
+# Copyright (C) 2019 Christian Ledergerber
+
 cmake_minimum_required (VERSION 3.8)
 
 option(test "Build all tests." OFF) # Makes boolean 'test' available.

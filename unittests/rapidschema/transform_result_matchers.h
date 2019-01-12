@@ -1,6 +1,4 @@
-//
-// Created by root on 11/23/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef UNITTESTS_RAPIDSCHEMA_TRANSFORM_RESULT_MATCHERS_H_
 #define UNITTESTS_RAPIDSCHEMA_TRANSFORM_RESULT_MATCHERS_H_

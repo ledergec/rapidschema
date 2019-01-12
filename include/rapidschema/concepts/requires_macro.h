@@ -1,6 +1,4 @@
-//
-// Created by root on 12/11/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_REQUIRES_MACRO_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_REQUIRES_MACRO_H_

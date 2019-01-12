@@ -1,6 +1,4 @@
-//
-// Created by root on 11/28/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_META_TYPE_SET_H_
 #define INCLUDE_RAPIDSCHEMA_META_TYPE_SET_H_

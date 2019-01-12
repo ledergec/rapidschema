@@ -1,3 +1,5 @@
+// Copyright (C) 2019 Christian Ledergerber
+
 #include <gtest/gtest.h>
 
 #include "rapidschema/meta/json_type_set.h"

@@ -1,6 +1,4 @@
-//
-// Created by root on 11/24/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_OSTREAM_OPERATORS_H_
 #define INCLUDE_RAPIDSCHEMA_OSTREAM_OPERATORS_H_

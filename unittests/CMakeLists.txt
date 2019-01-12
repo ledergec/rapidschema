@@ -1,3 +1,4 @@
+# Copyright (C) 2019 Christian Ledergerber
 
 file(GLOB UNITTEST_SRC
     "rapidschema/*.h"

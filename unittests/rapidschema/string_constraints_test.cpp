@@ -1,3 +1,5 @@
+// Copyright (C) 2019 Christian Ledergerber
+
 #include <gtest/gtest.h>
 
 #include "rapidschema/string_constraints.h"

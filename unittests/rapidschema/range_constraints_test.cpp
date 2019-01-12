@@ -1,3 +1,5 @@
+// Copyright (C) 2019 Christian Ledergerber
+
 #include <gtest/gtest.h>
 
 #include "rapidschema/range_constraints.h"

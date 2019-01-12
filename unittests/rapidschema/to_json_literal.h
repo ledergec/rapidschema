@@ -1,6 +1,4 @@
-//
-// Created by root on 11/25/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef UNITTESTS_RAPIDSCHEMA_TO_JSON_LITERAL_H_
 #define UNITTESTS_RAPIDSCHEMA_TO_JSON_LITERAL_H_

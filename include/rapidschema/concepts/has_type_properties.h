@@ -1,6 +1,4 @@
-//
-// Created by root on 12/9/18.
-//
+// Copyright (C) 2019 Christian Ledergerber
 
 #ifndef INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
 #define INCLUDE_RAPIDSCHEMA_CONCEPTS_HAS_TYPE_PROPERTIES_H_
