@@ -55,9 +55,9 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
 }
 
 TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVariant_ThenConstraintsApplied) {
-  auto variant = MakeUtf8Variant(
-      MakeUtf8VariantValue<int32_t, Minimum>(Minimum(10)),
-      MakeUtf8VariantValue<std::string, MaxLength>(MaxLength(4)));
+  auto variant = MakeVariant(
+      MakeVariantValue<int32_t, Minimum>(Minimum(10)),
+      MakeVariantValue<std::string, MaxLength>(MaxLength(4)));
 
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());
@@ -86,8 +86,8 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
 class VariantTestTestNode : public Object {
  public:
   VariantTestTestNode()
-    : variant(MakeUtf8Variant<Value<int64_t>, Value<std::string>>(
-          MakeUtf8VariantValue<int64_t>(), MakeUtf8VariantValue<std::string>())) {}
+    : variant(MakeVariant<Value<int64_t>, Value<std::string>>(
+          MakeVariantValue<int64_t>(), MakeVariantValue<std::string>())) {}
 
   Variant<Value<int64_t>, Value<std::string>> variant;
 

@@ -34,7 +34,7 @@ template<typename Encoding, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonT
 class GenericVariant;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-GenericVariant<char, Values...> MakeUtf8Variant(Values&&... values);
+GenericVariant<char, Values...> MakeVariant(Values&&... values);
 
 template<typename Ch, typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
 class GenericVariant : public GenericConfig<Ch> {
@@ -118,14 +118,14 @@ class GenericVariant : public GenericConfig<Ch> {
   explicit GenericVariant(Tuple&& data)
       : unique_tuple_(std::forward<Tuple>(data)) {}
 
-  friend GenericVariant<Ch, Values...> MakeUtf8Variant<Values...>(Values&&... values);
+  friend GenericVariant<Ch, Values...> MakeVariant<Values...>(Values&&... values);
 };
 
 template <typename... Values>
 using Variant = GenericVariant<char, Values...>;
 
 template<typename... Values> RAPIDSCHEMA_REQUIRES(UniqueJsonTypes<typename Values::Type...>)
-Variant<Values...> MakeUtf8Variant(Values&&... values) {
+Variant<Values...> MakeVariant(Values&&... values) {
   return Variant<Values...>(
       internal::UniqueTuple<Values...>(
           std::make_tuple<Values...>(std::forward<Values>(values)...)));
@@ -133,7 +133,7 @@ Variant<Values...> MakeUtf8Variant(Values&&... values) {
 
 template<typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
-Value<T, Constraints...> MakeUtf8VariantValue(Constraints<T>&&... constraints) {
+Value<T, Constraints...> MakeVariantValue(Constraints<T>&&... constraints) {
   return MakeValue<T, Constraints...>(std::forward<Constraints<T>>(constraints)...);
 }
 
