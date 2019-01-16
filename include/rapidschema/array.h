@@ -18,13 +18,13 @@ class Array : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
 
-  TransformResult Transform(const rapidjson::Value& document) override {
+  Result Transform(const rapidjson::Value& document) override {
     if (document.IsArray() == false) {
-      return TransformResult(Failure(fmt::format("Expected array but was: {} ",
+      return Result(Failure(fmt::format("Expected array but was: {} ",
                                                  JsonTypeToString(document.GetType()))));
     }
 
-    TransformResult result;
+    Result result;
     size_t count = 0;
     auto dom_array = document.GetArray();
     for (const auto& dom_element : dom_array) {
@@ -40,8 +40,8 @@ class Array : public GenericConfig<Ch> {
     return result;
   }
 
-  TransformResult Validate() const override {
-    TransformResult result;
+  Result Validate() const override {
+    Result result;
     for (auto& e : elements) {
       result.Append(e.Validate());
     }
@@ -57,8 +57,8 @@ class Array : public GenericConfig<Ch> {
     writer->EndArray();
   }
 
-  TransformResult HandleMissing() const override {
-    return TransformResult(Failure("Array is missing"));
+  Result HandleMissing() const override {
+    return Result(Failure("Array is missing"));
   }
 
   void CollectMemory() const override {

@@ -11,23 +11,23 @@ namespace rapidschema {
 template<typename BaseConfig>
 class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
  public:
-  TransformResult Transform(const rapidjson::Value& document) override {
+  Result Transform(const rapidjson::Value& document) override {
     if (HasValue() == false) {
       optional_config_ = BaseConfig();
     }
     return optional_config_.value().Transform(document);
   }
 
-  TransformResult Validate() const override {
+  Result Validate() const override {
     if (HasValue()) {
       return optional_config_.value().Validate();
     } else {
-      return TransformResult();
+      return Result();
     }
   }
 
-  TransformResult HandleMissing() const override {
-    return TransformResult();
+  Result HandleMissing() const override {
+    return Result();
   }
 
   void Serialize(AbstractWriter<typename BaseConfig::CharType>* writer) const override {

@@ -11,8 +11,8 @@ namespace rapidschema {
 template<typename Ch, typename T, template<typename> class ... Constraints>
 class GenericDefaultValue : public GenericValue<Ch, T, Constraints...> {
  public:
-  TransformResult HandleMissing() const override {
-    return TransformResult();
+  Result HandleMissing() const override {
+    return Result();
   }
 
   using GenericValue<Ch, T, Constraints...>::operator=;

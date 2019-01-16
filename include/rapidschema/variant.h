@@ -55,7 +55,7 @@ class GenericVariant : public GenericConfig<Ch> {
  public:
   GenericVariant() = default;
 
-  TransformResult Transform(const rapidjson::Value& document) override {
+  Result Transform(const rapidjson::Value& document) override {
     variant_index_ = unique_tuple_.ApplyUntilSuccess(
         [&document](auto& config_value) {
           return config_value.Transform(document).Success();
@@ -66,7 +66,7 @@ class GenericVariant : public GenericConfig<Ch> {
           "No type in variant matched. Actual type: {}",
           JsonTypeToString(document.GetType())));
     }
-    return TransformResult();
+    return Result();
   }
 
   template <typename T>
@@ -97,7 +97,7 @@ class GenericVariant : public GenericConfig<Ch> {
     return ConfigIndexOf<T> == variant_index_;
   }
 
-  TransformResult Validate() const override {
+  Result Validate() const override {
     assert(variant_index_ != INVALID_VARIANT_INDEX);
     return unique_tuple_.template Get<Config>(variant_index_)->Validate();
   }
@@ -106,7 +106,7 @@ class GenericVariant : public GenericConfig<Ch> {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
-  TransformResult HandleMissing() const {
+  Result HandleMissing() const {
     return FailResult("is missing");
   }
 

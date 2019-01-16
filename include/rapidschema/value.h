@@ -66,7 +66,7 @@ class GenericValue : public GenericConfig<Ch> {
     return checker_.template Get<Constraint>();
   }
 
-  TransformResult Transform(const rapidjson::Value& document) override {
+  Result Transform(const rapidjson::Value& document) override {
     if (TypeProperties<T>::IsType(document) == false) {
       rapidjson::StringBuffer buffer;
       rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
@@ -77,10 +77,10 @@ class GenericValue : public GenericConfig<Ch> {
 
     t_ = TypeProperties<T>::FromJson(document);
 
-    return TransformResult();
+    return Result();
   }
 
-  TransformResult Validate() const override {
+  Result Validate() const override {
     return checker_.Check(t_);
   }
 
@@ -88,7 +88,7 @@ class GenericValue : public GenericConfig<Ch> {
     TypeProperties<T>::template Serialize<Ch>(t_, writer);
   }
 
-  TransformResult HandleMissing() const override {
+  Result HandleMissing() const override {
     return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::name));
   }
 

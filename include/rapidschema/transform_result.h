@@ -85,15 +85,15 @@ static std::optional<FailureCollection> Append(
 
 }  // namespace internal
 
-class TransformResult {
+class Result {
  public:
-  TransformResult()
+  Result()
       : failure_collection_(std::nullopt) {}
 
-  explicit TransformResult(Failure failure)
+  explicit Result(Failure failure)
       : failure_collection_(failure) {}
 
-  explicit TransformResult(const std::optional<internal::FailureCollection>& failures)
+  explicit Result(const std::optional<internal::FailureCollection>& failures)
       : failure_collection_(failures) {}
 
   bool Success() const {
@@ -108,7 +108,7 @@ class TransformResult {
     }
   }
 
-  void Append(const TransformResult& other) {
+  void Append(const Result& other) {
     failure_collection_ = internal::Append(failure_collection_, other.failure_collection_);
   }
 
@@ -130,11 +130,11 @@ class TransformResult {
   std::optional<internal::FailureCollection> failure_collection_;
 };
 
-inline TransformResult FailResult(const std::string& message) {
-  return TransformResult(Failure(message));
+inline Result FailResult(const std::string& message) {
+  return Result(Failure(message));
 }
 
-inline bool operator== (const TransformResult& lhs, const TransformResult& rhs) {
+inline bool operator== (const Result& lhs, const Result& rhs) {
   return lhs.GetFailures() == rhs.GetFailures();
 }
 

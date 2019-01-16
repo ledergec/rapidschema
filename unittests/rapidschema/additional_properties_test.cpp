@@ -41,7 +41,7 @@ TEST(NoAdditionalPropertiesTest,
                 }
                 )", &example);
 
-  TransformResult expected(Failure("", "Unexpected member encountered: additionalProperty"));
+  Result expected(Failure("", "Unexpected member encountered: additionalProperty"));
   ASSERT_EQ(expected, result);
 }
 

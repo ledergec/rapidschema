@@ -37,15 +37,15 @@ class GenericObject : public GenericConfig<Ch> {
     return *this;
   }
 
-  TransformResult Transform(const rapidjson::Value& document) override {
+  Result Transform(const rapidjson::Value& document) override {
     UpdateMapping();
 
     if (document.IsObject() == false) {
-      return TransformResult(Failure(fmt::format("Expected object but was: {} ",
+      return Result(Failure(fmt::format("Expected object but was: {} ",
                                           JsonTypeToString(document.GetType()))));
     }
 
-    TransformResult result;
+    Result result;
     int missing_count = 0;
     for (auto pair : name_config_mapping_) {
       if (document.HasMember(pair.first.c_str()) == false) {
@@ -76,10 +76,10 @@ class GenericObject : public GenericConfig<Ch> {
     return result;
   }
 
-  TransformResult Validate() const override {
+  Result Validate() const override {
     UpdateMapping();
 
-    TransformResult result;
+    Result result;
     for (auto pair : name_config_mapping_) {
       auto tmp = pair.second->Validate();
       tmp.AddPath(pair.first);
@@ -100,11 +100,11 @@ class GenericObject : public GenericConfig<Ch> {
     writer->EndObject();
   }
 
-  virtual TransformResult HandleUnexpectedMember(const std::basic_string<Ch>& key) {
-    return TransformResult();
+  virtual Result HandleUnexpectedMember(const std::basic_string<Ch>& key) {
+    return Result();
   }
 
-  TransformResult HandleMissing() const override {
+  Result HandleMissing() const override {
     return FailResult("Object is missing in config.");
   }
 

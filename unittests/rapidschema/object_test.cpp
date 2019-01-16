@@ -86,7 +86,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorrectFail
                 }
                 )", &example_);
 
-  TransformResult expected(Failure("integerValue", "Value of type int is missing"));
+  Result expected(Failure("integerValue", "Value of type int is missing"));
   ASSERT_EQ(expected, result);
 }
 
@@ -98,7 +98,7 @@ TEST_F(ObjectTest, GivenParsingMemberFails_WhenParsingObject_ThenFailsWithCorrec
                 }
                 )", &example_);
 
-  TransformResult expected(Failure("integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
+  Result expected(Failure("integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
   ASSERT_EQ(expected, result);
 }
 
@@ -147,7 +147,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWithCorre
                 }
                 )", &nested_example_);
 
-  TransformResult expected(Failure("example.integerValue", "Value of type int is missing"));
+  Result expected(Failure("example.integerValue", "Value of type int is missing"));
   ASSERT_EQ(expected, result);
 }
 
@@ -163,7 +163,7 @@ TEST_F(ObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFailsWith
                 }
                 )", &nested_example_);
 
-  TransformResult expected(Failure("example.integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
+  Result expected(Failure("example.integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
   ASSERT_EQ(expected, result);
 }
 

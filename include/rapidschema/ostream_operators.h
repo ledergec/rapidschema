@@ -25,7 +25,7 @@ inline std::ostream& operator<<(std::ostream& stream, const std::optional<Failur
     return stream;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const TransformResult& result) {
+inline std::ostream& operator<<(std::ostream& stream, const Result& result) {
     if (result.Success()) {
         stream << "Success" << std::endl;
     } else {

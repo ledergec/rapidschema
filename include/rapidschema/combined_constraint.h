@@ -28,8 +28,8 @@ class CombinedConstraint {
  public:
   CombinedConstraint() = default;
 
-  TransformResult Check(const T& t) const {
-    TransformResult result;
+  Result Check(const T& t) const {
+    Result result;
     constraints_.ForEach([&result, t](const auto& checker) {
       result.Append(checker.Check(t));
     });
