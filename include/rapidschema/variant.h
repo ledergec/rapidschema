@@ -46,9 +46,6 @@ class GenericVariant : public GenericConfig<Ch> {
   template <typename T>
   using ConfigTypeOf = typename ConfigOf<T>::Type;
 
-  template <typename T>
-  static constexpr size_t ConfigIndexOf = ConfigOf<T>::Index;
-
   static constexpr int INVALID_VARIANT_INDEX = -1;
 
  public:
@@ -70,7 +67,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   template <typename T>
   GenericVariant<Ch, Values...>& operator=(const T& t) {
-    variant_index_ = ConfigIndexOf<T>;
+    variant_index_ = ConfigOf<T>::Index;
     GetVariant<T>() = t;
     return *this;
   }
@@ -93,7 +90,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   template <typename T>
   bool Is() {
-    return ConfigIndexOf<T> == variant_index_;
+    return ConfigOf<T>::Index == variant_index_;
   }
 
   Result Validate() const override {
