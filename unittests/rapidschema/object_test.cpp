@@ -20,8 +20,8 @@ using testing::UnorderedElementsAre;
 class ObjectTestConfigExample : public Object {
  public:
   ObjectTestConfigExample()
-      : integer_value(MakeValue(22, Maximum(4)))
-      , string_value(MakeValue(std::string("default"), MinLength(3), MaxLength(20))) {}
+      : integer_value(MakeValue(22, Maximum<int>(4)))
+      , string_value(MakeValue(std::string("default"), MinLength<>(3), MaxLength<>(20))) {}
 
   Value<int, Maximum> integer_value;
   Value<std::string, MinLength, MaxLength> string_value;
