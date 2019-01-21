@@ -27,12 +27,12 @@ TEST_F(ResultTest, WhenCreated_ThenEmpty) {
 }
 
 TEST_F(ResultTest, WhenNoFailureAppendedToEmptyResult_ThenResultEmpty) {
-  empty_result_.Append(std::nullopt);
+  empty_result_.Append(absl::nullopt);
   ASSERT_TRUE(empty_result_.GetFailures().empty());
 }
 
 TEST_F(ResultTest, WhenFailureAppendedToEmptyResult_ThenResultContainsOnlyTheFailure) {
-  empty_result_.Append(std::optional<Failure>(failure1_));
+  empty_result_.Append(absl::optional<Failure>(failure1_));
   ASSERT_THAT(empty_result_.GetFailures(), ElementsAre(failure1_));
 }
 

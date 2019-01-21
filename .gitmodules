@@ -10,3 +10,6 @@
 [submodule "extern/cpplint"]
 	path = extern/cpplint
 	url = https://github.com/cpplint/cpplint.git
+[submodule "extern/abseil"]
+	path = extern/abseil
+	url = https://github.com/abseil/abseil-cpp.git

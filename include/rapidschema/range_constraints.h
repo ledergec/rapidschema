@@ -3,13 +3,13 @@
 #ifndef INCLUDE_RAPIDSCHEMA_RANGE_CONSTRAINTS_H_
 #define INCLUDE_RAPIDSCHEMA_RANGE_CONSTRAINTS_H_
 
-#include <optional>
 #include <string>
 
 #include <fmt/format.h>
 
 #include <rapidjson/document.h>
 
+#include "rapidschema/modern_types/optional.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -22,11 +22,11 @@ class Minimum {
   explicit Minimum(const T& min)
       : min_(min) {}
 
-  std::optional<Failure> Check(const T& n) const {
+  absl::optional<Failure> Check(const T& n) const {
     if (n < min_) {
       return Failure(fmt::format("Expected: >= {}. Actual: {}", min_, n));
     }
-    return std::nullopt;
+    return absl::nullopt;
   }
 
   void SetMin(const T& min) {
@@ -45,11 +45,11 @@ class ExclusiveMinimum {
   explicit ExclusiveMinimum(const T& min)
       : min_(min) {}
 
-  std::optional<Failure> Check(const T& n) const {
+  absl::optional<Failure> Check(const T& n) const {
     if (n <= min_) {
       return Failure(fmt::format("Expected: > {}. Actual: {}", min_, n));
     }
-    return std::nullopt;
+    return absl::nullopt;
   }
 
   void SetMin(const T& min) {
@@ -68,11 +68,11 @@ class Maximum {
   explicit Maximum(const T& max)
       : max_(max) {}
 
-  std::optional<Failure> Check(const T& n) const {
+  absl::optional<Failure> Check(const T& n) const {
     if (n > max_) {
       return Failure(fmt::format("Expected: <= {}. Actual: {}", max_, n));
     }
-    return std::nullopt;
+    return absl::nullopt;
   }
 
   void SetMax(const T& max) {
@@ -91,11 +91,11 @@ class ExclusiveMaximum {
   explicit ExclusiveMaximum(const T& max)
       : max_(max) {}
 
-  std::optional<Failure> Check(const T& n) const {
+  absl::optional<Failure> Check(const T& n) const {
     if (n >= max_) {
       return Failure(fmt::format("Expected: < {}. Actual: {}", max_, n));
     }
-    return std::nullopt;
+    return absl::nullopt;
   }
 
   void SetMax(const T& max) {

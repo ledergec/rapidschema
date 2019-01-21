@@ -9,6 +9,7 @@
 #include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/unique_types.h"
 #include "rapidschema/meta/type_set.h"
+#include "rapidschema/modern_types/utility.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -100,14 +101,6 @@ struct TupleApplyUntilSuccess<Tuple, Operation, 0> {
 };
 
 
-template <typename Tuple, typename F, std::size_t ...Indices>
-constexpr void ForEachImpl(Tuple&& tuple, F&& f, std::index_sequence<Indices...>) {
-  using swallow = int[];
-  (void)swallow{1,
-                (f(std::get<Indices>(std::forward<Tuple>(tuple))), void(), int{})...
-  };
-}
-
 template<typename T>
 struct SameType {
   template<typename Y>
@@ -117,9 +110,9 @@ struct SameType {
 template <typename... Ts> RAPIDSCHEMA_REQUIRES(UniqueTypes<Ts...>)
 class UniqueTuple {
   static_assert(TypeSet<Ts...>::Unique(), "Types for unique tuple must be unique.");
+ public:
   using TupleT = std::tuple<Ts...>;
 
- public:
   UniqueTuple() = default;
 
   explicit UniqueTuple(TupleT&& tuple)
@@ -178,14 +171,12 @@ class UniqueTuple {
     return TupleApplyUntilSuccess<TupleT, Operation, sizeof...(Ts)>::Apply(std::forward<Operation>(operation), &tuple_);
   }
 
-  template <typename Function>
-  void ForEach(Function&& f) const {
-    constexpr std::size_t N = std::tuple_size<std::remove_reference_t<TupleT>>::value;
-    ForEachImpl(tuple_, std::forward<Function>(f), std::make_index_sequence<N>{});
+  static constexpr size_t Size() {
+    return std::tuple_size<TupleT>::value;
   }
 
-  size_t Size() const {
-    return std::tuple_size<TupleT>::value;
+  const TupleT & GetTuple() const {
+    return tuple_;
   }
 
  private:

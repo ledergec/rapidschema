@@ -4,9 +4,9 @@
 #define INCLUDE_RAPIDSCHEMA_OSTREAM_OPERATORS_H_
 
 #include <iostream>
-#include <optional>
 
 #include "rapidschema/failure.h"
+#include "rapidschema/modern_types/optional.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -16,7 +16,7 @@ inline std::ostream& operator<<(std::ostream& stream, const Failure& failure) {
     return stream;
 }
 
-inline std::ostream& operator<<(std::ostream& stream, const std::optional<Failure>& failure) {
+inline std::ostream& operator<<(std::ostream& stream, const absl::optional<Failure>& failure) {
     if (failure.has_value()) {
         stream << failure.value();
     } else {

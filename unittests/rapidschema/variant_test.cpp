@@ -56,8 +56,8 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
 
 TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVariant_ThenConstraintsApplied) {
   auto variant = MakeVariant(
-      MakeVariantValue<int32_t, Minimum>(Minimum(10)),
-      MakeVariantValue<std::string, MaxLength>(MaxLength(4)));
+      MakeVariantValue<int32_t, Minimum>(Minimum<int32_t>(10)),
+      MakeVariantValue<std::string, MaxLength>(MaxLength<>(4)));
 
   variant = std::string("hallo");
   ASSERT_TRUE(variant.Is<std::string>());

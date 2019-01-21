@@ -12,6 +12,23 @@
 namespace rapidschema {
 namespace internal {
 
+template <typename Tuple, typename T, size_t Index>
+struct CheckAll {
+  static Result Check(const Tuple& tuple, const T& t) {
+    Result tmp;
+    tmp.Append(std::get<Index - 1>(tuple).Check(t));
+    tmp.Append(CheckAll<Tuple, T, Index - 1>::Check(tuple, t));
+    return tmp;
+  }
+};
+
+template <typename Tuple, typename T>
+struct CheckAll<Tuple, T, 0> {
+  static Result Check(const Tuple& tuple, const T& t) {
+    return Result();
+  }
+};
+
 template<typename T, template<typename> class ... Constraints>
 RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class CombinedConstraint;
@@ -29,11 +46,7 @@ class CombinedConstraint {
   CombinedConstraint() = default;
 
   Result Check(const T& t) const {
-    Result result;
-    constraints_.ForEach([&result, t](const auto& checker) {
-      result.Append(checker.Check(t));
-    });
-    return result;
+    return CheckAll<typename TupleT::TupleT, T, TupleT::Size()>::Check(constraints_.GetTuple(), t);
   }
 
   template<template<typename> class Constraint>

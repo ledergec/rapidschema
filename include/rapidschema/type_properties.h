@@ -27,8 +27,13 @@ struct TypeProperties;
 
 template<typename Ch>
 struct TypeProperties<std::basic_string<Ch>> {
-  static constexpr JsonType json_type = JsonType::STRING;
-  static constexpr char name[] = "string";
+  static JsonType GetJsonType() {
+    return JsonType::STRING;
+  }
+
+  static std::string GetName() {
+    return "string";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsString();
@@ -46,8 +51,13 @@ struct TypeProperties<std::basic_string<Ch>> {
 
 template<>
 struct TypeProperties<int32_t> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "int";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "int";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsInt();
@@ -65,8 +75,13 @@ struct TypeProperties<int32_t> {
 
 template<>
 struct TypeProperties<uint32_t> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "unsigned int";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "unsigned int";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsUint();
@@ -84,8 +99,13 @@ struct TypeProperties<uint32_t> {
 
 template<>
 struct TypeProperties<int64_t> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "long int";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "long int";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsInt64();
@@ -104,8 +124,13 @@ struct TypeProperties<int64_t> {
 
 template<>
 struct TypeProperties<uint64_t> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "unsigned long int";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "unsigned long int";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsUint64();
@@ -123,8 +148,13 @@ struct TypeProperties<uint64_t> {
 
 template<>
 struct TypeProperties<bool> {
-  static constexpr JsonType json_type = JsonType::BOOLEAN;
-  static constexpr char name[] = "boolean";
+  static JsonType GetJsonType() {
+    return JsonType::BOOLEAN;
+  }
+
+  static std::string GetName() {
+    return "boolean";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsBool();
@@ -143,8 +173,13 @@ struct TypeProperties<bool> {
 
 template<>
 struct TypeProperties<float> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "float";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "float";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsFloat();
@@ -162,8 +197,13 @@ struct TypeProperties<float> {
 
 template<>
 struct TypeProperties<double> {
-  static constexpr JsonType json_type = JsonType::NUMBER;
-  static constexpr char name[] = "double";
+  static JsonType GetJsonType() {
+    return JsonType::NUMBER;
+  }
+
+  static std::string GetName() {
+    return "double";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsNumber();
@@ -180,9 +220,14 @@ struct TypeProperties<double> {
 };
 
 template<>
-struct TypeProperties<std::nullptr_t > {
-  static constexpr JsonType json_type = JsonType::NULLTYPE;
-  static constexpr char name[] = "nullptr";
+struct TypeProperties<std::nullptr_t> {
+  static JsonType GetJsonType() {
+    return JsonType::NULLTYPE;
+  }
+
+  static std::string GetName() {
+    return "nullptr";
+  }
 
   static bool IsType(const rapidjson::Value& value) {
       return value.IsNull();

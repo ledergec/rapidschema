@@ -5,18 +5,17 @@
 
 #include <assert.h>
 #include <functional>
-#include <optional>
 #include <string>
 #include <tuple>
 #include <utility>
 
-#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
+#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/unique_json_types.h"
-#include "rapidschema/value.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/meta/unique_tuple.h"
 #include "rapidschema/rapidjson_type_to_string.h"
+#include "rapidschema/value.h"
 
 namespace rapidschema {
 
@@ -47,9 +46,6 @@ class GenericVariant : public GenericConfig<Ch> {
   template <typename T>
   using ConfigTypeOf = typename ConfigOf<T>::Type;
 
-  template <typename T>
-  static constexpr size_t ConfigIndexOf = ConfigOf<T>::Index;
-
   static constexpr int INVALID_VARIANT_INDEX = -1;
 
  public:
@@ -57,7 +53,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   Result Transform(const rapidjson::Value& document) override {
     variant_index_ = unique_tuple_.ApplyUntilSuccess(
-        [&document](auto& config_value) {
+        [&document](GenericConfig<Ch>& config_value) {
           return config_value.Transform(document).Success();
         });
     if (variant_index_ == -1) {
@@ -71,7 +67,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   template <typename T>
   GenericVariant<Ch, Values...>& operator=(const T& t) {
-    variant_index_ = ConfigIndexOf<T>;
+    variant_index_ = ConfigOf<T>::Index;
     GetVariant<T>() = t;
     return *this;
   }
@@ -94,7 +90,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   template <typename T>
   bool Is() {
-    return ConfigIndexOf<T> == variant_index_;
+    return ConfigOf<T>::Index == variant_index_;
   }
 
   Result Validate() const override {
