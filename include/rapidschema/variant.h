@@ -5,18 +5,17 @@
 
 #include <assert.h>
 #include <functional>
-#include <optional>
 #include <string>
 #include <tuple>
 #include <utility>
 
-#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
+#include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/unique_json_types.h"
-#include "rapidschema/value.h"
 #include "rapidschema/meta/json_type_set.h"
 #include "rapidschema/meta/unique_tuple.h"
 #include "rapidschema/rapidjson_type_to_string.h"
+#include "rapidschema/value.h"
 
 namespace rapidschema {
 

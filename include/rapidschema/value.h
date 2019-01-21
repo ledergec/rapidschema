@@ -3,7 +3,6 @@
 #ifndef INCLUDE_RAPIDSCHEMA_VALUE_H_
 #define INCLUDE_RAPIDSCHEMA_VALUE_H_
 
-#include <optional>
 #include <string>
 
 #include <fmt/format.h>
