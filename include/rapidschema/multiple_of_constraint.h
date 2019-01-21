@@ -18,15 +18,15 @@ namespace rapidschema {
 
 namespace internal {
 template<typename T, class Enabled = void>
-class MultipleOf;
+class MultipleOfImpl;
 
 template<typename T>
-class MultipleOf<T, typename std::enable_if<std::is_integral<T>::value>::type> {
+class MultipleOfImpl<T, typename std::enable_if<std::is_integral<T>::value>::type> {
  public:
-  MultipleOf()
+  MultipleOfImpl()
       : mul_(1) {}
 
-  explicit MultipleOf(const T& mul)
+  explicit MultipleOfImpl(const T& mul)
       : mul_(mul) {
     assert(mul_ != 0);
   }
@@ -43,12 +43,12 @@ class MultipleOf<T, typename std::enable_if<std::is_integral<T>::value>::type> {
 };
 
 template<typename T>
-class MultipleOf<T, typename std::enable_if<std::is_floating_point<T>::value>::type> {
+class MultipleOfImpl<T, typename std::enable_if<std::is_floating_point<T>::value>::type> {
  public:
-  MultipleOf() :
+  MultipleOfImpl() :
       mul_(1) {}
 
-  explicit MultipleOf(const T& mul)
+  explicit MultipleOfImpl(const T& mul)
       : mul_(mul) {
     assert(mul_ != 0);
   }
@@ -83,7 +83,7 @@ class MultipleOf {
     return internal.Check(n);
   }
  private:
-  internal::MultipleOf<T> internal;
+  internal::MultipleOfImpl<T> internal;
 };
 
 }  // namespace rapidschema
