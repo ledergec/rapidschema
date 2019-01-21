@@ -9,6 +9,7 @@
 #include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/unique_types.h"
 #include "rapidschema/meta/type_set.h"
+#include "rapidschema/modern_types/utility.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -101,7 +102,7 @@ struct TupleApplyUntilSuccess<Tuple, Operation, 0> {
 
 
 template <typename Tuple, typename F, std::size_t ...Indices>
-constexpr void ForEachImpl(Tuple&& tuple, F&& f, std::index_sequence<Indices...>) {
+constexpr void ForEachImpl(Tuple&& tuple, F&& f, absl::index_sequence<Indices...>) {
   using swallow = int[];
   (void)swallow{1,
                 (f(std::get<Indices>(std::forward<Tuple>(tuple))), void(), int{})...
@@ -180,8 +181,8 @@ class UniqueTuple {
 
   template <typename Function>
   void ForEach(Function&& f) const {
-    constexpr std::size_t N = std::tuple_size<std::remove_reference_t<TupleT>>::value;
-    ForEachImpl(tuple_, std::forward<Function>(f), std::make_index_sequence<N>{});
+    constexpr std::size_t N = std::tuple_size<absl::remove_reference_t<TupleT>>::value;
+    ForEachImpl(tuple_, std::forward<Function>(f), absl::make_index_sequence<N>{});
   }
 
   size_t Size() const {

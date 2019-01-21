@@ -5,11 +5,11 @@
 
 #include <algorithm>
 #include <cassert>
-#include <optional>
 #include <string>
 #include <vector>
 
 #include "rapidschema/failure.h"
+#include "rapidschema/modern_types/optional.h"
 
 namespace rapidschema {
 namespace internal {
@@ -51,9 +51,9 @@ class FailureCollection {
   std::vector<Failure> failures_;
 };
 
-static std::optional<FailureCollection> Append(
-    std::optional<FailureCollection> lhs,
-    const std::optional<FailureCollection>& rhs) {
+static absl::optional<FailureCollection> Append(
+    absl::optional<FailureCollection> lhs,
+    const absl::optional<FailureCollection>& rhs) {
   if (lhs.has_value()) {
     if (rhs.has_value()) {
       lhs.value().Append(rhs.value());
@@ -66,9 +66,9 @@ static std::optional<FailureCollection> Append(
   }
 }
 
-static std::optional<FailureCollection> Append(
-    std::optional<FailureCollection> lhs,
-    const std::optional<Failure>& rhs) {
+static absl::optional<FailureCollection> Append(
+    absl::optional<FailureCollection> lhs,
+    const absl::optional<Failure>& rhs) {
   if (lhs.has_value()) {
     if (rhs.has_value()) {
       lhs.value().Append(rhs.value());
@@ -79,7 +79,7 @@ static std::optional<FailureCollection> Append(
   } else if (rhs.has_value()) {
     return FailureCollection(rhs.value());
   } else {
-    return std::nullopt;
+    return absl::nullopt;
   }
 }
 
@@ -88,12 +88,12 @@ static std::optional<FailureCollection> Append(
 class Result {
  public:
   Result()
-      : failure_collection_(std::nullopt) {}
+      : failure_collection_(absl::nullopt) {}
 
   explicit Result(Failure failure)
       : failure_collection_(failure) {}
 
-  explicit Result(const std::optional<internal::FailureCollection>& failures)
+  explicit Result(const absl::optional<internal::FailureCollection>& failures)
       : failure_collection_(failures) {}
 
   bool Success() const {
@@ -112,7 +112,7 @@ class Result {
     failure_collection_ = internal::Append(failure_collection_, other.failure_collection_);
   }
 
-  void Append(const std::optional<Failure>& failure) {
+  void Append(const absl::optional<Failure>& failure) {
     failure_collection_ = internal::Append(failure_collection_, failure);
   }
 
@@ -127,7 +127,7 @@ class Result {
   }
 
  private:
-  std::optional<internal::FailureCollection> failure_collection_;
+  absl::optional<internal::FailureCollection> failure_collection_;
 };
 
 inline Result FailResult(const std::string& message) {

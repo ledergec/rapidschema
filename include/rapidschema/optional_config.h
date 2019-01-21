@@ -56,13 +56,13 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     return optional_config_.value();
   }
 
-  OptionalConfig<BaseConfig>& operator=(const std::optional<BaseConfig>& optional_config) {
+  OptionalConfig<BaseConfig>& operator=(const absl::optional<BaseConfig>& optional_config) {
     optional_config_ = optional_config;
     return *this;
   }
 
  private:
-  std::optional<BaseConfig> optional_config_;
+  absl::optional<BaseConfig> optional_config_;
 };
 
 }  // namespace rapidschema

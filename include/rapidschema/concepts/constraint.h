@@ -6,9 +6,8 @@
 
 #ifdef RAPIDSCHEMA_WITH_CONCEPTS
 
-#include <optional>
-
 #include "rapidschema/failure.h"
+#include "rapidschema/modern_types/optional.h"
 #include "rapidschema/transform_result.h"
 
 namespace rapidschema {
@@ -16,7 +15,7 @@ namespace internal {
 
 template<typename T, template<typename> class C>
 struct IsConstraint {
-  template<typename U, std::optional<Failure> (U::*)(const T&) const>
+  template<typename U, absl::optional<Failure> (U::*)(const T&) const>
   struct SFINAE {};
   template<typename U>
   static char Test(SFINAE<U, &U::Check>*);
@@ -44,7 +43,7 @@ class AreConstraints<T> {
 }  // namespace internal
 
 /// \brief Concept checking whether all the constraints have a method with the following signature:
-/// std::optional<Failure> Check(const T&) const.
+/// absl::optional<Failure> Check(const T&) const.
 template<typename T, template<typename> class ... Constraints>
 concept bool AreConstraints = internal::AreConstraints<T, Constraints...>::value;
 
