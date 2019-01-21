@@ -83,19 +83,19 @@ class Array : public GenericConfig<Ch> {
     return elements[i];
   }
 
-  auto begin() {
+  typename std::vector<ConfigType>::iterator begin() {
     return elements.begin();
   }
 
-  const auto begin() const {
+  typename std::vector<ConfigType>::const_iterator begin() const {
     return elements.begin();
   }
 
-  auto end() {
+  typename std::vector<ConfigType>::iterator end() {
     return elements.end();
   }
 
-  const auto end() const {
+  typename std::vector<ConfigType>::const_iterator end() const {
     return elements.end();
   }
 
