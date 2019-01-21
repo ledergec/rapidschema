@@ -7,6 +7,10 @@ file(GLOB UNITTEST_SRC
 
 add_executable(unittest ${UNITTEST_SRC})
 
-target_link_libraries(unittest gtest gmock fmt)
+if (RAPIDSCHEMA_CPP_11)
+    target_link_libraries(unittest gtest gmock fmt absl::optional)
+else()
+    target_link_libraries(unittest gtest gmock fmt)
+endif()
 
 setup_cpplint(unittest ${UNITTEST_SRC})
