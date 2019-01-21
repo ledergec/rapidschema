@@ -53,7 +53,7 @@ class GenericVariant : public GenericConfig<Ch> {
 
   Result Transform(const rapidjson::Value& document) override {
     variant_index_ = unique_tuple_.ApplyUntilSuccess(
-        [&document](auto& config_value) {
+        [&document](GenericConfig<Ch>& config_value) {
           return config_value.Transform(document).Success();
         });
     if (variant_index_ == -1) {
