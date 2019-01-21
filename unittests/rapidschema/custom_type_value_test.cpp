@@ -19,9 +19,9 @@ namespace rapidschema {
 
 template<>
 struct TypeProperties<std::chrono::milliseconds> {
-  static constexpr JsonType json_type = JsonType::NULLTYPE;
-
-  static constexpr char name[] = "nullptr_t";
+  static std::string GetName() {
+    return "milliseconds";
+  }
 
   static bool IsType(const rapidjson::Value &value) {
     return value.IsUint64();

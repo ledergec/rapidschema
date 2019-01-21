@@ -71,7 +71,7 @@ class GenericValue : public GenericConfig<Ch> {
       rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
       document.Accept(writer);
       return FailResult(
-          fmt::format("Expected type: {}. Actual value was: {}", TypeProperties<T>::name, buffer.GetString()));
+          fmt::format("Expected type: {}. Actual value was: {}", TypeProperties<T>::GetName(), buffer.GetString()));
     }
 
     t_ = TypeProperties<T>::FromJson(document);
@@ -88,7 +88,7 @@ class GenericValue : public GenericConfig<Ch> {
   }
 
   Result HandleMissing() const override {
-    return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::name));
+    return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::GetName()));
   }
 
  private:
