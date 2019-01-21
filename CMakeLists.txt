@@ -15,6 +15,11 @@ if (RAPIDSCHEMA_CPP_11)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-class-memaccess -std=c++11 -DRAPIDSCHEMA_CPP_11")
 endif()
 
+# TODO(cledergerber) having to turn off unused-variable in order to compile rapidjson in release seems weired
+if (${CMAKE_BUILD_TYPE} STREQUAL "Release" OR  ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
+endif()
+
 if (${RAPIDSCHEMA_WITH_CONCEPTS})
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
 endif()
