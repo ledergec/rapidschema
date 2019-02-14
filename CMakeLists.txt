@@ -19,6 +19,8 @@ else()
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++2a")
 endif()
 
+set(RAPIDJSON_BUILD_TESTS "OFF" CACHE STRING "Turn off rapidjson tests to avoid redefinition of gtest target")
+
 # add all source code directories
 if (RAPIDSCHEMA_CPP_11)
    include_directories(extern/abseil)
