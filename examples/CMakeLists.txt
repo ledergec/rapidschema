@@ -13,6 +13,7 @@ foreach (example ${EXAMPLES})
     else()
         target_link_libraries(${example} fmt)
     endif()
+    set_target_properties(${example} PROPERTIES COMPILE_FLAGS ${RAPIDSCHEMA_COMPILE_FLAGS})
     setup_cpplint(${example} ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cpp)
 endforeach()
 

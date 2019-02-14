@@ -3,28 +3,21 @@
 cmake_minimum_required (VERSION 3.8)
 project (rapidschema)
 
-
 option(test "Build all tests." OFF) # Makes boolean 'test' available.
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
 
-
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Werror -Wpedantic -std=gnu++2a -DRAPIDJSON_HAS_STDSTRING")
-# TODO(cledergerber) how is abseil correctly integrated so not all the errors have to be switched off globally?
-if (RAPIDSCHEMA_CPP_11)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers -Wno-unused-parameter -Wno-pedantic")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-class-memaccess -std=c++11 -DRAPIDSCHEMA_CPP_11")
-endif()
-
-# TODO(cledergerber) having to turn off unused-variable in order to compile rapidjson in release seems weired
-if (${CMAKE_BUILD_TYPE} STREQUAL "Release" OR  ${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-variable")
-endif()
-
-if (${RAPIDSCHEMA_WITH_CONCEPTS})
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
-endif()
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
+
+set(RAPIDSCHEMA_COMPILE_FLAGS "-Wall -Werror -Wpedantic -DRAPIDJSON_HAS_STDSTRING")
+if (${RAPIDSCHEMA_WITH_CONCEPTS})
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
+endif()
+
+if (RAPIDSCHEMA_CPP_11)
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++11 -DRAPIDSCHEMA_CPP_11")
+else()
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++2a")
+endif()
 
 # add all source code directories
 if (RAPIDSCHEMA_CPP_11)
