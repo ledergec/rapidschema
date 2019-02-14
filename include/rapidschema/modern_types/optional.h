@@ -14,7 +14,7 @@ using optional = std::optional<T>;
 
 using nullopt_t = std::nullopt_t;
 
-inline constexpr nullopt_t nullopt { nullopt_t::_Construct::_Token };
+ inline constexpr nullopt_t nullopt { std::nullopt };
 }
 #endif
 

@@ -102,7 +102,7 @@ class GenericVariant : public GenericConfig<Ch> {
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
-  Result HandleMissing() const {
+  Result HandleMissing() const override {
     return FailResult("is missing");
   }
 

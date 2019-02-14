@@ -238,7 +238,7 @@ struct TypeProperties<std::nullptr_t> {
   }
 
   template <typename TargetCh>
-  static void Serialize(const nullptr_t& n, AbstractWriter<TargetCh>* writer) {
+  static void Serialize(const std::nullptr_t& n, AbstractWriter<TargetCh>* writer) {
     (void) n;
     writer->Null();
   }
