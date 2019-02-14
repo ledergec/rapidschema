@@ -5,12 +5,12 @@ file(GLOB UNITTEST_SRC
     "rapidschema/*.cpp"
 )
 
-add_executable(unittest ${UNITTEST_SRC})
+add_executable(rapidschema_unittest ${UNITTEST_SRC})
 
 if (RAPIDSCHEMA_CPP_11)
-    target_link_libraries(unittest gtest gmock fmt absl::optional)
+    target_link_libraries(rapidschema_unittest gtest gmock fmt absl::optional)
 else()
-    target_link_libraries(unittest gtest gmock fmt)
+    target_link_libraries(rapidschema_unittest gtest gmock fmt)
 endif()
 
-setup_cpplint(unittest ${UNITTEST_SRC})
+setup_cpplint(rapidschema_unittest ${UNITTEST_SRC})
