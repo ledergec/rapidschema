@@ -15,10 +15,10 @@
 namespace rapidschema {
 namespace internal {
 
-template <typename Tuple, template <typename> typename Condition, size_t Index, class Enabled = void>
+template <typename Tuple, template <typename> class Condition, size_t Index, class Enabled = void>
 struct TupleElementWithCondition;
 
-template <typename Tuple, template <typename> typename Condition, size_t I>
+template <typename Tuple, template <typename> class Condition, size_t I>
 struct TupleElementWithCondition<
     Tuple,
     Condition,
@@ -28,7 +28,7 @@ struct TupleElementWithCondition<
   static constexpr size_t Index = I - 1;
 };
 
-template <typename Tuple, template <typename> typename Condition, size_t I>
+template <typename Tuple, template <typename> class Condition, size_t I>
 struct TupleElementWithCondition<
     Tuple,
     Condition,
@@ -125,7 +125,7 @@ class UniqueTuple {
   /// \brief retrieves the index of the tuple element for which the type meets the Condition
   /// if no element meets the condition there will be a compilation error.
   template <template<typename> class Condition>
-  constexpr size_t IndexOf() {
+  constexpr size_t IndexOf() const {
     return ElementWithCondition<Condition>::Index;
   }
 
