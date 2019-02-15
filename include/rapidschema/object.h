@@ -19,7 +19,6 @@ namespace rapidschema {
 template<typename Ch = char>
 class GenericObject : public GenericConfig<Ch> {
  public:
-  using CharType = Ch;
   using PropertyMapping = std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>>;
 
   GenericObject()

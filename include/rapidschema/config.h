@@ -13,6 +13,8 @@ namespace rapidschema {
 template <typename Ch = char>
 class GenericConfig {
  public:
+  using CharType = Ch;
+
   virtual ~GenericConfig() = default;
 
   virtual Result Transform(const rapidjson::Value& document) = 0;
