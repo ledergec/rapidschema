@@ -10,7 +10,7 @@
 #include "rapidschema/concepts/unique_types.h"
 #include "rapidschema/meta/type_set.h"
 #include "rapidschema/modern_types/utility.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 namespace internal {

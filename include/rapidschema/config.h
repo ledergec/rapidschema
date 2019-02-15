@@ -6,7 +6,7 @@
 #include <rapidjson/document.h>
 
 #include "rapidschema/abstract_writer.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 

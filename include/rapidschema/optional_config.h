@@ -4,7 +4,7 @@
 #define INCLUDE_RAPIDSCHEMA_OPTIONAL_CONFIG_H_
 
 #include "rapidschema/config.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 

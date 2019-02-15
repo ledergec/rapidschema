@@ -6,7 +6,7 @@
 #include <gmock/gmock.h>
 
 #include "rapidschema/failure.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 #include "rapidschema/ostream_operators.h"
 
 MATCHER(CheckSucceeded, "") {

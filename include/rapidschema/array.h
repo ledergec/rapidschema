@@ -9,7 +9,7 @@
 
 #include "rapidschema/config.h"
 #include "rapidschema/rapidjson_type_to_string.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 

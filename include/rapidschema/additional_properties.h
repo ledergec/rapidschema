@@ -3,7 +3,7 @@
 #ifndef INCLUDE_RAPIDSCHEMA_ADDITIONAL_PROPERTIES_H_
 #define INCLUDE_RAPIDSCHEMA_ADDITIONAL_PROPERTIES_H_
 
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 

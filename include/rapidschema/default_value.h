@@ -4,7 +4,7 @@
 #define INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
 
 #include "rapidschema/value.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 

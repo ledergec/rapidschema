@@ -10,7 +10,7 @@
 
 #include <rapidjson/document.h>
 
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 #include "rapidschema/utils/regex.h"
 
 namespace rapidschema {

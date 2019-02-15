@@ -7,7 +7,7 @@
 
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/meta/unique_tuple.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 namespace internal {

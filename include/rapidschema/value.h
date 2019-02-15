@@ -14,7 +14,7 @@
 #include "rapidschema/concepts/requires_macro.h"
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/config.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 #include "rapidschema/type_properties.h"
 
 namespace rapidschema {

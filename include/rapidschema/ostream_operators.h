@@ -7,7 +7,7 @@
 
 #include "rapidschema/failure.h"
 #include "rapidschema/modern_types/optional.h"
-#include "rapidschema/transform_result.h"
+#include "rapidschema/result.h"
 
 namespace rapidschema {
 
