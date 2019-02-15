@@ -25,7 +25,7 @@ class SimpleExample : public NoAdditionalProperties<Object> {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config*> CreateMemberMapping() const override {
+  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }

@@ -90,10 +90,10 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
-    UpdateMapping();
+    auto pair_list = CreateMemberMapping();
 
     writer->StartObject();
-    for (const auto& pair : name_config_mapping_) {
+    for (const auto& pair : pair_list) {
       writer->Key(pair.first.c_str());
       pair.second->Serialize(writer);
     }
@@ -120,12 +120,16 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
  protected:
-  virtual std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> CreateMemberMapping() const = 0;
+  virtual std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>> CreateMemberMapping() const = 0;
 
  private:
   void UpdateMapping() const {
     if (mapping_initialized_ == false) {
-      name_config_mapping_ = CreateMemberMapping();
+      name_config_mapping_ = std::map<std::string, const Config*>();
+      auto list = CreateMemberMapping();
+      for (const auto pair : list) {
+          name_config_mapping_.insert(pair);
+      }
       mapping_initialized_ = true;
     }
   }

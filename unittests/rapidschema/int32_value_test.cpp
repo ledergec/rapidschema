@@ -67,7 +67,7 @@ class Int32ConfigValueTestNode : public Object {
   Value<int32_t> value;
 
  protected:
-  std::map<std::string, const Config*> CreateMemberMapping() const override {
+  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
     return {{"value", &value}};
   }
 };

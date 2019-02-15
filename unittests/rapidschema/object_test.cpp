@@ -27,7 +27,7 @@ class ObjectTestConfigExample : public Object {
   Value<std::string, MinLength, MaxLength> string_value;
 
  protected:
-  std::map<std::string, const Config*> CreateMemberMapping() const override {
+  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }
@@ -42,10 +42,10 @@ class ObjectTestNestedConfigExample : public Object {
   Value<std::string> string_value;
 
  protected:
-  std::map<std::string, const Config*> CreateMemberMapping() const override {
-    return {{"example", &example},
-            {"integerValue", &integer_value},
-            {"stringValue", &string_value}};
+  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value},
+            {"example", &example}};
   }
 };
 
@@ -264,7 +264,7 @@ TEST_F(ObjectTest, WhenSerialize_ThenCorrectResult) {
   node.example.string_value = "du";
 
   std::string result = SerializeConfig(node);
-  ASSERT_EQ(R"({"example":{"integerValue":443,"stringValue":"du"},"integerValue":123,"stringValue":"hallo"})", result);
+  ASSERT_EQ(R"({"integerValue":123,"stringValue":"hallo","example":{"integerValue":443,"stringValue":"du"}})", result);
 }
 
 }  // namespace rapidschema

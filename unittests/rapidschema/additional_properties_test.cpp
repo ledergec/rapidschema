@@ -22,7 +22,7 @@ class AdditionalPropertiesTestObject : public NoAdditionalProperties<Object> {
   Value<std::string> string_value;
 
  protected:
-  std::map<std::string, const Config*> CreateMemberMapping() const override {
+  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }
