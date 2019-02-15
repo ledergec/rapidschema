@@ -33,7 +33,7 @@ class GenericObject : public GenericConfig<Ch> {
   GenericObject& operator= (const GenericObject& other) {
     if (this != &other) {
       mapping_initialized_ = false;
-      name_config_mapping_ = std::map<std::basic_string<Ch>, const GenericConfig<Ch>*>();
+      name_config_mapping_.clear();
     }
     return *this;
   }
