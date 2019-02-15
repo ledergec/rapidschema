@@ -5,6 +5,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 #include <fmt/format.h>
@@ -125,7 +126,7 @@ class GenericObject : public GenericConfig<Ch> {
  private:
   void UpdateMapping() const {
     if (mapping_initialized_ == false) {
-      name_config_mapping_ = std::map<std::string, const Config*>();
+      name_config_mapping_ = std::unordered_map<std::string, const Config*>();
       auto list = CreateMemberMapping();
       for (const auto pair : list) {
           name_config_mapping_.insert(pair);
@@ -135,7 +136,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   mutable bool mapping_initialized_;
-  mutable std::map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_config_mapping_;
+  mutable std::unordered_map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_config_mapping_;
 };
 
 using Object = GenericObject<>;
