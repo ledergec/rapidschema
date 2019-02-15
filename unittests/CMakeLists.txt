@@ -1,7 +1,7 @@
 # Copyright (C) 2019 Christian Ledergerber
 set(RAPIDSCHEMA_UNITTEST_TARGET rapidschema_unittest)
 
-file(GLOB UNITTEST_SRC
+file(GLOB_RECURSE UNITTEST_SRC
     "rapidschema/*.h"
     "rapidschema/*.cpp"
 )
