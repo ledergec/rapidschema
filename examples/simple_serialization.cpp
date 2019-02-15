@@ -21,7 +21,7 @@ class SimpleExample : public Object {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value},
             {"intArray", &int_array}};

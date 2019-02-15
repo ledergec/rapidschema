@@ -20,7 +20,7 @@ template<typename Ch = char>
 class GenericObject : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
-  using MemberMapping = std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>>;
+  using PropertyMapping = std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>>;
 
   GenericObject()
     : mapping_initialized_(false) {}
@@ -40,7 +40,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   Result Transform(const rapidjson::Value& document) override {
-    UpdateMapping();
+    UpdatePropertyMapping();
 
     if (document.IsObject() == false) {
       return Result(Failure(fmt::format("Expected object but was: {} ", JsonTypeToString(document.GetType()))));
@@ -85,7 +85,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   Result Validate() const override {
-    UpdateMapping();
+    UpdatePropertyMapping();
 
     Result result;
     for (auto pair : name_property_mapping_) {
@@ -98,7 +98,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
-    auto pair_list = CreateMemberMapping();
+    auto pair_list = CreatePropertyMapping();
 
     writer->StartObject();
     for (const auto& pair : pair_list) {
@@ -128,15 +128,15 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
  protected:
-  virtual MemberMapping CreateMemberMapping() const {
-    return MemberMapping();
+  virtual PropertyMapping CreatePropertyMapping() const {
+    return PropertyMapping();
   }
 
  private:
-  void UpdateMapping() const {
+  void UpdatePropertyMapping() const {
     if (mapping_initialized_ == false) {
       name_property_mapping_ = std::unordered_map<std::string, const Config*>();
-      auto list = CreateMemberMapping();
+      auto list = CreatePropertyMapping();
       for (const auto pair : list) {
           name_property_mapping_.insert(pair);
       }

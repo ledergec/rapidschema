@@ -67,7 +67,7 @@ class Int32ConfigValueTestNode : public Object {
   Value<int32_t> value;
 
  protected:
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"value", &value}};
   }
 };

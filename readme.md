@@ -30,7 +30,7 @@ class SimpleExample : public Object {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config *> CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value},
             {"intArray", &int_array}};
@@ -76,7 +76,7 @@ int_array = [1, 2, 3]
 
 It shows how to parse a json string into a C++ class. The only significant difference to gson is
 that we need to explicitly provide the information, which member has which json property name, in the 
-CreateMemberMapping function. This is not necessary in gson because gson uses java reflection to infer the json 
+CreatePropertyMapping function. This is not necessary in gson because gson uses java reflection to infer the json 
 property names based on the names of the members in the java struct.
 
 ### Error Handling - Best Effort Parsing
@@ -108,7 +108,7 @@ class SimpleExample : public Object {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config *> CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value},
             {"intArray", &int_array}};
@@ -183,7 +183,7 @@ class SimpleExample : public Object {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config *> CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value},
             {"intArray", &int_array}};
@@ -284,7 +284,7 @@ class SimpleExample : public NoAdditionalProperties<Object> {
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
-  std::map<std::string, const Config *> CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }

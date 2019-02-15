@@ -27,7 +27,7 @@ class ObjectTestConfigExample : public Object {
   Value<std::string, MinLength, MaxLength> string_value;
 
  protected:
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }
@@ -42,7 +42,7 @@ class ObjectTestNestedConfigExample : public Object {
   Value<std::string> string_value;
 
  protected:
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value},
             {"example", &example}};

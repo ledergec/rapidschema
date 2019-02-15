@@ -25,7 +25,7 @@ class DefaultTestConfigExample : public Object {
   DefaultValue<std::string> string_value;
 
  protected:
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
   }

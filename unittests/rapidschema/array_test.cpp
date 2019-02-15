@@ -19,7 +19,7 @@ class ArrayTestDummyObject : public Object {
   Value<int> integer_value;
 
  protected:
-  MemberMapping CreateMemberMapping() const override {
+  PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value}};
   }
 };
