@@ -100,9 +100,11 @@ class VariantTestTestNode : public Object {
 TEST(VariantTest, WhenSerialize_ThenCorrectResult) {
   VariantTestTestNode node;
   node.variant.SetVariant<std::string>("my_string");
+  node.variant.SelectVariant<std::string>();
   std::string result = SerializeConfig(node);
   ASSERT_EQ(R"({"value":"my_string"})", result);
   node.variant.SetVariant<int64_t>(123);
+  node.variant.SelectVariant<int64_t>();
   result = SerializeConfig(node);
   ASSERT_EQ(R"({"value":123})", result);
 }

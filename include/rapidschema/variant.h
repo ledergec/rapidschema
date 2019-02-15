@@ -85,6 +85,10 @@ class GenericVariant : public GenericConfig<Ch> {
   template <typename T>
   void SetVariant(const T& t) {
     unique_tuple_.template GetIfCondition<internal::ConfigValueHasType<T>::template Condition>() = t;
+  }
+
+  template <typename T>
+  void SelectVariant() {
     variant_index_ = unique_tuple_.template IndexOf<internal::ConfigValueHasType<T>::template Condition>();
   }
 
@@ -99,6 +103,7 @@ class GenericVariant : public GenericConfig<Ch> {
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
+    assert(variant_index_ != INVALID_VARIANT_INDEX);
     return unique_tuple_.template Get<Config>(variant_index_)->Serialize(writer);
   }
 
