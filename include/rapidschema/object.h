@@ -43,39 +43,44 @@ class GenericObject : public GenericConfig<Ch> {
     UpdateMapping();
 
     if (document.IsObject() == false) {
-      return Result(Failure(fmt::format("Expected object but was: {} ",
-                                          JsonTypeToString(document.GetType()))));
+      return Result(Failure(fmt::format("Expected object but was: {} ", JsonTypeToString(document.GetType()))));
     }
 
     Result result;
-    int missing_count = 0;
-    for (auto pair : name_config_mapping_) {
-      if (document.HasMember(pair.first.c_str()) == false) {
-        auto missing_result = pair.second->HandleMissing();
-        missing_result.AddPath(pair.first);
-        result.Append(missing_result);
-        missing_count++;
-        continue;
-      }
+    size_t found_properties_count = 0;
+    auto member_it = document.MemberBegin();
+    while (member_it != document.MemberEnd()) {
+      auto name = std::basic_string<Ch>(member_it->name.GetString(), member_it->name.GetStringLength());
+      auto property = name_config_mapping_.find(name);
+      if (property != name_config_mapping_.end()) {  // there is a property with the given name
+        found_properties_count++;
 
-      auto transform_result =
-          const_cast<Config*>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
-      if (transform_result.Success() == false) {
-        transform_result.AddPath(pair.first);
-        result.Append(transform_result);
-      }
-    }
-
-    if (document.MemberCount() + missing_count > name_config_mapping_.size()) {
-      auto member_it = document.MemberBegin();
-      while (member_it != document.MemberEnd()) {
-        auto name = std::basic_string<Ch>(member_it->name.GetString(), member_it->name.GetStringLength());
-        if (name_config_mapping_.find(name) == name_config_mapping_.end()) {
-          result.Append(HandleUnexpectedMember(name));
+        auto transform_result =
+          const_cast<Config*>(property->second)->Transform(document.FindMember(property->first.c_str())->value);
+        if (transform_result.Success() == false) {
+          transform_result.AddPath(property->first);
+          result.Append(transform_result);
         }
-        member_it++;
+      }
+
+      if (property == name_config_mapping_.end()) {  // no property or pattern property with the given name
+        result.Append(HandleUnexpectedMember(name));
+      }
+
+      member_it++;
+    }
+
+    if (found_properties_count < name_config_mapping_.size()) {
+      for (auto pair : name_config_mapping_) {
+        if (document.HasMember(pair.first.c_str()) == false) {
+          auto missing_result = pair.second->HandleMissing();
+          missing_result.AddPath(pair.first);
+          result.Append(missing_result);
+          continue;
+        }
       }
     }
+
     return result;
   }
 
