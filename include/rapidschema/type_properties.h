@@ -27,12 +27,12 @@ struct TypeProperties;
 
 template<typename Ch>
 struct TypeProperties<std::basic_string<Ch>> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::STRING;
   }
 
   static std::string GetName() {
-    return "string";
+    return "string";  
   }
 
   static bool IsType(const rapidjson::Value& value) {
@@ -51,7 +51,7 @@ struct TypeProperties<std::basic_string<Ch>> {
 
 template<>
 struct TypeProperties<int32_t> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -75,7 +75,7 @@ struct TypeProperties<int32_t> {
 
 template<>
 struct TypeProperties<uint32_t> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -99,7 +99,7 @@ struct TypeProperties<uint32_t> {
 
 template<>
 struct TypeProperties<int64_t> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -124,7 +124,7 @@ struct TypeProperties<int64_t> {
 
 template<>
 struct TypeProperties<uint64_t> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -148,7 +148,7 @@ struct TypeProperties<uint64_t> {
 
 template<>
 struct TypeProperties<bool> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::BOOLEAN;
   }
 
@@ -173,7 +173,7 @@ struct TypeProperties<bool> {
 
 template<>
 struct TypeProperties<float> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -197,7 +197,7 @@ struct TypeProperties<float> {
 
 template<>
 struct TypeProperties<double> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NUMBER;
   }
 
@@ -221,7 +221,7 @@ struct TypeProperties<double> {
 
 template<>
 struct TypeProperties<std::nullptr_t> {
-  static JsonType GetJsonType() {
+  static constexpr JsonType GetJsonType() {
     return JsonType::NULLTYPE;
   }
 

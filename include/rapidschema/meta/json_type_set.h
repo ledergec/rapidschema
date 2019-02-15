@@ -22,7 +22,7 @@ struct JsonTypeSet<S, Ss...> {
  public:
   template<typename T>
   static constexpr bool Contains() {
-    return TypeProperties<T>::json_type == TypeProperties<S>::json_type ||
+    return TypeProperties<T>::GetJsonType() == TypeProperties<S>::GetJsonType() ||
         JsonTypeSet<Ss...>::template Contains<T>();
   }
 
