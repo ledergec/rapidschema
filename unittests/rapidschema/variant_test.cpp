@@ -92,7 +92,7 @@ class VariantTestTestNode : public Object {
   Variant<Value<int64_t>, Value<std::string>> variant;
 
  protected:
-  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
+  MemberMapping CreateMemberMapping() const override {
     return {{"value", &variant}};
   }
 };

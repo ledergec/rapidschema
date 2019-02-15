@@ -20,6 +20,7 @@ template<typename Ch = char>
 class GenericObject : public GenericConfig<Ch> {
  public:
   using CharType = Ch;
+  using MemberMapping = std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>>;
 
   GenericObject()
     : mapping_initialized_(false) {}
@@ -121,7 +122,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
  protected:
-  virtual std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>> CreateMemberMapping() const = 0;
+  virtual MemberMapping CreateMemberMapping() const = 0;
 
  private:
   void UpdateMapping() const {

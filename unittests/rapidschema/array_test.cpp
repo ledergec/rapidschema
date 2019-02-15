@@ -19,7 +19,7 @@ class ArrayTestDummyObject : public Object {
   Value<int> integer_value;
 
  protected:
-  std::vector<std::pair<std::string, const Config*>> CreateMemberMapping() const override {
+  MemberMapping CreateMemberMapping() const override {
     return {{"integerValue", &integer_value}};
   }
 };
