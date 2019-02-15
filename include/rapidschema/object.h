@@ -34,7 +34,7 @@ class GenericObject : public GenericConfig<Ch> {
   GenericObject& operator= (const GenericObject& other) {
     if (this != &other) {
       mapping_initialized_ = false;
-      name_config_mapping_.clear();
+      name_property_mapping_.clear();
     }
     return *this;
   }
@@ -51,8 +51,8 @@ class GenericObject : public GenericConfig<Ch> {
     auto member_it = document.MemberBegin();
     while (member_it != document.MemberEnd()) {
       auto name = std::basic_string<Ch>(member_it->name.GetString(), member_it->name.GetStringLength());
-      auto property = name_config_mapping_.find(name);
-      if (property != name_config_mapping_.end()) {  // there is a property with the given name
+      auto property = name_property_mapping_.find(name);
+      if (property != name_property_mapping_.end()) {  // there is a property with the given name
         found_properties_count++;
 
         auto transform_result =
@@ -63,15 +63,15 @@ class GenericObject : public GenericConfig<Ch> {
         }
       }
 
-      if (property == name_config_mapping_.end()) {  // no property or pattern property with the given name
+      if (property == name_property_mapping_.end()) {  // no property or pattern property with the given name
         result.Append(HandleUnexpectedMember(name));
       }
 
       member_it++;
     }
 
-    if (found_properties_count < name_config_mapping_.size()) {
-      for (auto pair : name_config_mapping_) {
+    if (found_properties_count < name_property_mapping_.size()) {
+      for (auto pair : name_property_mapping_) {
         if (document.HasMember(pair.first.c_str()) == false) {
           auto missing_result = pair.second->HandleMissing();
           missing_result.AddPath(pair.first);
@@ -88,7 +88,7 @@ class GenericObject : public GenericConfig<Ch> {
     UpdateMapping();
 
     Result result;
-    for (auto pair : name_config_mapping_) {
+    for (auto pair : name_property_mapping_) {
       auto tmp = pair.second->Validate();
       tmp.AddPath(pair.first);
       result.Append(tmp);
@@ -118,12 +118,12 @@ class GenericObject : public GenericConfig<Ch> {
 
   void CollectMemory() const override {
     if (mapping_initialized_) {
-      for (const auto& pair : name_config_mapping_) {
+      for (const auto& pair : name_property_mapping_) {
         pair.second->CollectMemory();
       }
 
       mapping_initialized_ = false;
-      name_config_mapping_.clear();
+      name_property_mapping_.clear();
     }
   }
 
@@ -135,17 +135,17 @@ class GenericObject : public GenericConfig<Ch> {
  private:
   void UpdateMapping() const {
     if (mapping_initialized_ == false) {
-      name_config_mapping_ = std::unordered_map<std::string, const Config*>();
+      name_property_mapping_ = std::unordered_map<std::string, const Config*>();
       auto list = CreateMemberMapping();
       for (const auto pair : list) {
-          name_config_mapping_.insert(pair);
+          name_property_mapping_.insert(pair);
       }
       mapping_initialized_ = true;
     }
   }
 
   mutable bool mapping_initialized_;
-  mutable std::unordered_map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_config_mapping_;
+  mutable std::unordered_map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_property_mapping_;
 };
 
 using Object = GenericObject<>;
