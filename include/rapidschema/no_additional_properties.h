@@ -5,6 +5,8 @@
 
 #include <fmt/format.h>
 
+#include "rapidschema/transform_result.h"
+
 namespace rapidschema {
 
 template<typename BaseObject>
