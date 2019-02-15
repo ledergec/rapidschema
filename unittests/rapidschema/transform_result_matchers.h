@@ -32,6 +32,7 @@ MATCHER(TransformSucceeded, "") {
 MATCHER_P2(TransformFailed, message, path, "") {
   if (arg.GetFailures().size() != 1) {
     std::cout << "Expected one failure, but was " << arg.GetFailures().size() << std::endl;
+    std::cout << arg << std::endl;
     return false;
   }
   if (arg.GetFailures()[0].GetMessage().compare(message) != 0) {
