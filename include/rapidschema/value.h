@@ -91,6 +91,9 @@ class GenericValue : public GenericConfig<Ch> {
     return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::GetName()));
   }
 
+ protected:
+  T t_;
+
  private:
   explicit GenericValue(ValueChecker&& checker)
       : checker_(std::forward<ValueChecker>(checker)) {}
@@ -99,7 +102,6 @@ class GenericValue : public GenericConfig<Ch> {
       : t_(t)
       , checker_(std::forward<ValueChecker>(checker)) {}
 
-  T t_;
   ValueChecker checker_;
 
   friend GenericValue MakeValue<T, Constraints...>(Constraints<T>&&... constraints);
