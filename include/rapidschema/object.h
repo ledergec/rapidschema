@@ -51,17 +51,18 @@ class GenericObject : public GenericConfig<Ch> {
     int missing_count = 0;
     for (auto pair : name_config_mapping_) {
       if (document.HasMember(pair.first.c_str()) == false) {
-        auto tmp = pair.second->HandleMissing();
-        tmp.AddPath(pair.first);
-        result.Append(tmp);
+        auto missing_result = pair.second->HandleMissing();
+        missing_result.AddPath(pair.first);
+        result.Append(missing_result);
         missing_count++;
         continue;
       }
 
-      auto tmp = const_cast<Config*>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
-      if (tmp.Success() == false) {
-        tmp.AddPath(pair.first);
-        result.Append(tmp);
+      auto transform_result =
+          const_cast<Config*>(pair.second)->Transform(document.FindMember(pair.first.c_str())->value);
+      if (transform_result.Success() == false) {
+        transform_result.AddPath(pair.first);
+        result.Append(transform_result);
       }
     }
 
