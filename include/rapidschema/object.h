@@ -122,7 +122,9 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
  protected:
-  virtual MemberMapping CreateMemberMapping() const = 0;
+  virtual MemberMapping CreateMemberMapping() const {
+    return MemberMapping();
+  }
 
  private:
   void UpdateMapping() const {
