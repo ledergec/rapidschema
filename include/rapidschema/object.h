@@ -11,6 +11,7 @@
 #include <fmt/format.h>
 
 #include "rapidschema/config.h"
+#include "rapidschema/pattern_property.h"
 #include "rapidschema/rapidjson_type_to_string.h"
 #include "rapidschema/transform_result.h"
 
@@ -20,26 +21,28 @@ template<typename Ch = char>
 class GenericObject : public GenericConfig<Ch> {
  public:
   using PropertyMapping = std::vector<std::pair<std::basic_string<Ch>, const GenericConfig<Ch>*>>;
+  using PatternPropertyList = std::vector<const PatternPropertyInterface<Ch>*>;
 
   GenericObject()
-    : mapping_initialized_(false) {}
+    : member_cache_initialized_(false) {}
 
   GenericObject(const GenericObject<Ch>& other)
-    : mapping_initialized_(false) {}
+    : member_cache_initialized_(false) {}
 
   GenericObject(GenericObject<Ch>&& other)
-      : mapping_initialized_(false) {}
+      : member_cache_initialized_(false) {}
 
   GenericObject& operator= (const GenericObject& other) {
     if (this != &other) {
-      mapping_initialized_ = false;
-      name_property_mapping_.clear();
+      member_cache_initialized_ = false;
+      properties_chache_.clear();
+      pattern_properties_cache_.clear();
     }
     return *this;
   }
 
   Result Transform(const rapidjson::Value& document) override {
-    UpdatePropertyMapping();
+    UpdateMemberCache();
 
     if (document.IsObject() == false) {
       return Result(Failure(fmt::format("Expected object but was: {} ", JsonTypeToString(document.GetType()))));
@@ -50,27 +53,36 @@ class GenericObject : public GenericConfig<Ch> {
     auto member_it = document.MemberBegin();
     while (member_it != document.MemberEnd()) {
       auto name = std::basic_string<Ch>(member_it->name.GetString(), member_it->name.GetStringLength());
-      auto property = name_property_mapping_.find(name);
-      if (property != name_property_mapping_.end()) {  // there is a property with the given name
+      auto property = properties_chache_.find(name);
+      if (property != properties_chache_.end()) {  // there is a property with the given name
         found_properties_count++;
 
         auto transform_result =
-          const_cast<Config*>(property->second)->Transform(document.FindMember(property->first.c_str())->value);
+          const_cast<Config*>(property->second)->Transform(member_it->value);
         if (transform_result.Success() == false) {
           transform_result.AddPath(property->first);
           result.Append(transform_result);
         }
       }
 
-      if (property == name_property_mapping_.end()) {  // no property or pattern property with the given name
+      bool matching_pattern_property_found = false;
+      for (auto& pattern_property : pattern_properties_cache_) {
+        if (pattern_property->IsMatchingName(name)) {
+          result.Append(const_cast<PatternPropertyInterface<Ch>*>(pattern_property)->Transform(name, member_it->value));
+          matching_pattern_property_found = true;
+        }
+      }
+
+      // no property or pattern property with the given name
+      if (property == properties_chache_.end() && matching_pattern_property_found == false) {
         result.Append(HandleUnexpectedMember(name));
       }
 
       member_it++;
     }
 
-    if (found_properties_count < name_property_mapping_.size()) {
-      for (auto pair : name_property_mapping_) {
+    if (found_properties_count < properties_chache_.size()) {
+      for (auto& pair : properties_chache_) {
         if (document.HasMember(pair.first.c_str()) == false) {
           auto missing_result = pair.second->HandleMissing();
           missing_result.AddPath(pair.first);
@@ -84,13 +96,17 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   Result Validate() const override {
-    UpdatePropertyMapping();
+    UpdateMemberCache();
 
     Result result;
-    for (auto pair : name_property_mapping_) {
-      auto tmp = pair.second->Validate();
-      tmp.AddPath(pair.first);
-      result.Append(tmp);
+    for (const auto & pair : properties_chache_) {
+      auto validation_result = pair.second->Validate();
+      validation_result.AddPath(pair.first);
+      result.Append(validation_result);
+    }
+
+    for (const auto & pattern_property : pattern_properties_cache_) {
+      result.Append(pattern_property->Validate());
     }
 
     return result;
@@ -98,12 +114,18 @@ class GenericObject : public GenericConfig<Ch> {
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
     auto pair_list = CreatePropertyMapping();
+    UpdateMemberCache();
 
     writer->StartObject();
     for (const auto& pair : pair_list) {
       writer->Key(pair.first.c_str());
       pair.second->Serialize(writer);
     }
+
+    for (const auto & pattern_property : pattern_properties_cache_) {
+      pattern_property->Serialize(writer);
+    }
+
     writer->EndObject();
   }
 
@@ -116,13 +138,13 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
   void CollectMemory() const override {
-    if (mapping_initialized_) {
-      for (const auto& pair : name_property_mapping_) {
+    if (member_cache_initialized_) {
+      for (const auto & pair : properties_chache_) {
         pair.second->CollectMemory();
       }
 
-      mapping_initialized_ = false;
-      name_property_mapping_.clear();
+      member_cache_initialized_ = false;
+      properties_chache_.clear();
     }
   }
 
@@ -131,20 +153,26 @@ class GenericObject : public GenericConfig<Ch> {
     return PropertyMapping();
   }
 
+  virtual PatternPropertyList CreatePatternPropertyList() const {
+    return PatternPropertyList();
+  }
+
  private:
-  void UpdatePropertyMapping() const {
-    if (mapping_initialized_ == false) {
-      name_property_mapping_ = std::unordered_map<std::string, const Config*>();
+  void UpdateMemberCache() const {
+    if (member_cache_initialized_ == false) {
+      properties_chache_ = std::unordered_map<std::string, const Config*>();
       auto list = CreatePropertyMapping();
-      for (const auto pair : list) {
-          name_property_mapping_.insert(pair);
+      for (const auto & pair : list) {
+          properties_chache_.insert(pair);
       }
-      mapping_initialized_ = true;
+      pattern_properties_cache_ = CreatePatternPropertyList();
+      member_cache_initialized_ = true;
     }
   }
 
-  mutable bool mapping_initialized_;
-  mutable std::unordered_map<std::basic_string<Ch>, const GenericConfig<Ch>*> name_property_mapping_;
+  mutable bool member_cache_initialized_;
+  mutable std::unordered_map<std::basic_string<Ch>, const GenericConfig<Ch>*> properties_chache_;
+  mutable PatternPropertyList pattern_properties_cache_;
 };
 
 using Object = GenericObject<>;

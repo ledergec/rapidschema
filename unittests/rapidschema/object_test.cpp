@@ -5,15 +5,17 @@
 
 #include <map>
 
-#include "rapidschema/value.h"
 #include "rapidschema/object.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
+#include "rapidschema/value.h"
 
 namespace rapidschema {
 
+using testing::AnyOf;
+using testing::Eq;
 using testing::Test;
 using testing::UnorderedElementsAre;
 
@@ -21,15 +23,21 @@ class ObjectTestConfigExample : public Object {
  public:
   ObjectTestConfigExample()
       : integer_value(MakeValue(22, Maximum<int>(4)))
-      , string_value(MakeValue(std::string("default"), MinLength<>(3), MaxLength<>(20))) {}
+      , string_value(MakeValue(std::string("default"), MinLength<>(3), MaxLength<>(20)))
+      , integer_pattern_property("^I.*") {}
 
   Value<int, Maximum> integer_value;
   Value<std::string, MinLength, MaxLength> string_value;
+  PatternProperty<Value<int>> integer_pattern_property;
 
  protected:
   PropertyMapping CreatePropertyMapping() const override {
     return {{"integerValue", &integer_value},
             {"stringValue", &string_value}};
+  }
+
+  PatternPropertyList CreatePatternPropertyList() const override {
+    return {&integer_pattern_property};
   }
 };
 
@@ -58,15 +66,111 @@ class ObjectTest : public Test {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST_F(ObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlySet) {
-  ParseConfig(R"(
+  auto result = ParseConfig(R"(
                 {
                   "integerValue": 23,
                   "stringValue": "hallo"
                 }
                 )", &example_);
 
+  ASSERT_TRUE(result.Success());
   ASSERT_EQ(23, example_.integer_value.Get());
   ASSERT_EQ("hallo", example_.string_value.Get());
+  ASSERT_TRUE(example_.integer_pattern_property.GetProperties().empty());
+}
+
+TEST_F(ObjectTest, GivenUnexpectedMember_WhenParsingObject_ThenIgnoredAndSuccess) {
+  auto result = ParseConfig(R"(
+                {
+                  "integerValue": 23,
+                  "stringValue": "hallo",
+                  "unexpectedMember": "some string"
+                }
+                )", &example_);
+
+  ASSERT_TRUE(result.Success());
+}
+
+TEST_F(ObjectTest, GivenTwoMatchingPatternProperties_WhenParsingObject_ThenPatternPropertyCorrectlySet) {
+  auto result = ParseConfig(R"(
+                {
+                  "integerValue": 23,
+                  "stringValue": "hallo",
+                  "I1": 32,
+                  "I2": 43
+                }
+                )", &example_);
+
+  ASSERT_TRUE(result.Success());
+  ASSERT_EQ(23, example_.integer_value.Get());
+  ASSERT_EQ("hallo", example_.string_value.Get());
+  ASSERT_EQ(2, example_.integer_pattern_property.GetProperties().size());
+  ASSERT_EQ(32, example_.integer_pattern_property.GetProperties().at("I1").Get());
+  ASSERT_EQ(43, example_.integer_pattern_property.GetProperties().at("I2").Get());
+}
+
+class MatchingPropertyPatternPropertyConflict : public Object {
+ public:
+  MatchingPropertyPatternPropertyConflict()
+      : integer_value(MakeValue(22, Maximum<int>(4)))
+      , integer_pattern_property("^i.*") {}
+
+  Value<int, Maximum> integer_value;
+  PatternProperty<Value<int>> integer_pattern_property;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override {
+    return {{"integerValue", &integer_value}};
+  }
+
+  PatternPropertyList CreatePatternPropertyList() const override {
+    return {&integer_pattern_property};
+  }
+};
+
+TEST_F(ObjectTest, GivenPropertyNameWhichMatchesPatternProperty_WhenParsingObject_ThenPatternPropertyAndPropertySet) {
+  MatchingPropertyPatternPropertyConflict conflict_example;
+
+  auto result = ParseConfig(R"(
+                {
+                  "integerValue": 23
+                }
+                )", &conflict_example);
+
+  ASSERT_TRUE(result.Success());
+  ASSERT_EQ(23, conflict_example.integer_value.Get());
+  ASSERT_EQ(23, conflict_example.integer_pattern_property.GetProperties().at("integerValue").Get());
+}
+
+class ConflictingPropertyPatternPropertyConflict : public Object {
+ public:
+  ConflictingPropertyPatternPropertyConflict()
+      : integer_value(MakeValue(22, Maximum<int>(4)))
+      , string_pattern_property("^i.*") {}
+
+  Value<int, Maximum> integer_value;
+  PatternProperty<Value<std::string>> string_pattern_property;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override {
+    return {{"integerValue", &integer_value}};
+  }
+
+  PatternPropertyList CreatePatternPropertyList() const override {
+    return {&string_pattern_property};
+  }
+};
+
+TEST_F(ObjectTest, GivenPropertyNameWhichConflictsPatternProperty_WhenParsingObject_ThenFailsAlways) {
+  ConflictingPropertyPatternPropertyConflict conflict_example;
+
+  auto result = ParseConfig(R"(
+                {
+                  "integerValue": 23
+                }
+                )", &conflict_example);
+
+  ASSERT_FALSE(result.Success());
 }
 
 TEST_F(ObjectTest, GivenMissingMember_WhenParsingObject_ThenOtherMembersSetCorrectly) {
@@ -167,7 +271,6 @@ TEST_F(ObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFailsWith
   ASSERT_EQ(expected, result);
 }
 
-
 ////////////////////////// Copy Construction and Assignment work ///////////////////////////////////////
 
 TEST_F(ObjectTest, GivenCopiedObject_WhenParsingNestedObject_ThenAllMembersCorrectlySet) {
@@ -262,9 +365,29 @@ TEST_F(ObjectTest, WhenSerialize_ThenCorrectResult) {
   node.string_value = "hallo";
   node.example.integer_value = 443;
   node.example.string_value = "du";
+  node.example.integer_pattern_property.Insert("I1", 43);
 
   std::string result = SerializeConfig(node);
-  ASSERT_EQ(R"({"integerValue":123,"stringValue":"hallo","example":{"integerValue":443,"stringValue":"du"}})", result);
+  ASSERT_EQ(R"({"integerValue":123,"stringValue":"hallo","example":{"integerValue":443,"stringValue":"du","I1":43}})",
+      result);
+}
+
+
+TEST_F(ObjectTest, WhenSerializeMultiplePatternProperties_ThenOrderUndefined) {
+  ObjectTestNestedConfigExample node;
+  node.integer_value = 123;
+  node.string_value = "hallo";
+  node.example.integer_value = 443;
+  node.example.string_value = "du";
+  node.example.integer_pattern_property.Insert("I54", 43);
+  node.example.integer_pattern_property.Insert("ISD", 46);
+
+  auto result_variant_1 =
+   R"({"integerValue":123,"stringValue":"hallo","example":{"integerValue":443,"stringValue":"du","I54":43,"ISD":46}})";
+  auto result_variant_2 =
+   R"({"integerValue":123,"stringValue":"hallo","example":{"integerValue":443,"stringValue":"du","ISD":46,"I54":43}})";
+  std::string result = SerializeConfig(node);
+  ASSERT_THAT(result, AnyOf(Eq(result_variant_1), Eq(result_variant_2)));
 }
 
 }  // namespace rapidschema
