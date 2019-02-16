@@ -76,11 +76,11 @@ class GenericValue : public GenericConfig<Ch> {
 
     t_ = TypeProperties<T>::FromJson(document);
 
-    return Result();
+    return ValidateInternal();
   }
 
   Result Validate() const override {
-    return checker_.Check(t_);
+    return ValidateInternal();
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
@@ -95,6 +95,10 @@ class GenericValue : public GenericConfig<Ch> {
   T t_;
 
  private:
+  Result ValidateInternal() const {
+    return checker_.Check(t_);
+  }
+
   explicit GenericValue(ValueChecker&& checker)
       : checker_(std::forward<ValueChecker>(checker)) {}
 

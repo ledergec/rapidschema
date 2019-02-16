@@ -68,13 +68,13 @@ class ObjectTest : public Test {
 TEST_F(ObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlySet) {
   auto result = ParseConfig(R"(
                 {
-                  "integerValue": 23,
+                  "integerValue": 2,
                   "stringValue": "hallo"
                 }
                 )", &example_);
 
   ASSERT_TRUE(result.Success());
-  ASSERT_EQ(23, example_.integer_value.Get());
+  ASSERT_EQ(2, example_.integer_value.Get());
   ASSERT_EQ("hallo", example_.string_value.Get());
   ASSERT_TRUE(example_.integer_pattern_property.GetProperties().empty());
 }
@@ -82,7 +82,7 @@ TEST_F(ObjectTest, GivenSuccess_WhenParsingObject_ThenAllMembersCorrectlySet) {
 TEST_F(ObjectTest, GivenUnexpectedMember_WhenParsingObject_ThenIgnoredAndSuccess) {
   auto result = ParseConfig(R"(
                 {
-                  "integerValue": 23,
+                  "integerValue": 2,
                   "stringValue": "hallo",
                   "unexpectedMember": "some string"
                 }
@@ -94,7 +94,7 @@ TEST_F(ObjectTest, GivenUnexpectedMember_WhenParsingObject_ThenIgnoredAndSuccess
 TEST_F(ObjectTest, GivenTwoMatchingPatternProperties_WhenParsingObject_ThenPatternPropertyCorrectlySet) {
   auto result = ParseConfig(R"(
                 {
-                  "integerValue": 23,
+                  "integerValue": 2,
                   "stringValue": "hallo",
                   "I1": 32,
                   "I2": 43
@@ -102,7 +102,7 @@ TEST_F(ObjectTest, GivenTwoMatchingPatternProperties_WhenParsingObject_ThenPatte
                 )", &example_);
 
   ASSERT_TRUE(result.Success());
-  ASSERT_EQ(23, example_.integer_value.Get());
+  ASSERT_EQ(2, example_.integer_value.Get());
   ASSERT_EQ("hallo", example_.string_value.Get());
   ASSERT_EQ(2, example_.integer_pattern_property.GetProperties().size());
   ASSERT_EQ(32, example_.integer_pattern_property.GetProperties().at("I1").Get());
@@ -133,13 +133,13 @@ TEST_F(ObjectTest, GivenPropertyNameWhichMatchesPatternProperty_WhenParsingObjec
 
   auto result = ParseConfig(R"(
                 {
-                  "integerValue": 23
+                  "integerValue": 2
                 }
                 )", &conflict_example);
 
   ASSERT_TRUE(result.Success());
-  ASSERT_EQ(23, conflict_example.integer_value.Get());
-  ASSERT_EQ(23, conflict_example.integer_pattern_property.GetProperties().at("integerValue").Get());
+  ASSERT_EQ(2, conflict_example.integer_value.Get());
+  ASSERT_EQ(2, conflict_example.integer_pattern_property.GetProperties().at("integerValue").Get());
 }
 
 class ConflictingPropertyPatternPropertyConflict : public Object {
@@ -320,7 +320,7 @@ TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCo
                 {
                   "example": {
                     "integerValue": 0,
-                    "stringValue": ""
+                    "stringValue": "wer"
                   },
                   "integerValue": 0,
                   "stringValue": ""
@@ -334,7 +334,7 @@ TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCo
   result = ParseConfig(R"(
                 {
                   "example": {
-                    "integerValue": 43,
+                    "integerValue": 1,
                     "stringValue": "nested_value"
                   },
                   "integerValue": 23,
@@ -343,7 +343,7 @@ TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCo
                 )", &nested_example_);
 
   ASSERT_TRUE(result.Success());
-  ASSERT_EQ(43, nested_example_.example.integer_value.Get());
+  ASSERT_EQ(1, nested_example_.example.integer_value.Get());
   ASSERT_EQ("nested_value", nested_example_.example.string_value.Get());
   ASSERT_EQ(23, nested_example_.integer_value.Get());
   ASSERT_EQ("hallo", nested_example_.string_value.Get());

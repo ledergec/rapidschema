@@ -51,9 +51,9 @@ class OneOfTest : public Test {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST_F(OneOfTest, GivenSingleVariantMatches_WhenParsingDom_ThenCorrectlyParsed) {
-  auto result = ParseConfig(R"({"integerValue":12})", &one_of_);
+  auto result = ParseConfig(R"({"integerValue":112})", &one_of_);
   ASSERT_TRUE(result.Success());
-  ASSERT_EQ(12, one_of_.GetVariant<OneOfIntegerTestObject>().integer_value.Get());
+  ASSERT_EQ(112, one_of_.GetVariant<OneOfIntegerTestObject>().integer_value.Get());
   ASSERT_TRUE(one_of_.Is<OneOfIntegerTestObject>());
 }
 
@@ -67,7 +67,7 @@ TEST_F(OneOfTest, GivenNoVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessage
 
 TEST_F(OneOfTest, GivenMultipleVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessages) {
   OneOf<OneOfIntegerTestObject, NoAdditionalProperties<OneOfIntegerTestObject>> example;
-  auto result = ParseConfig(R"({"integerValue":12})", &example);
+  auto result = ParseConfig(R"({"integerValue":112})", &example);
   ASSERT_THAT(result, TransformFailed("Multiple matches - ambiguous result.", ""));
 }
 

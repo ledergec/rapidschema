@@ -24,13 +24,18 @@ class GenericConstant : public GenericValue<Ch, T> {
   Result Transform(const rapidjson::Value& document) override {
     auto result = GenericValue<Ch, T>::Transform(document);
     if (result.Success()) {
-      return Validate();
+      return ValidateInternal();
     } else {
       return result;
     }
   }
 
   Result Validate() const override {
+    return ValidateInternal();
+  }
+
+ private:
+  Result ValidateInternal() const {
     if (this->t_ == expected_value_) {
       return Result();
     } else {
@@ -38,7 +43,6 @@ class GenericConstant : public GenericValue<Ch, T> {
     }
   }
 
- private:
   T expected_value_;
 };
 

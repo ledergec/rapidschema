@@ -55,9 +55,6 @@ TEST(ConstantTest, GivenNotEqualToConstant_WhenParsing_ThenValidationFails) {
                   "integerValue": 23,
                   "stringValue": "hallo"
                 })", &example);
-  ASSERT_TRUE(result.Success());
-
-  result = example.Validate();
   ASSERT_FALSE(result.Success());
 
   ASSERT_EQ(2, result.GetFailures().size());

@@ -62,7 +62,7 @@ class GenericVariant : public GenericConfig<Ch> {
           "No type in variant matched. Actual type: {}",
           JsonTypeToString(document.GetType())));
     }
-    return Result();
+    return ValidateInternal();
   }
 
   template <typename T>
@@ -98,8 +98,7 @@ class GenericVariant : public GenericConfig<Ch> {
   }
 
   Result Validate() const override {
-    assert(variant_index_ != INVALID_VARIANT_INDEX);
-    return unique_tuple_.template Get<Config>(variant_index_)->Validate();
+    return ValidateInternal();
   }
 
   void Serialize(AbstractWriter<Ch>* writer) const override {
@@ -112,6 +111,11 @@ class GenericVariant : public GenericConfig<Ch> {
   }
 
  private:
+  Result ValidateInternal() const {
+    assert(variant_index_ != INVALID_VARIANT_INDEX);
+    return unique_tuple_.template Get<Config>(variant_index_)->Validate();
+  }
+
   int32_t variant_index_ = INVALID_VARIANT_INDEX;
   // must be a tuple because each config value and its constraints must be stored
   Tuple unique_tuple_;
