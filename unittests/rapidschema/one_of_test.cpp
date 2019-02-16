@@ -62,7 +62,7 @@ TEST_F(OneOfTest, GivenNoVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessage
   ASSERT_EQ(3, result.GetFailures().size());
   ASSERT_EQ("No type in OneOf matched for the following 2 reasons:", result.GetFailures()[0].GetMessage());
   ASSERT_EQ("Expected type: int. Actual value was: \"string\"", result.GetFailures()[1].GetMessage());
-  ASSERT_EQ("Value of type string is missing", result.GetFailures()[2].GetMessage());
+  ASSERT_EQ("Is missing.", result.GetFailures()[2].GetMessage());
 }
 
 TEST_F(OneOfTest, GivenMultipleVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessages) {

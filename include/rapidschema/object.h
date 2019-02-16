@@ -84,10 +84,8 @@ class GenericObject : public GenericConfig<Ch> {
 
     if (found_properties_count < properties_chache_.size()) {
       for (auto& pair : properties_chache_) {
-        if (document.HasMember(pair.first.c_str()) == false) {
-          auto missing_result = pair.second->HandleMissing();
-          missing_result.AddPath(pair.first);
-          result.Append(missing_result);
+        if (document.HasMember(pair.first.c_str()) == false && pair.second->IsRequired()) {
+          result.Append(Failure(pair.first, "Is missing."));
           continue;
         }
       }
@@ -134,8 +132,8 @@ class GenericObject : public GenericConfig<Ch> {
     return true;
   }
 
-  Result HandleMissing() const override {
-    return FailResult("Object is missing in config.");
+  bool IsRequired() const {
+    return true;
   }
 
   void CollectMemory() const override {

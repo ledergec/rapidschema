@@ -6,6 +6,7 @@
 #include <map>
 
 #include "rapidschema/object.h"
+#include "rapidschema/ostream_operators.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
 #include "rapidschema/test_utils.h"
@@ -190,7 +191,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorrectFail
                 }
                 )", &example_);
 
-  Result expected(Failure("integerValue", "Value of type int is missing"));
+  Result expected(Failure("integerValue", "Is missing."));
   ASSERT_EQ(expected, result);
 }
 
@@ -251,7 +252,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWithCorre
                 }
                 )", &nested_example_);
 
-  Result expected(Failure("example.integerValue", "Value of type int is missing"));
+  Result expected(Failure("example.integerValue", "Is missing."));
   ASSERT_EQ(expected, result);
 }
 

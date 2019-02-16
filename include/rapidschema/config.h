@@ -21,7 +21,7 @@ class GenericConfig {
 
   virtual Result Validate() const = 0;
 
-  virtual Result HandleMissing() const = 0;
+  virtual bool IsRequired() const = 0;
 
   virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 

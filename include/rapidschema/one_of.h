@@ -112,8 +112,8 @@ class GenericOneOf : public GenericConfig<Ch> {
     return unique_tuple_.template Get<Config>(one_of_index_)->Serialize(writer);
   }
 
-  Result HandleMissing() const override {
-    return FailResult("is missing");
+  bool IsRequired() const override {
+    return true;
   }
 
  private:

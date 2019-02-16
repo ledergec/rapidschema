@@ -57,8 +57,8 @@ class Array : public GenericConfig<Ch> {
     writer->EndArray();
   }
 
-  Result HandleMissing() const override {
-    return Result(Failure("Array is missing"));
+  bool IsRequired() const override {
+    return true;
   }
 
   void CollectMemory() const override {

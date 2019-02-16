@@ -26,8 +26,8 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     }
   }
 
-  Result HandleMissing() const override {
-    return Result();
+  bool IsRequired() const override {
+    return false;
   }
 
   void Serialize(AbstractWriter<typename BaseConfig::CharType>* writer) const override {

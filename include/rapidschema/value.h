@@ -87,8 +87,8 @@ class GenericValue : public GenericConfig<Ch> {
     TypeProperties<T>::template Serialize<Ch>(t_, writer);
   }
 
-  Result HandleMissing() const override {
-    return FailResult(fmt::format("Value of type {} is missing", TypeProperties<T>::GetName()));
+  bool IsRequired() const override {
+    return true;
   }
 
  protected:
