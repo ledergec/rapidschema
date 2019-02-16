@@ -74,8 +74,9 @@ class GenericObject : public GenericConfig<Ch> {
       }
 
       // no property or pattern property with the given name
-      if (property == properties_chache_.end() && matching_pattern_property_found == false) {
-        result.Append(HandleUnexpectedMember(name));
+      if (property == properties_chache_.end() && matching_pattern_property_found == false
+          && AdditionalPropertiesAllowed() == false) {
+        result.Append(Failure(fmt::format("Unexpected member encountered: {}", name)));
       }
 
       member_it++;
@@ -129,8 +130,8 @@ class GenericObject : public GenericConfig<Ch> {
     writer->EndObject();
   }
 
-  virtual Result HandleUnexpectedMember(const std::basic_string<Ch>& key) {
-    return Result();
+  virtual bool AdditionalPropertiesAllowed() const {
+    return true;
   }
 
   Result HandleMissing() const override {

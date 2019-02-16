@@ -10,8 +10,8 @@ namespace rapidschema {
 template<typename BaseObject>
 class AdditionalProperties : public BaseObject {
  public:
-  Result HandleUnexpectedMember(const std::basic_string<typename BaseObject::CharType>& key) override {
-    return Result();
+  bool AdditionalPropertiesAllowed() const override {
+    return true;
   }
 };
 
