@@ -25,6 +25,9 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
   PatternProperty(const StringType& pattern)
       : pattern_(Regex<CharType>::CreateRegex(pattern)) {}
 
+  PatternProperty(const typename Regex<CharType>::RegexType& pattern)
+      : pattern_(pattern) {}
+
   bool IsMatchingName(const StringType & name) const override {
     return Regex<CharType>::IsCompleteMatch(pattern_, name);
   }
