@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
-#define INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
+#ifndef INCLUDE_RAPIDSCHEMA_CONSTANT_H_
+#define INCLUDE_RAPIDSCHEMA_CONSTANT_H_
 
 #include "rapidschema/value.h"
 #include "rapidschema/result.h"
@@ -51,4 +51,4 @@ using Constant = GenericConstant<char, T>;
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
+#endif  // INCLUDE_RAPIDSCHEMA_CONSTANT_H_

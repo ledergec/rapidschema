@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_PATTERN_PROPERTY_H_
-#define INCLUDE_PATTERN_PROPERTY_H_
+#ifndef INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_
+#define INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_
 
 #include <assert.h>
 
@@ -22,10 +22,10 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
   using CharType = typename PatternPropertyInterface<typename ConfigType::CharType>::CharType;
   using StringType = typename PatternPropertyInterface<typename ConfigType::CharType>::StringType;
 
-  PatternProperty(const StringType& pattern)
+  explicit PatternProperty(const StringType& pattern)
       : pattern_(Regex<CharType>::CreateRegex(pattern)) {}
 
-  PatternProperty(const typename Regex<CharType>::RegexType& pattern)
+  explicit PatternProperty(const typename Regex<CharType>::RegexType& pattern)
       : pattern_(pattern) {}
 
   bool IsMatchingName(const StringType & name) const override {
@@ -45,7 +45,7 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     return properties_;
   }
 
-  Result Transform(StringType& name, const rapidjson::Value& document) override {
+  Result Transform(const StringType& name, const rapidjson::Value& document) override {
     assert(IsMatchingName(name));
     ConfigType config;
     auto result = config.Transform(document);
@@ -82,4 +82,4 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_PATTERN_PROPERTY_H_
+#endif  // INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_

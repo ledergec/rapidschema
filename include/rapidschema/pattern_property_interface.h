@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_PATTERN_PROPERTY_INTERFACE_H_
-#define INCLUDE_PATTERN_PROPERTY_INTERFACE_H_
+#ifndef INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_INTERFACE_H_
+#define INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_INTERFACE_H_
 
 #include <assert.h>
 
@@ -23,7 +23,7 @@ class PatternPropertyInterface {
 
   virtual bool IsMatchingName(const StringType & name) const = 0;
 
-  virtual Result Transform(StringType & name, const rapidjson::Value& document) = 0;
+  virtual Result Transform(const StringType & name, const rapidjson::Value& document) = 0;
 
   virtual Result Validate() const = 0;
 
@@ -32,4 +32,4 @@ class PatternPropertyInterface {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_PATTERN_PROPERTY_INTERFACE_H_
+#endif  // INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_INTERFACE_H_

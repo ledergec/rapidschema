@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_RAPIDSCHEMA_VARIANT_H_
-#define INCLUDE_RAPIDSCHEMA_VARIANT_H_
+#ifndef INCLUDE_RAPIDSCHEMA_ONE_OF_H_
+#define INCLUDE_RAPIDSCHEMA_ONE_OF_H_
 
 #include <assert.h>
 #include <functional>
@@ -69,7 +69,8 @@ class GenericOneOf : public GenericConfig<Ch> {
   }
 
   template <typename Config>
-  using ConfigOf = typename Tuple::template ElementWithCondition<internal::ConfigHasSameType<Config>::template Condition>;
+  using ConfigOf =
+      typename Tuple::template ElementWithCondition<internal::ConfigHasSameType<Config>::template Condition>;
 
   template <typename Config>
   GenericOneOf<Ch, Configs...>& operator=(const Config& config) {
@@ -139,4 +140,4 @@ OneOf<Configs...> MakeOneOf(Configs&&... configs) {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_VARIANT_H_
+#endif  // INCLUDE_RAPIDSCHEMA_ONE_OF_H_

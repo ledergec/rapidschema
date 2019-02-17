@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef RAPIDSCHEMA_TUPLE_H
-#define RAPIDSCHEMA_TUPLE_H
+#ifndef INCLUDE_RAPIDSCHEMA_MODERN_TYPES_UTILITY_H_
+#define INCLUDE_RAPIDSCHEMA_MODERN_TYPES_UTILITY_H_
 
 #ifdef RAPIDSCHEMA_CPP_11
 #include <absl/utility/utility.h>
@@ -20,4 +20,4 @@ using remove_reference_t = std::remove_reference_t<TupleT>;
 }
 #endif
 
-#endif //RAPIDSCHEMA_TUPLE_H
+#endif  // INCLUDE_RAPIDSCHEMA_MODERN_TYPES_UTILITY_H_

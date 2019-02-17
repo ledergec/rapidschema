@@ -32,7 +32,7 @@ struct TypeProperties<std::basic_string<Ch>> {
   }
 
   static std::string GetName() {
-    return "string";  
+    return "string";
   }
 
   static bool IsType(const rapidjson::Value& value) {
