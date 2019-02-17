@@ -37,6 +37,13 @@ class Regex {
   static bool IsCompleteMatch(const RegexType& regex, const StringType& string) {
     return std::regex_match(string, regex);
   }
+
+  /// regex matching any string
+  static RegexType AnyRegex() {
+    static auto any_regex = CreateRegex(".*");
+    return any_regex;
+  }
+
 };
 
 }  // namespace rapidschema
