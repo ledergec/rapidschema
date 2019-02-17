@@ -8,30 +8,16 @@
 #include "rapidschema/array.h"
 #include "rapidschema/one_of.h"
 #include "rapidschema/optional_config.h"
-#include "rapidschema/schema/integer_schema.h"
-#include "rapidschema/schema/number_schema.h"
-#include "rapidschema/schema/string_schema.h"
-#include "rapidschema/schema/type_schema.h"
-#include "rapidschema/schema/constant_schema.h"
+#include "rapidschema/schema/sub_schema.h"
 
 namespace rapidschema {
 namespace schema {
-
-class ObjectSchema;
-
-using AnySchema = OneOf<ObjectSchema,
-                        NumberSchema,
-                        IntegerSchema,
-                        StringSchema,
-                        ConstantNumberSchema,
-                        ConstantIntegerSchema,
-                        ConstantStringSchema>;
 
 class PropertiesSchema : public NoAdditionalProperties<Object> {
  public:
   PropertiesSchema();
 
-  std::shared_ptr<PatternProperty<AnySchema>> pattern_properties;
+  std::shared_ptr<PatternProperty<SubSchema>> pattern_properties;
 
  protected:
   PatternPropertyList CreatePatternPropertyList() const override;
@@ -42,7 +28,7 @@ class PatternPropertiesSchema : public NoAdditionalProperties<Object> {
  public:
   PatternPropertiesSchema();
 
-  std::shared_ptr<PatternProperty<AnySchema>> properties;
+  std::shared_ptr<PatternProperty<SubSchema>> properties;
 
  protected:
   PatternPropertyList CreatePatternPropertyList() const override;
@@ -87,7 +73,7 @@ class ObjectSchema : public TypeSchema {
 
 ///////////////////// Implementation of PropertiesSchema ////////////////////////////////////
 PropertiesSchema::PropertiesSchema()
-    : pattern_properties(std::make_shared<PatternProperty<AnySchema>>(Regex<>::AnyRegex())) {}
+    : pattern_properties(std::make_shared<PatternProperty<SubSchema>>(Regex<>::AnyRegex())) {}
 
 PropertiesSchema::PatternPropertyList PropertiesSchema::CreatePatternPropertyList() const {
   return {pattern_properties.get()};
@@ -96,11 +82,11 @@ PropertiesSchema::PatternPropertyList PropertiesSchema::CreatePatternPropertyLis
 
 ///////////////////// Implementation of PatternPropertiesSchema ////////////////////////////////////
 PatternPropertiesSchema::PatternPropertiesSchema()
-      : properties(std::make_shared<PatternProperty<AnySchema>>(Regex<>::AnyRegex())) {}
+      : properties(std::make_shared<PatternProperty<SubSchema>>(Regex<>::AnyRegex())) {}
 
 PatternPropertiesSchema::PatternPropertyList PatternPropertiesSchema::CreatePatternPropertyList() const {
     return {properties.get()};
-  }
+}
 
 }  // namespace schema
 }  // namespace rapidschema
