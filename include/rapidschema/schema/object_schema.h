@@ -10,6 +10,7 @@
 #include "rapidschema/optional_config.h"
 #include "rapidschema/schema/integer_schema.h"
 #include "rapidschema/schema/number_schema.h"
+#include "rapidschema/schema/string_schema.h"
 #include "rapidschema/schema/type_schema.h"
 
 namespace rapidschema {
@@ -19,7 +20,8 @@ class ObjectSchema;
 
 using AnySchema = OneOf<ObjectSchema,
                         NumberSchema,
-                        IntegerSchema>;
+                        IntegerSchema,
+                        StringSchema>;
 
 class PropertiesSchema : public NoAdditionalProperties<Object> {
  public:

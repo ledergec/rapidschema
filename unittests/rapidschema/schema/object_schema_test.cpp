@@ -37,6 +37,11 @@ TEST_F(ObjectSchemaTest, CanParseSchema) {
                         "maximum": 20.0,
                         "exclusiveMinimum": 5.0,
                         "exclusiveMaximum": 30.0
+                      },
+                      "stringProperty":{
+                        "type":"string",
+                        "minLength": 10,
+                        "maxLength": 20
                       }
                    },
                    "patternProperties":{
