@@ -17,6 +17,15 @@ class Regex {
   using RegexType = std::basic_regex<CharType>;
   using StringType = std::basic_string<CharType>;
 
+  bool IsRegex(const StringType& pattern) {
+    try {
+      RegexType regex(pattern);
+    } catch (std::regex_error& error) {
+      return false;
+    }
+    return true;
+  }
+
   static RegexType CreateRegex(const StringType& pattern) {
     try {
       return RegexType(pattern);
