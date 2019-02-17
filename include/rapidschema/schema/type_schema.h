@@ -3,6 +3,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_TYPE_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_TYPE_SCHEMA_H_
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+
 #include "rapidschema/constant.h"
 #include "rapidschema/no_additional_properties.h"
 #include "rapidschema/object.h"
@@ -22,5 +24,7 @@ class TypeSchema : public NoAdditionalProperties<Object> {
 
 }  // namespace schema
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_TYPE_SCHEMA_H_

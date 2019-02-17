@@ -31,6 +31,7 @@ class Regex {
       return RegexType(pattern);
     } catch (std::regex_error& error) {
       assert(false);
+      return RegexType(".*");
     }
   }
 

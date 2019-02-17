@@ -1,4 +1,5 @@
 // Copyright (C) 2019 Christian Ledergerber
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -71,7 +72,10 @@ TEST_F(ObjectSchemaTest, CanParseSchema) {
 
   std::cout << result << std::endl;
   ASSERT_TRUE(result.Success());
+  FAIL();
 }
 
 }  // namespace schema
 }  // namespace rapidschema
+
+#endif

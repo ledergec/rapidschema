@@ -3,6 +3,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_CONSTANT_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_CONSTANT_SCHEMA_H_
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+
 #include "rapidschema/no_additional_properties.h"
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
@@ -27,5 +29,7 @@ using ConstantStringSchema = ConstantSchema<std::string>;
 
 }  // namespace schema
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_CONSTANT_SCHEMA_H_

@@ -4,6 +4,7 @@ cmake_minimum_required (VERSION 3.8)
 project (rapidschema)
 
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
+option(RAPIDSCHEMA_WITH_SCHEMA_GENERATION "Build rapidschema including schema generation")
 option(RAPIDSCHEMA_WITH_CONCEPTS "Build rapidschema with gcc and -fconcepts")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
@@ -17,6 +18,10 @@ if (RAPIDSCHEMA_CPP_11)
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++11 -DRAPIDSCHEMA_CPP_11")
 else()
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++2a")
+endif()
+
+if (RAPIDSCHEMA_WITH_SCHEMA_GENERATION)
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION")
 endif()
 
 set(RAPIDJSON_BUILD_TESTS "OFF" CACHE STRING "Turn off rapidjson tests to avoid redefinition of gtest target")

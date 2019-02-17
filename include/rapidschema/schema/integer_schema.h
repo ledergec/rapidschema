@@ -3,6 +3,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_INTEGER_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_INTEGER_SCHEMA_H_
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+
 #include "rapidschema/optional_config.h"
 #include "rapidschema/schema/type_schema.h"
 
@@ -38,5 +40,7 @@ class IntegerSchema : public TypeSchema {
 
 }  // namespace schema
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_INTEGER_SCHEMA_H_

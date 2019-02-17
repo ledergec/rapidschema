@@ -3,6 +3,8 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_OBJECT_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_OBJECT_SCHEMA_H_
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+
 #include <memory>
 
 #include "rapidschema/array.h"
@@ -112,5 +114,7 @@ OneOfSchema::PropertyMapping OneOfSchema::CreatePropertyMapping() const {
 
 }  // namespace schema
 }  // namespace rapidschema
+
+#endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_OBJECT_SCHEMA_H_
