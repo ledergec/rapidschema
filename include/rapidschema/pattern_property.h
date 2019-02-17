@@ -51,8 +51,11 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     auto result = config.Transform(document);
     if (result.Success()) {
       Insert(name, config);
+      return result;
+    } else {
+      result.AddPath(name);
+      return result;
     }
-    return result;
   }
 
   Result Validate() const override {
