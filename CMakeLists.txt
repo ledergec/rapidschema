@@ -3,7 +3,6 @@
 cmake_minimum_required (VERSION 3.8)
 project (rapidschema)
 
-option(test "Build all tests." OFF) # Makes boolean 'test' available.
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
@@ -39,16 +38,3 @@ add_subdirectory(extern/fmt)
 add_subdirectory(include)
 add_subdirectory(unittests)
 add_subdirectory(examples)
-
-if (test)
-   if (APPLE)
-      add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-      add_definitions(-D__GLIBCXX__)
-   endif (APPLE)
-
-   enable_testing()
-
-   # Include the gtest library. gtest_SOURCE_DIR is available due to
-   # 'project(gtest)' above.
-   include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-endif()
