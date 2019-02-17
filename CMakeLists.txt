@@ -4,6 +4,7 @@ cmake_minimum_required (VERSION 3.8)
 project (rapidschema)
 
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
+option(RAPIDSCHEMA_WITH_CONCEPTS "Build rapidschema with gcc and -fconcepts")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
 
