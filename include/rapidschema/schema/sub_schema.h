@@ -1,18 +1,19 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_SCHEMA_H_
-#define INCLUDE_RAPIDSCHEMA_SCHEMA_SCHEMA_H_
+#ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_SUB_SCHEMA_H_
+#define INCLUDE_RAPIDSCHEMA_SCHEMA_SUB_SCHEMA_H_
 
+#include "rapidschema/schema/constant_schema.h"
 #include "rapidschema/schema/integer_schema.h"
 #include "rapidschema/schema/number_schema.h"
 #include "rapidschema/schema/string_schema.h"
 #include "rapidschema/schema/type_schema.h"
-#include "rapidschema/schema/constant_schema.h"
 
 namespace rapidschema {
 namespace schema {
 
 class ObjectSchema;
+class OneOfSchema;
 
 using SubSchema = OneOf<ObjectSchema,
                         NumberSchema,
@@ -20,9 +21,10 @@ using SubSchema = OneOf<ObjectSchema,
                         StringSchema,
                         ConstantNumberSchema,
                         ConstantIntegerSchema,
-                        ConstantStringSchema>;
+                        ConstantStringSchema,
+                        OneOfSchema>;
 
 }  // namespace schema
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_SCHEMA_H_
+#endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_SUB_SCHEMA_H_

@@ -35,6 +35,23 @@ class PatternPropertiesSchema : public NoAdditionalProperties<Object> {
 };
 
 
+class OneOfSchema : public NoAdditionalProperties<Object> {
+ public:
+  using OneOfSubSchema = OneOf<ObjectSchema,
+                               NumberSchema,
+                               IntegerSchema,
+                               StringSchema,
+                               ConstantNumberSchema,
+                               ConstantIntegerSchema,
+                               ConstantStringSchema>;
+
+  Array<OneOfSubSchema> one_of;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override;
+};
+
+
 class ObjectSchema : public TypeSchema {
  public:
   ObjectSchema() {
@@ -82,10 +99,15 @@ PropertiesSchema::PatternPropertyList PropertiesSchema::CreatePatternPropertyLis
 
 ///////////////////// Implementation of PatternPropertiesSchema ////////////////////////////////////
 PatternPropertiesSchema::PatternPropertiesSchema()
-      : properties(std::make_shared<PatternProperty<SubSchema>>(Regex<>::AnyRegex())) {}
+    : properties(std::make_shared<PatternProperty<SubSchema>>(Regex<>::AnyRegex())) {}
 
 PatternPropertiesSchema::PatternPropertyList PatternPropertiesSchema::CreatePatternPropertyList() const {
-    return {properties.get()};
+  return {properties.get()};
+}
+
+/////////////////////// Implementation of OneOfSchema /////////////////////////////////////////
+OneOfSchema::PropertyMapping OneOfSchema::CreatePropertyMapping() const {
+  return {{"oneOf", &one_of}};
 }
 
 }  // namespace schema

@@ -51,6 +51,12 @@ TEST_F(ObjectSchemaTest, CanParseSchema) {
                       },
                       "constNumberProperty": {
                         "const": 1.0
+                      },
+                      "oneOfProperty": {
+                        "oneOf": [
+                          { "type": "number", "multipleOf": 5.0 },
+                          { "type": "number", "multipleOf": 3.0 }
+                        ]
                       }
                    },
                    "patternProperties": {
