@@ -22,35 +22,44 @@ class ObjectSchemaTest : public Test {
 TEST_F(ObjectSchemaTest, CanParseSchema) {
   auto result = ParseConfig(R"(
                 {
-                   "type":"object",
-                   "properties":{
-                      "integerProperty":{
-                        "type":"integer",
+                   "type": "object",
+                   "properties": {
+                      "integerProperty": {
+                        "type": "integer",
                         "minimum": 10,
                         "maximum": 20,
                         "exclusiveMinimum": 5,
                         "exclusiveMaximum": 30
                       },
-                      "numberProperty":{
+                      "numberProperty": {
                         "type":"number",
                         "minimum": 10.0,
                         "maximum": 20.0,
                         "exclusiveMinimum": 5.0,
                         "exclusiveMaximum": 30.0
                       },
-                      "stringProperty":{
-                        "type":"string",
+                      "stringProperty": {
+                        "type": "string",
                         "minLength": 10,
                         "maxLength": 20
+                      },
+                      "constStringProperty": {
+                        "const": "constant string value"
+                      },
+                      "constIntegerProperty": {
+                        "const": 1
+                      },
+                      "constNumberProperty": {
+                        "const": 1.0
                       }
                    },
-                   "patternProperties":{
-                      "patternProperty1.*":{
-                        "type":"object"
+                   "patternProperties": {
+                      "patternProperty1.*": {
+                        "type": "object"
                       }
                    },
                    "additionalProperties": false,
-                   "required":["property1"]
+                   "required": ["property1"]
                 }
                 )", &object_);
 

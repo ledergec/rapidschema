@@ -12,6 +12,7 @@
 #include "rapidschema/schema/number_schema.h"
 #include "rapidschema/schema/string_schema.h"
 #include "rapidschema/schema/type_schema.h"
+#include "rapidschema/schema/constant_schema.h"
 
 namespace rapidschema {
 namespace schema {
@@ -21,7 +22,10 @@ class ObjectSchema;
 using AnySchema = OneOf<ObjectSchema,
                         NumberSchema,
                         IntegerSchema,
-                        StringSchema>;
+                        StringSchema,
+                        ConstantNumberSchema,
+                        ConstantIntegerSchema,
+                        ConstantStringSchema>;
 
 class PropertiesSchema : public NoAdditionalProperties<Object> {
  public:
