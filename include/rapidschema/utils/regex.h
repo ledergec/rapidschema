@@ -11,7 +11,7 @@ namespace rapidschema {
 /// http://www.ecma-international.org/publications/standards/Ecma-262.htm. The current implementation relies on the
 /// regex implementation in the stl which is not an exact implemenation of the standard, but a modified version. See
 /// https://en.cppreference.com/w/cpp/regex/ecmascript for reference.
-template<typename CharType>
+template<typename CharType = char>
 class Regex {
  public:
   using RegexType = std::basic_regex<CharType>;
