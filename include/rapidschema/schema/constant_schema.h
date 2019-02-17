@@ -5,22 +5,23 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/no_additional_properties.h"
-#include "rapidschema/object.h"
-#include "rapidschema/value.h"
+#include "rapidschema/schema/constant_schema_interface.h"
 
 namespace rapidschema {
 namespace schema {
 
 template <typename T>
-class ConstantSchema : public NoAdditionalProperties<Object> {
+class ConstantSchema : public NoAdditionalProperties<Object> ,
+                       public ConstantSchemaInterface<T> {
  public:
   Value<T> const_value;
 
+  void SetConstant(const T& t);
+
+  std::shared_ptr<SubSchema> CreateSubSchema() const override;
+
  protected:
-  PropertyMapping CreatePropertyMapping() const override {
-    return {{"const", &const_value}};
-  }
+  PropertyMapping CreatePropertyMapping() const override;
 };
 
 using ConstantIntegerSchema = ConstantSchema<int64_t>;

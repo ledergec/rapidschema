@@ -5,26 +5,33 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/schema/constant_schema.h"
-#include "rapidschema/schema/integer_schema.h"
-#include "rapidschema/schema/number_schema.h"
-#include "rapidschema/schema/string_schema.h"
-#include "rapidschema/schema/type_schema.h"
+#include <memory>
+
+#include "rapidschema/array.h"
+#include "rapidschema/no_additional_properties.h"
+#include "rapidschema/object.h"
+#include "rapidschema/one_of.h"
+#include "rapidschema/pattern_property.h"
+#include "rapidschema/optional_config.h"
 
 namespace rapidschema {
 namespace schema {
 
-class ObjectSchema;
-class OneOfSchema;
+class SubSchema : public OneOf<ObjectSchema,
+                               NumberSchema,
+                               IntegerSchema,
+                               StringSchema,
+                               ConstantNumberSchema,
+                               ConstantIntegerSchema,
+                               ConstantStringSchema,
+                               OneOfSchema> {
+ public:
+  SubSchema() = default;
 
-using SubSchema = OneOf<ObjectSchema,
-                        NumberSchema,
-                        IntegerSchema,
-                        StringSchema,
-                        ConstantNumberSchema,
-                        ConstantIntegerSchema,
-                        ConstantStringSchema,
-                        OneOfSchema>;
+  template <typename SchemaType>
+  explicit SubSchema(const SchemaType& schema)
+    : GenericOneOf(schema) {}
+};
 
 }  // namespace schema
 }  // namespace rapidschema

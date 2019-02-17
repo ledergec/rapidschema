@@ -45,6 +45,12 @@ class GenericOneOf : public GenericConfig<Ch> {
  public:
   GenericOneOf() = default;
 
+  template <typename Config>
+  explicit GenericOneOf(const Config& config) {
+    SetVariant<Config>(config);
+    SelectVariant<Config>();
+  }
+
   Result Transform(const rapidjson::Value& document) override {
     size_t n_matches = 0;
     Result result;

@@ -5,17 +5,15 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/optional_config.h"
-#include "rapidschema/schema/type_schema.h"
+#include "rapidschema/schema/integer_schema_interface.h"
 
 namespace rapidschema {
 namespace schema {
 
-class IntegerSchema : public TypeSchema {
+class IntegerSchema : public TypeSchema,
+                      public IntegerSchemaInterface {
  public:
-  IntegerSchema() {
-    type.SetExpectedValue("integer");
-  }
+  IntegerSchema();
 
   OptionalConfig<Value<int64_t>> multiple_of;
   OptionalConfig<Value<int64_t>> minimum;
@@ -23,19 +21,20 @@ class IntegerSchema : public TypeSchema {
   OptionalConfig<Value<int64_t>> maximum;
   OptionalConfig<Value<int64_t>> exclusive_maximum;
 
- protected:
-  PropertyMapping CreatePropertyMapping() const override {
-    PropertyMapping property_mapping(
-        {{"multipleOf", &multiple_of},
-         {"minimum", &minimum},
-         {"exclusiveMinimum", &exclusive_minimum},
-         {"maximum", &maximum},
-         {"exclusiveMaximum", &exclusive_maximum}});
+  void SetMultipleOf(int64_t multiple) override;
 
-    auto mapping = TypeSchema::CreatePropertyMapping();
-    mapping.insert(std::end(mapping), std::begin(property_mapping), std::end(property_mapping));
-    return mapping;
-  }
+  void SetMinimum(int64_t min) override;
+
+  void SetExclusiveMinimum(int64_t exclusive_min) override;
+
+  void SetMaximum(int64_t max) override;
+
+  void SetExclusiveMaximum(int64_t exclusive_max) override;
+
+  std::shared_ptr<SubSchema> CreateSubSchema() const override;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override;
 };
 
 }  // namespace schema

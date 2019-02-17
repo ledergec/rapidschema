@@ -8,6 +8,44 @@
 
 namespace rapidschema {
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+template <typename T, class Enabled = void>
+struct ConstantSchemaCreator;
+
+template <typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::STRING>::type> {
+  static std::shared_ptr<schema::SubSchema> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface & assembler,
+      const T& t) {
+    auto schema = assembler.CreateConstantStringSchema();
+    schema->SetConstant(t);
+    return schema->CreateSubSchema();
+  }
+};
+
+template <typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<std::is_integral<T>::value>::type> {
+  static std::shared_ptr<schema::SubSchema> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface & assembler,
+      const T& t) {
+    auto schema = assembler.CreateConstantIntegerSchema();
+    schema->SetConstant(t);
+    return schema->CreateSubSchema();
+  }
+};
+
+template <typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<std::is_floating_point<T>::value>::type> {
+  static std::shared_ptr<schema::SubSchema> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface & assembler,
+      const T& t) {
+    auto schema = assembler.CreateConstantNumberSchema();
+    schema->SetConstant(t);
+    return schema->CreateSubSchema();
+  }
+};
+#endif
+
 template<typename Ch, typename T>
 class GenericConstant : public GenericValue<Ch, T> {
  public:
@@ -33,6 +71,12 @@ class GenericConstant : public GenericValue<Ch, T> {
   Result Validate() const override {
     return ValidateInternal();
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    return ConstantSchemaCreator<T>::CreateConstantSchema(assembler, expected_value_);
+  }
+#endif
 
  private:
   Result ValidateInternal() const {

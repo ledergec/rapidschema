@@ -5,31 +5,26 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/optional_config.h"
-#include "rapidschema/schema/type_schema.h"
+#include "rapidschema/schema/string_schema_interface.h"
 
 namespace rapidschema {
 namespace schema {
 
-class StringSchema : public TypeSchema {
+class StringSchema : public TypeSchema ,
+                     public StringSchemaInterface {
  public:
-  StringSchema() {
-    type.SetExpectedValue("string");
-  }
+  StringSchema();
 
   OptionalConfig<Value<size_t>> min_length;
   OptionalConfig<Value<size_t>> max_length;
 
- protected:
-  PropertyMapping CreatePropertyMapping() const override {
-    PropertyMapping property_mapping(
-        {{"minLength", &min_length},
-         {"maxLength", &max_length}});
+  void SetMinLength(size_t min) override;
+  void SetMaxLength(size_t max) override;
 
-    auto mapping = TypeSchema::CreatePropertyMapping();
-    mapping.insert(std::end(mapping), std::begin(property_mapping), std::end(property_mapping));
-    return mapping;
-  }
+  std::shared_ptr<SubSchema> CreateSubSchema() const override;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override;
 };
 
 }  // namespace schema

@@ -9,9 +9,9 @@ file(GLOB_RECURSE UNITTEST_SRC
 add_executable(${RAPIDSCHEMA_UNITTEST_TARGET} ${UNITTEST_SRC})
 
 if (RAPIDSCHEMA_CPP_11)
-    target_link_libraries(${RAPIDSCHEMA_UNITTEST_TARGET} gtest gmock fmt absl::optional)
+    target_link_libraries(${RAPIDSCHEMA_UNITTEST_TARGET} gtest gmock fmt absl::optional rapidschema_library)
 else()
-    target_link_libraries(${RAPIDSCHEMA_UNITTEST_TARGET} gtest gmock fmt)
+    target_link_libraries(${RAPIDSCHEMA_UNITTEST_TARGET} gtest gmock fmt rapidschema_library)
 endif()
 
 set_target_properties(${RAPIDSCHEMA_UNITTEST_TARGET} PROPERTIES COMPILE_FLAGS ${RAPIDSCHEMA_COMPILE_FLAGS})

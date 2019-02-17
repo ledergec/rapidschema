@@ -5,17 +5,15 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/optional_config.h"
-#include "rapidschema/schema/type_schema.h"
+#include "rapidschema/schema/number_schema_interface.h"
 
 namespace rapidschema {
 namespace schema {
 
-class NumberSchema : public TypeSchema {
+class NumberSchema : public TypeSchema ,
+                     public NumberSchemaInterface {
  public:
-  NumberSchema() {
-    type.SetExpectedValue("number");
-  }
+  NumberSchema();
 
   OptionalConfig<Value<double>> multiple_of;
   OptionalConfig<Value<double>> minimum;
@@ -23,19 +21,21 @@ class NumberSchema : public TypeSchema {
   OptionalConfig<Value<double>> maximum;
   OptionalConfig<Value<double>> exclusive_maximum;
 
- protected:
-  PropertyMapping CreatePropertyMapping() const override {
-    PropertyMapping property_mapping(
-        {{"multipleOf", &multiple_of},
-         {"minimum", &minimum},
-         {"exclusiveMinimum", &exclusive_minimum},
-         {"maximum", &maximum},
-         {"exclusiveMaximum", &exclusive_maximum}});
 
-    auto mapping = TypeSchema::CreatePropertyMapping();
-    mapping.insert(std::end(mapping), std::begin(property_mapping), std::end(property_mapping));
-    return mapping;
-  }
+  void SetMultipleOf(double multiple) override;
+
+  void SetMinimum(double min) override;
+
+  void SetExclusiveMinimum(double exclusive_min) override;
+
+  void SetMaximum(double max) override;
+
+  void SetExclusiveMaximum(double exclusive_max) override;
+
+  std::shared_ptr<SubSchema> CreateSubSchema() const override;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override;
 };
 
 }  // namespace schema

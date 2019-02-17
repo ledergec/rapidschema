@@ -5,7 +5,7 @@
 #include <gmock/gmock.h>
 
 #include "rapidschema/ostream_operators.h"
-#include "rapidschema/schema/object_schema.h"
+#include "rapidschema/schema/schema.h"
 #include "rapidschema/test_utils.h"
 
 namespace rapidschema {
@@ -13,14 +13,14 @@ namespace schema {
 
 using testing::Test;
 
-class ObjectSchemaTest : public Test {
+class SchemaTest : public Test {
  public:
   ObjectSchema object_;
 };
 
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
-TEST_F(ObjectSchemaTest, CanParseSchema) {
+TEST_F(SchemaTest, CanParseSchema) {
   auto result = ParseConfig(R"(
                 {
                    "type": "object",
@@ -72,7 +72,6 @@ TEST_F(ObjectSchemaTest, CanParseSchema) {
 
   std::cout << result << std::endl;
   ASSERT_TRUE(result.Success());
-  FAIL();
 }
 
 }  // namespace schema
