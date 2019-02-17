@@ -8,6 +8,8 @@
 #include "rapidschema/array.h"
 #include "rapidschema/one_of.h"
 #include "rapidschema/optional_config.h"
+#include "rapidschema/schema/integer_schema.h"
+#include "rapidschema/schema/number_schema.h"
 #include "rapidschema/schema/type_schema.h"
 
 namespace rapidschema {
@@ -15,7 +17,9 @@ namespace schema {
 
 class ObjectSchema;
 
-using AnySchema = OneOf<ObjectSchema>;
+using AnySchema = OneOf<ObjectSchema,
+                        NumberSchema,
+                        IntegerSchema>;
 
 class PropertiesSchema : public NoAdditionalProperties<Object> {
  public:

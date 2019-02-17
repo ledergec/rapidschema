@@ -24,8 +24,19 @@ TEST_F(ObjectSchemaTest, CanParseSchema) {
                 {
                    "type":"object",
                    "properties":{
-                      "property1":{
-                        "type":"object"
+                      "integerProperty":{
+                        "type":"integer",
+                        "minimum": 10,
+                        "maximum": 20,
+                        "exclusiveMinimum": 5,
+                        "exclusiveMaximum": 30
+                      },
+                      "numberProperty":{
+                        "type":"number",
+                        "minimum": 10.0,
+                        "maximum": 20.0,
+                        "exclusiveMinimum": 5.0,
+                        "exclusiveMaximum": 30.0
                       }
                    },
                    "patternProperties":{
