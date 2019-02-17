@@ -3,8 +3,6 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_NUMBER_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_NUMBER_SCHEMA_H_
 
-#include <memory>
-
 #include "rapidschema/optional_config.h"
 #include "rapidschema/schema/type_schema.h"
 

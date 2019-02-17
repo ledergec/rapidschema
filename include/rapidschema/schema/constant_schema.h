@@ -3,8 +3,6 @@
 #ifndef INCLUDE_RAPIDSCHEMA_SCHEMA_CONSTANT_SCHEMA_H_
 #define INCLUDE_RAPIDSCHEMA_SCHEMA_CONSTANT_SCHEMA_H_
 
-#include <memory>
-
 #include "rapidschema/no_additional_properties.h"
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
