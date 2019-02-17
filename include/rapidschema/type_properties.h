@@ -206,7 +206,7 @@ struct TypeProperties<double> {
   }
 
   static bool IsType(const rapidjson::Value& value) {
-      return value.IsNumber();
+      return value.IsDouble();
   }
 
   static double FromJson(const rapidjson::Value& value) {
