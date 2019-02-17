@@ -42,7 +42,7 @@ class Regex {
   static RegexType AnyRegex() {
     static auto any_regex = CreateRegex(".*");
     return any_regex;
-  } 
+  }
 };
 
 }  // namespace rapidschema
