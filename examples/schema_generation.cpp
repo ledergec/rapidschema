@@ -24,8 +24,8 @@ class SimpleExample : public NoAdditionalProperties<Object> {
   Value<std::string, MaxLength> string_value;
 
   SimpleExample()
-      : integer_value(MakeValue<int, Minimum>(Minimum<int>(10)))
-      , string_value(MakeValue<std::string, MaxLength>(MaxLength<>(20))) {}
+      : integer_value(MakeValue<int, Minimum>(Minimum(10)))
+      , string_value(MakeValue<std::string, MaxLength>(MaxLength(20))) {}
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
