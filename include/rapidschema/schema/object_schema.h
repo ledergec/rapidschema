@@ -16,6 +16,7 @@ class SubSchema;
 class PropertiesSchema : public NoAdditionalProperties<Object> {
  public:
   PropertiesSchema();
+  virtual ~PropertiesSchema() = default;
 
   std::shared_ptr<PatternProperty<SubSchema>> properties;
 

@@ -133,7 +133,7 @@ class GenericValue : public GenericConfig<Ch> {
   }
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
-  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+  std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const override {
     auto value_schema = internal::ValueSchemaCreator<T>::CreateValueSchema(assembler);
     checker_.AddToSchema(value_schema);
     return value_schema->CreateSubSchema();

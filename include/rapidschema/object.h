@@ -134,7 +134,7 @@ class GenericObject : public GenericConfig<Ch> {
     return true;
   }
 
-  bool IsRequired() const {
+  bool IsRequired() const override {
     return true;
   }
 
@@ -150,7 +150,7 @@ class GenericObject : public GenericConfig<Ch> {
   }
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
-  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+  std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const override {
     auto pair_list = CreatePropertyMapping();
     UpdateMemberCache();
 

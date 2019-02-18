@@ -29,6 +29,8 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
   explicit PatternProperty(const typename Regex<CharType>::RegexType& pattern)
       : regex_(pattern) {}
 
+  virtual ~PatternProperty() = default;
+
   const StringType & GetPattern() const override {
     return pattern_;
   }

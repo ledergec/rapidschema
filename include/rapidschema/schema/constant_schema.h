@@ -16,7 +16,7 @@ class ConstantSchema : public NoAdditionalProperties<Object> ,
  public:
   Value<T> const_value;
 
-  void SetConstant(const T& t);
+  void SetConstant(const T& t) override;
 
   std::shared_ptr<SubSchema> CreateSubSchema() const override;
 

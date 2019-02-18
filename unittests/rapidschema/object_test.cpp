@@ -6,6 +6,7 @@
 #include <map>
 
 #include "rapidschema/object.h"
+#include "rapidschema/optional_config.h"
 #include "rapidschema/ostream_operators.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"

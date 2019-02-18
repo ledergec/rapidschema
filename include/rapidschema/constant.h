@@ -74,7 +74,7 @@ class GenericConstant : public GenericValue<Ch, T> {
   }
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
-  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+  std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const override {
     auto result = internal::ConstantSchemaCreator<T>::CreateConstantSchema(assembler);
     result->SetConstant(expected_value_);
     return result->CreateSubSchema();

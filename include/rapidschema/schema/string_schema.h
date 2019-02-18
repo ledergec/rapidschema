@@ -15,8 +15,8 @@ class StringSchema : public TypeSchema ,
  public:
   StringSchema();
 
-  OptionalConfig<Value<size_t>> min_length;
-  OptionalConfig<Value<size_t>> max_length;
+  OptionalConfig<Value<uint32_t>> min_length;
+  OptionalConfig<Value<uint32_t>> max_length;
 
   void SetMinLength(size_t min) override;
   void SetMaxLength(size_t max) override;

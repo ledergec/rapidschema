@@ -21,7 +21,7 @@ std::shared_ptr<SubSchema> ConstantSchema<T>::CreateSubSchema() const {
 }
 
 template <typename T>
-typename ConstantSchema<T>::PropertyMapping ConstantSchema<T>::CreatePropertyMapping() const {
+Object::PropertyMapping ConstantSchema<T>::CreatePropertyMapping() const {
   return {{"const", &const_value}};
 }
 
