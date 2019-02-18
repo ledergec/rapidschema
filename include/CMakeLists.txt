@@ -5,7 +5,7 @@ file(GLOB_RECURSE RAPID_SCHEMA_SRC
         "rapidschema/*.cpp"
         )
 
-add_library(rapidschema_library STATIC ${RAPID_SCHEMA_SRC})
-set_target_properties(rapidschema_library PROPERTIES COMPILE_FLAGS ${RAPIDSCHEMA_COMPILE_FLAGS})
+add_library(rapidschema STATIC ${RAPID_SCHEMA_SRC})
+set_target_properties(rapidschema PROPERTIES COMPILE_FLAGS ${RAPIDSCHEMA_COMPILE_FLAGS})
 
-setup_cpplint(rapidschema_library ${RAPID_SCHEMA_SRC})
+setup_cpplint(rapidschema ${RAPID_SCHEMA_SRC})
