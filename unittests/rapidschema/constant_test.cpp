@@ -69,37 +69,48 @@ TEST(ConstantTest, GivenNotEqualToConstant_WhenParsing_ThenValidationFails) {
 /////////////////////////// Serialize Schema /////////////////////////////////////////////
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
-TEST(ConstantTest, GivenIntConstant_WhenSchemaSerialized_ThenCorrectSchema) {
-  Constant<int> int_constant;
-  int_constant.SetExpectedValue(12);
+TEST(ConstantTest, GivenBooleanConstant_WhenSchemaSerialized_ThenCorrectSchema) {
+  Constant<bool> constant;
+  constant.SetExpectedValue(true);
 
   schema::SchemaAssembler assembler;
-  auto sub_schema = int_constant.CreateSchema(assembler);
-  ASSERT_TRUE(sub_schema->Is<schema::ConstantIntegerSchema>());
-  auto int_schema = sub_schema->GetVariant<schema::ConstantIntegerSchema>();
-  ASSERT_EQ(12, int_schema.const_value.Get());
+  auto sub_schema = constant.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::ConstantBooleanSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::ConstantBooleanSchema>();
+  ASSERT_EQ(true, type_schema.const_value.Get());
 }
 
-TEST(ConstantTest, GivenStringConstant_WhenSchemaSerialized_ThenCorrectSchema) {
-  Constant<std::string> int_constant;
-  int_constant.SetExpectedValue("hallo");
+TEST(ConstantTest, GivenIntConstant_WhenSchemaSerialized_ThenCorrectSchema) {
+  Constant<int> constant;
+  constant.SetExpectedValue(12);
 
   schema::SchemaAssembler assembler;
-  auto sub_schema = int_constant.CreateSchema(assembler);
-  ASSERT_TRUE(sub_schema->Is<schema::ConstantStringSchema>());
-  auto int_schema = sub_schema->GetVariant<schema::ConstantStringSchema>();
-  ASSERT_EQ("hallo", int_schema.const_value.Get());
+  auto sub_schema = constant.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::ConstantIntegerSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::ConstantIntegerSchema>();
+  ASSERT_EQ(12, type_schema.const_value.Get());
 }
 
 TEST(ConstantTest, GivenNumberConstant_WhenSchemaSerialized_ThenCorrectSchema) {
-  Constant<double> int_constant;
-  int_constant.SetExpectedValue(12.4);
+  Constant<double> constant;
+  constant.SetExpectedValue(12.4);
 
   schema::SchemaAssembler assembler;
-  auto sub_schema = int_constant.CreateSchema(assembler);
+  auto sub_schema = constant.CreateSchema(assembler);
   ASSERT_TRUE(sub_schema->Is<schema::ConstantNumberSchema>());
-  auto int_schema = sub_schema->GetVariant<schema::ConstantNumberSchema>();
-  ASSERT_EQ(12.4, int_schema.const_value.Get());
+  auto type_schema = sub_schema->GetVariant<schema::ConstantNumberSchema>();
+  ASSERT_EQ(12.4, type_schema.const_value.Get());
+}
+
+TEST(ConstantTest, GivenStringConstant_WhenSchemaSerialized_ThenCorrectSchema) {
+  Constant<std::string> constant;
+  constant.SetExpectedValue("hallo");
+
+  schema::SchemaAssembler assembler;
+  auto sub_schema = constant.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::ConstantStringSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::ConstantStringSchema>();
+  ASSERT_EQ("hallo", type_schema.const_value.Get());
 }
 #endif
 

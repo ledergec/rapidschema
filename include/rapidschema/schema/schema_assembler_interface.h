@@ -5,6 +5,7 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
+#include "rapidschema/schema/boolean_schema_interface.h"
 #include "rapidschema/schema/constant_schema_interface.h"
 #include "rapidschema/schema/integer_schema_interface.h"
 #include "rapidschema/schema/number_schema_interface.h"
@@ -17,9 +18,11 @@ namespace schema {
 
 class SchemaAssemblerInterface {
  public:
+  virtual std::shared_ptr<ConstantBooleanSchemaInterface> CreateConstantBooleanSchema() const = 0;
   virtual std::shared_ptr<ConstantIntegerSchemaInterface> CreateConstantIntegerSchema() const = 0;
   virtual std::shared_ptr<ConstantNumberSchemaInterface> CreateConstantNumberSchema() const = 0;
   virtual std::shared_ptr<ConstantStringSchemaInterface> CreateConstantStringSchema() const = 0;
+  virtual std::shared_ptr<BooleanSchemaInterface> CreateBooleanSchema() const = 0;
   virtual std::shared_ptr<IntegerSchemaInterface> CreateIntegerSchema() const = 0;
   virtual std::shared_ptr<NumberSchemaInterface> CreateNumberSchema() const = 0;
   virtual std::shared_ptr<ObjectSchemaInterface> CreateObjectSchema() const = 0;

@@ -29,6 +29,13 @@ class Minimum {
     return absl::nullopt;
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMinimum(min_);
+  }
+#endif
+
   void SetMin(const T& min) {
     min_ = min;
   }
@@ -51,6 +58,13 @@ class ExclusiveMinimum {
     }
     return absl::nullopt;
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetExclusiveMinimum(min_);
+  }
+#endif
 
   void SetMin(const T& min) {
     min_ = min;
@@ -75,6 +89,13 @@ class Maximum {
     return absl::nullopt;
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMaximum(max_);
+  }
+#endif
+
   void SetMax(const T& max) {
     max_ = max;
   }
@@ -97,6 +118,13 @@ class ExclusiveMaximum {
     }
     return absl::nullopt;
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetExclusiveMaximum(max_);
+  }
+#endif
 
   void SetMax(const T& max) {
     max_ = max;

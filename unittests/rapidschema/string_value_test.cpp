@@ -5,6 +5,7 @@
 
 #include "rapidschema/value.h"
 #include "rapidschema/string_constraints.h"
+#include "rapidschema/schema/schema_assembler.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
 
@@ -68,4 +69,40 @@ TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenValidatingLongString_Th
       TransformFailed("Expected string of length at most 2. Actual: length 10 string: \"ein string\"", ""));
 }
 
+
+/////////////////////////// Serialize Schema /////////////////////////////////////////////
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+TEST(StringConfigValueTest, WhenSchemaSerialized_ThenCorrectSchema) {
+  Value<std::string> value;
+
+  schema::SchemaAssembler assembler;
+  auto sub_schema = value.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::StringSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::StringSchema>();
+  ASSERT_FALSE(type_schema.min_length.HasValue());
+}
+
+TEST(StringConfigValueTest, WhenSchemaWithMinLenghtConstraint_ThenCorrectSchema) {
+  auto value = MakeValue<std::string, MinLength>("hallo", MinLength<>(3));
+
+  schema::SchemaAssembler assembler;
+  auto sub_schema = value.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::StringSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::StringSchema>();
+  ASSERT_TRUE(type_schema.min_length.HasValue());
+  ASSERT_EQ(3, type_schema.min_length.GetValue().Get());
+}
+
+TEST(StringConfigValueTest, WhenSchemaWithMaxLenghtConstraint_ThenCorrectSchema) {
+  auto value = MakeValue<std::string, MaxLength>("hallo", MaxLength<>(3));
+
+  schema::SchemaAssembler assembler;
+  auto sub_schema = value.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::StringSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::StringSchema>();
+  ASSERT_TRUE(type_schema.max_length.HasValue());
+  ASSERT_EQ(3, type_schema.max_length.GetValue().Get());
+}
+#endif
 }  // namespace rapidschema

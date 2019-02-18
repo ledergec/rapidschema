@@ -18,11 +18,13 @@ namespace rapidschema {
 namespace schema {
 
 class SubSchema : public OneOf<ObjectSchema,
-                               NumberSchema,
+                               BooleanSchema,
                                IntegerSchema,
+                               NumberSchema,
                                StringSchema,
-                               ConstantNumberSchema,
+                               ConstantBooleanSchema,
                                ConstantIntegerSchema,
+                               ConstantNumberSchema,
                                ConstantStringSchema,
                                OneOfSchema> {
  public:

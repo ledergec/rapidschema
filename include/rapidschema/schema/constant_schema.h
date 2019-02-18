@@ -24,6 +24,7 @@ class ConstantSchema : public NoAdditionalProperties<Object> ,
   PropertyMapping CreatePropertyMapping() const override;
 };
 
+using ConstantBooleanSchema = ConstantSchema<bool>;
 using ConstantIntegerSchema = ConstantSchema<int64_t>;
 using ConstantNumberSchema = ConstantSchema<double>;
 using ConstantStringSchema = ConstantSchema<std::string>;

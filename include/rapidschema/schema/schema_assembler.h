@@ -13,6 +13,10 @@ namespace schema {
 
 class SchemaAssembler : public SchemaAssemblerInterface {
  public:
+  std::shared_ptr<ConstantBooleanSchemaInterface> CreateConstantBooleanSchema() const override {
+    return std::make_shared<ConstantBooleanSchema>();
+  }
+
   std::shared_ptr<ConstantIntegerSchemaInterface> CreateConstantIntegerSchema() const override {
     return std::make_shared<ConstantIntegerSchema>();
   }
@@ -23,6 +27,10 @@ class SchemaAssembler : public SchemaAssemblerInterface {
 
   std::shared_ptr<ConstantStringSchemaInterface> CreateConstantStringSchema() const override {
     return std::make_shared<ConstantStringSchema>();
+  }
+
+  std::shared_ptr<BooleanSchemaInterface> CreateBooleanSchema() const override {
+    return std::make_shared<BooleanSchema>();
   }
 
   std::shared_ptr<IntegerSchemaInterface> CreateIntegerSchema() const override {

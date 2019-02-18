@@ -29,6 +29,21 @@ struct CheckAll<Tuple, T, 0> {
   }
 };
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+template <typename Tuple, typename SchemaType, size_t Index>
+struct ConstraintToSchemaAdder {
+  static void AddToSchema(const Tuple& tuple, std::shared_ptr<SchemaType> schema) {
+    std::get<Index - 1>(tuple).AddToSchema(schema);
+    ConstraintToSchemaAdder<Tuple, SchemaType, Index - 1>::AddToSchema(tuple, schema);
+  }
+};
+
+template <typename Tuple, typename SchemaType>
+struct ConstraintToSchemaAdder<Tuple, SchemaType, 0> {
+  static void AddToSchema(const Tuple& tuple, std::shared_ptr<SchemaType> schema) {}
+};
+#endif
+
 template<typename T, template<typename> class ... Constraints>
 RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
 class CombinedConstraint;
@@ -58,6 +73,14 @@ class CombinedConstraint {
   const Constraint<T>& Get() const {
     return constraints_.template GetType<Constraint<T>>();
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    ConstraintToSchemaAdder<typename TupleT::TupleT, SchemaType, TupleT::Size()>::AddToSchema(
+        constraints_.GetTuple(), schema);
+  }
+#endif
 
  private:
   explicit CombinedConstraint(TupleT&& constraints)

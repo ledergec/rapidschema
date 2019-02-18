@@ -20,6 +20,7 @@
 #include "rapidschema/schema/sub_schema_interface.h"
 #include "rapidschema/schema/type_schema.h"
 
+#include "rapidschema/schema/boolean_schema.h"
 #include "rapidschema/schema/constant_schema.h"
 #include "rapidschema/schema/integer_schema.h"
 #include "rapidschema/schema/number_schema.h"

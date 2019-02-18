@@ -16,6 +16,7 @@ class ConstantSchemaInterface : public SubSchemaInterface {
   virtual void SetConstant(const T& t) = 0;
 };
 
+using ConstantBooleanSchemaInterface = ConstantSchemaInterface<bool>;
 using ConstantIntegerSchemaInterface = ConstantSchemaInterface<int64_t>;
 using ConstantNumberSchemaInterface = ConstantSchemaInterface<double>;
 using ConstantStringSchemaInterface = ConstantSchemaInterface<std::string>;

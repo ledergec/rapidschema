@@ -30,6 +30,13 @@ class MinLength {
     return absl::nullopt;
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMinLength(min_length_);
+  }
+#endif
+
   void SetMinLength(size_t min_length) {
     min_length_ = min_length;
   }
@@ -53,6 +60,13 @@ class MaxLength {
     }
     return absl::nullopt;
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMaxLength(max_length_);
+  }
+#endif
 
   void SetMaxLength(size_t max_length) {
     max_length_ = max_length;
