@@ -30,6 +30,10 @@ class OptionalConfig : public GenericConfig<typename BaseConfig::CharType> {
     return false;
   }
 
+  bool IsPresent() const override {
+    return HasValue();
+  }
+
   void Serialize(AbstractWriter<typename BaseConfig::CharType>* writer) const override {
     if (HasValue()) {
       optional_config_.value().Serialize(writer);

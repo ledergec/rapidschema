@@ -117,8 +117,10 @@ class GenericObject : public GenericConfig<Ch> {
 
     writer->StartObject();
     for (const auto& pair : pair_list) {
-      writer->Key(pair.first.c_str());
-      pair.second->Serialize(writer);
+      if (pair.second->IsPresent()) {
+        writer->Key(pair.first.c_str());
+        pair.second->Serialize(writer);
+      }
     }
 
     for (const auto & pattern_property : pattern_properties_cache_) {

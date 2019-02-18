@@ -374,6 +374,23 @@ TEST_F(ObjectTest, WhenSerialize_ThenCorrectResult) {
       result);
 }
 
+class ObjectTestWithOptionalExample : public Object {
+ public:
+  OptionalConfig<Value<int>> integer_value;
+
+ protected:
+  PropertyMapping CreatePropertyMapping() const override {
+    return {{"integerValue", &integer_value}};
+  }
+};
+
+TEST_F(ObjectTest, GivenOptionalNotPresent_WhenSerialize_ThenNotPresentInResult) {
+  ObjectTestWithOptionalExample object_with_empty_optional;
+
+  std::string result = SerializeConfig(object_with_empty_optional);
+  ASSERT_EQ(R"({})", result);
+}
+
 
 TEST_F(ObjectTest, WhenSerializeMultiplePatternProperties_ThenOrderUndefined) {
   ObjectTestNestedConfigExample node;

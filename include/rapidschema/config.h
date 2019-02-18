@@ -31,6 +31,10 @@ class GenericConfig {
 
   virtual bool IsRequired() const = 0;
 
+  virtual bool IsPresent() const {
+    return true;
+  }
+
   virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 
   virtual void CollectMemory() const {}
