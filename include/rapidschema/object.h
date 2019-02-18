@@ -147,6 +147,31 @@ class GenericObject : public GenericConfig<Ch> {
     }
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    auto pair_list = CreatePropertyMapping();
+    UpdateMemberCache();
+
+    auto object_schema = assembler.CreateObjectSchema();
+    for (const auto pair : pair_list) {
+      object_schema->AddProperty(pair.first, pair.second->CreateSchema(assembler));
+      if (pair.second->IsRequired()) {
+        object_schema->AddRequired(pair.first);
+      }
+    }
+
+    for (const auto pattern_property : pattern_properties_cache_) {
+      object_schema->AddPatternProperty(pattern_property->GetPattern(), pattern_property->CreateSchema(assembler));
+    }
+
+    if (AdditionalPropertiesAllowed() == false) {
+      object_schema->SetAdditionalProperties(false);
+    }
+
+    return object_schema->CreateSubSchema();
+  }
+#endif
+
  protected:
   virtual PropertyMapping CreatePropertyMapping() const {
     return PropertyMapping();

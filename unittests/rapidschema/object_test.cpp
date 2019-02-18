@@ -9,6 +9,7 @@
 #include "rapidschema/ostream_operators.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/string_constraints.h"
+#include "rapidschema/schema/schema_assembler.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
 #include "rapidschema/value.h"
@@ -390,5 +391,31 @@ TEST_F(ObjectTest, WhenSerializeMultiplePatternProperties_ThenOrderUndefined) {
   std::string result = SerializeConfig(node);
   ASSERT_THAT(result, AnyOf(Eq(result_variant_1), Eq(result_variant_2)));
 }
+
+
+/////////////////////////// Serialize Schema /////////////////////////////////////////////
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+TEST_F(ObjectTest, WhenSchemaSerialized_ThenCorrectSchema) {
+  schema::SchemaAssembler assembler;
+  auto sub_schema = example_.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::ObjectSchema>());
+  auto object_schema = sub_schema->GetVariant<schema::ObjectSchema>();
+  auto properties = object_schema.properties->GetValue().properties->GetProperties();
+
+  ASSERT_TRUE(properties.find("integerValue") != properties.end());
+  auto int_sub_schema = properties["integerValue"];
+  ASSERT_TRUE(int_sub_schema.Is<schema::IntegerSchema>());
+
+  ASSERT_TRUE(properties.find("stringValue") != properties.end());
+  auto string_sub_schema = properties["stringValue"];
+  ASSERT_TRUE(string_sub_schema.Is<schema::StringSchema>());
+
+  auto pattern_properties = object_schema.pattern_properties->GetValue().pattern_properties->GetProperties();
+  ASSERT_TRUE(pattern_properties.find("^I.*") != pattern_properties.end());
+  auto int_pattern_property = pattern_properties["^I.*"];
+  ASSERT_TRUE(int_pattern_property.Is<schema::IntegerSchema>());
+}
+#endif
 
 }  // namespace rapidschema

@@ -23,13 +23,18 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
   using StringType = typename PatternPropertyInterface<typename ConfigType::CharType>::StringType;
 
   explicit PatternProperty(const StringType& pattern)
-      : pattern_(Regex<CharType>::CreateRegex(pattern)) {}
+      : pattern_(pattern)
+      , regex_(Regex<CharType>::CreateRegex(pattern)) {}
 
   explicit PatternProperty(const typename Regex<CharType>::RegexType& pattern)
-      : pattern_(pattern) {}
+      : regex_(pattern) {}
+
+  const StringType & GetPattern() const override {
+    return pattern_;
+  }
 
   bool IsMatchingName(const StringType & name) const override {
-    return Regex<CharType>::IsCompleteMatch(pattern_, name);
+    return Regex<CharType>::IsCompleteMatch(regex_, name);
   }
 
   void Insert(const StringType & name, const ConfigType & config) {
@@ -75,8 +80,15 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     }
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const override {
+    return ConfigType().CreateSchema(assembler);
+  }
+#endif
+
  private:
-  std::basic_regex<CharType> pattern_;
+  StringType pattern_;
+  std::basic_regex<CharType> regex_;
   std::unordered_map<StringType, ConfigType> properties_;
 };
 
