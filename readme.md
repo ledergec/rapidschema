@@ -259,10 +259,7 @@ follows:
 #include <iostream>
 #include <map>
 
-#include <rapidjson/prettywriter.h>
-
 #include <rapidschema/array.h>
-#include <rapidschema/generic_writer.h>
 #include <rapidschema/no_additional_properties.h>
 #include <rapidschema/object.h>
 #include <rapidschema/range_constraints.h>
@@ -311,18 +308,8 @@ int main() {
 
   // Reporting the errors
   size_t i = 1;
-  for (const auto & failure : result.GetFailures()) {
+  for (const auto& failure : result.GetFailures()) {
     std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
-              << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
-    i++;
-  }
-
-  result = simple_example.Validate();
-
-  // Reporting the errors
-  i = 1;
-  for (const auto & failure : result.GetFailures()) {
-    std::cout << "Validation Error " << i << " is located at \"" << failure.GetPath()
               << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
     i++;
   }
@@ -334,9 +321,9 @@ int main() {
 When run this example will output the following:
 
 ~~~~~~~~~~shell
-Transform Error 1 is located at: "" and the corresponding message is: Unexpected member encountered: additionalProperty
-Validation Error 1 is located at "integerValue" and the corresponding message is: Expected: >= 10. Actual: 5
-Validation Error 2 is located at "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
+Transform Error 1 is located at: "integerValue" and the corresponding message is: Expected: >= 10. Actual: 5
+Transform Error 2 is located at: "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
+Transform Error 3 is located at: "" and the corresponding message is: Unexpected member encountered: additionalProperty
 ~~~~~~~~~~
 
 The example also shows how to change the behavior of the object class such that errors are reported when additional 
