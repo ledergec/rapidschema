@@ -29,8 +29,6 @@
 #include "rapidschema/schema/one_of_schema.h"
 #include "rapidschema/schema/sub_schema.h"
 
-#include "rapidschema/schema/constant_schema_impl.h"
-
 #endif
 
 #endif  // INCLUDE_RAPIDSCHEMA_SCHEMA_SCHEMA_H_

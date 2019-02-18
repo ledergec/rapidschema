@@ -29,6 +29,11 @@ using ConstantIntegerSchema = ConstantSchema<int64_t>;
 using ConstantNumberSchema = ConstantSchema<double>;
 using ConstantStringSchema = ConstantSchema<std::string>;
 
+extern template class ConstantSchema<bool>;
+extern template class ConstantSchema<int64_t>;
+extern template class ConstantSchema<double>;
+extern template class ConstantSchema<std::string>;
+
 }  // namespace schema
 }  // namespace rapidschema
 

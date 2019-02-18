@@ -5,6 +5,8 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
+#include "rapidschema/schema/schema.h"
+
 namespace rapidschema {
 namespace schema {
 
@@ -22,6 +24,11 @@ template <typename T>
 typename ConstantSchema<T>::PropertyMapping ConstantSchema<T>::CreatePropertyMapping() const {
   return {{"const", &const_value}};
 }
+
+template class ConstantSchema<bool>;
+template class ConstantSchema<int64_t>;
+template class ConstantSchema<double>;
+template class ConstantSchema<std::string>;
 
 }  // namespace schema
 }  // namespace rapidschema
