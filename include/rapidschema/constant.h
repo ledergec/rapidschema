@@ -1,12 +1,51 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
-#define INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
+#ifndef INCLUDE_RAPIDSCHEMA_CONSTANT_H_
+#define INCLUDE_RAPIDSCHEMA_CONSTANT_H_
 
 #include "rapidschema/value.h"
 #include "rapidschema/result.h"
 
 namespace rapidschema {
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+namespace internal {
+template<typename T, class Enabled = void>
+struct ConstantSchemaCreator;
+
+template<typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::BOOLEAN>::type> {
+  static std::shared_ptr<schema::ConstantBooleanSchemaInterface> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateConstantBooleanSchema();
+  }
+};
+
+template<typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::INTEGER>::type> {
+  static std::shared_ptr<schema::ConstantIntegerSchemaInterface> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateConstantIntegerSchema();
+  }
+};
+
+template<typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::NUMBER>::type> {
+  static std::shared_ptr<schema::ConstantNumberSchemaInterface> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateConstantNumberSchema();
+  }
+};
+
+template<typename T>
+struct ConstantSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::STRING>::type> {
+  static std::shared_ptr<schema::ConstantStringSchemaInterface> CreateConstantSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateConstantStringSchema();
+  }
+};
+}  // namespace internal
+#endif
 
 template<typename Ch, typename T>
 class GenericConstant : public GenericValue<Ch, T> {
@@ -34,6 +73,14 @@ class GenericConstant : public GenericValue<Ch, T> {
     return ValidateInternal();
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    auto result = internal::ConstantSchemaCreator<T>::CreateConstantSchema(assembler);
+    result->SetConstant(expected_value_);
+    return result->CreateSubSchema();
+  }
+#endif
+
  private:
   Result ValidateInternal() const {
     if (this->t_ == expected_value_) {
@@ -51,4 +98,4 @@ using Constant = GenericConstant<char, T>;
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_DEFAULT_VALUE_H_
+#endif  // INCLUDE_RAPIDSCHEMA_CONSTANT_H_

@@ -38,6 +38,13 @@ class MultipleOfImpl<T, typename std::enable_if<std::is_integral<T>::value>::typ
     return absl::nullopt;
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMultipleOf(mul_);
+  }
+#endif
+
  private:
   T mul_;
 };
@@ -65,6 +72,13 @@ class MultipleOfImpl<T, typename std::enable_if<std::is_floating_point<T>::value
     return absl::nullopt;
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    schema->SetMultipleOf(mul_);
+  }
+#endif
+
  private:
   T mul_;
 };
@@ -82,6 +96,14 @@ class MultipleOf {
   absl::optional<Failure> Check(const T& n) const {
     return internal.Check(n);
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  template <typename SchemaType>
+  void AddToSchema(std::shared_ptr<SchemaType> schema) const {
+    internal.AddToSchema(schema);
+  }
+#endif
+
  private:
   internal::MultipleOfImpl<T> internal;
 };

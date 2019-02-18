@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_RAPIDSCHEMA_TRANSFORM_RESULT_H_
-#define INCLUDE_RAPIDSCHEMA_TRANSFORM_RESULT_H_
+#ifndef INCLUDE_RAPIDSCHEMA_RESULT_H_
+#define INCLUDE_RAPIDSCHEMA_RESULT_H_
 
 #include <algorithm>
 #include <cassert>
@@ -140,4 +140,4 @@ inline bool operator== (const Result& lhs, const Result& rhs) {
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_RAPIDSCHEMA_TRANSFORM_RESULT_H_
+#endif  // INCLUDE_RAPIDSCHEMA_RESULT_H_

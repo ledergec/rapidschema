@@ -259,10 +259,7 @@ follows:
 #include <iostream>
 #include <map>
 
-#include <rapidjson/prettywriter.h>
-
 #include <rapidschema/array.h>
-#include <rapidschema/generic_writer.h>
 #include <rapidschema/no_additional_properties.h>
 #include <rapidschema/object.h>
 #include <rapidschema/range_constraints.h>
@@ -311,18 +308,8 @@ int main() {
 
   // Reporting the errors
   size_t i = 1;
-  for (const auto & failure : result.GetFailures()) {
+  for (const auto& failure : result.GetFailures()) {
     std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
-              << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
-    i++;
-  }
-
-  result = simple_example.Validate();
-
-  // Reporting the errors
-  i = 1;
-  for (const auto & failure : result.GetFailures()) {
-    std::cout << "Validation Error " << i << " is located at \"" << failure.GetPath()
               << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
     i++;
   }
@@ -334,9 +321,9 @@ int main() {
 When run this example will output the following:
 
 ~~~~~~~~~~shell
-Transform Error 1 is located at: "" and the corresponding message is: Unexpected member encountered: additionalProperty
-Validation Error 1 is located at "integerValue" and the corresponding message is: Expected: >= 10. Actual: 5
-Validation Error 2 is located at "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
+Transform Error 1 is located at: "integerValue" and the corresponding message is: Expected: >= 10. Actual: 5
+Transform Error 2 is located at: "stringValue" and the corresponding message is: Expected string of length at most 20. Actual: length 24 string: "My dog wears sunglasses!"
+Transform Error 3 is located at: "" and the corresponding message is: Unexpected member encountered: additionalProperty
 ~~~~~~~~~~
 
 The example also shows how to change the behavior of the object class such that errors are reported when additional 
@@ -425,21 +412,109 @@ Since parsing, validation, cross validation and overlays are separate functions 
 them. It is up to you whether you with do validate and cross validate all intermediate configurations or only the final 
 result.
 
-## Generating a Json Schema from Code and Vice Versa
-
-NOT YET IMPLEMENTED...
+## Generating a Json Schema from Code
 
 Json schemas are useful for defining the structure of json data not only for configuration files but also when 
 communicating between web services or micro services. In this case you may need to parse the data in C++ as well
-as other programming languages. Wouldn't it be great if you only needed to define the structure of the json data in one
-place and do not need to maintain all the different implementations seperately?  Using the design of 
-rapidschema it will be possible to generate the json schema from the source code. Furthermore, it should not be
-too difficult to write a tool which generates C++ code using the infrastructure provided by rapidschema which validates 
-a given schema.
+as other programming languages. This may also be the case if your application is written in C++ and you want to
+provide a Java tool for editing the configuration. Wouldn't it be great if you only needed to define the structure of 
+the json data in one place and do not need to maintain all the different implementations separately?
+
+Currently not all features of rapidschema are supported. Adding more features should now be relatively straight 
+forward.
+
+An example is shown.
+
+~~~~~~~~~~cpp
+#include <iostream>
+#include <map>
+
+#include <rapidjson/prettywriter.h>
+
+#include <rapidschema/array.h>
+#include <rapidschema/generic_writer.h>
+#include <rapidschema/no_additional_properties.h>
+#include <rapidschema/object.h>
+#include <rapidschema/range_constraints.h>
+#include <rapidschema/schema/schema_assembler.h>
+#include <rapidschema/string_constraints.h>
+#include <rapidschema/value.h>
+
+using namespace rapidschema;  // NOLINT[build/namespaces]
+
+// Definition of the C++ class which will be filled with data from the json
+// This class contains additional schema information
+class SimpleExample : public NoAdditionalProperties<Object> {
+ public:
+  Value<int, Minimum> integer_value;
+  Value<std::string, MaxLength> string_value;
+
+  SimpleExample()
+      : integer_value(MakeValue<int, Minimum>(Minimum(10)))
+      , string_value(MakeValue<std::string, MaxLength>(MaxLength(20))) {}
+
+ protected:
+  // Definition of the mapping from json property names to members of the C++ class
+  PropertyMapping CreatePropertyMapping() const override {
+    return {{"integerValue", &integer_value},
+            {"stringValue", &string_value}};
+  }
+};
+
+int main() {
+  schema::SchemaAssembler assembler;
+
+  // The object to be filled with data
+  SimpleExample simple_example;
+  auto schema = simple_example.CreateSchema(assembler);
+
+  // Serialize the object to json
+  rapidjson::StringBuffer buffer;
+  rapidschema::GenericWriter<rapidjson::PrettyWriter<rapidjson::StringBuffer>> writer(buffer);
+  schema->Serialize(&writer);
+
+  std::cout << buffer.GetString() << std::endl;
+
+  return 0;
+}
+~~~~~~~~~~
+
+This will generate the following schema:
+
+~~~~~~~~~~json
+{
+    "type": "object",
+    "properties": {
+        "stringValue": {
+            "type": "string",
+            "maxLength": 20
+        },
+        "integerValue": {
+            "type": "integer",
+            "minimum": 10
+        }
+    },
+    "required": [
+        "integerValue",
+        "stringValue"
+    ]
+}
+~~~~~~~~~~
+
+If you try to validate the json generated by the serialization example against this schema it will fail. Which is
+something you can find out before hand by calling Validate() on the object.
+
+## Generating Code from Schema
+
+NOT YET IMPLEMENTED...
+
+The other direction currently seems more difficult. Nevertheless, it would be great to be able to generate Code also
+from a schema.
 
 Conceptually this is similar to how for instance [protobuf](https://developers.google.com/protocol-buffers/) works. 
 You specify a schema and it will generate the serialization and deserialization code for you - in pretty much any 
 language. Rapidschema aims at providing the C++ binding for json schemas.
+
 
 ## Performance
 

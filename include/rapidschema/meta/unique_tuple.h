@@ -110,6 +110,7 @@ struct SameType {
 template <typename... Ts> RAPIDSCHEMA_REQUIRES(UniqueTypes<Ts...>)
 class UniqueTuple {
   static_assert(TypeSet<Ts...>::Unique(), "Types for unique tuple must be unique.");
+
  public:
   using TupleT = std::tuple<Ts...>;
 

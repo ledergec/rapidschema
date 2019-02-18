@@ -3,10 +3,14 @@
 #include <iostream>
 #include <map>
 
+#include <rapidjson/prettywriter.h>
+
 #include <rapidschema/array.h>
+#include <rapidschema/generic_writer.h>
 #include <rapidschema/no_additional_properties.h>
 #include <rapidschema/object.h>
 #include <rapidschema/range_constraints.h>
+#include <rapidschema/schema/schema_assembler.h>
 #include <rapidschema/string_constraints.h>
 #include <rapidschema/value.h>
 
@@ -20,8 +24,8 @@ class SimpleExample : public NoAdditionalProperties<Object> {
   Value<std::string, MaxLength> string_value;
 
   SimpleExample()
-    : integer_value(MakeValue<int, Minimum>(Minimum(10)))
-    , string_value(MakeValue<std::string, MaxLength>(MaxLength(20))) {}
+      : integer_value(MakeValue<int, Minimum>(Minimum(10)))
+      , string_value(MakeValue<std::string, MaxLength>(MaxLength(20))) {}
 
  protected:
   // Definition of the mapping from json property names to members of the C++ class
@@ -32,31 +36,18 @@ class SimpleExample : public NoAdditionalProperties<Object> {
 };
 
 int main() {
+  schema::SchemaAssembler assembler;
+
   // The object to be filled with data
   SimpleExample simple_example;
+  auto schema = simple_example.CreateSchema(assembler);
 
-  // Json string to be parsed
-  std::string json_string =
-      R"(
-      {
-        "integerValue": 5,
-        "stringValue": "My dog wears sunglasses!",
-        "additionalProperty": [1, 2, 3]
-      }
-      )";
+  // Serialize the object to json
+  rapidjson::StringBuffer buffer;
+  rapidschema::GenericWriter<rapidjson::PrettyWriter<rapidjson::StringBuffer>> writer(buffer);
+  schema->Serialize(&writer);
 
-  // Parsing the json string into the object
-  rapidjson::Document document;
-  document.Parse(json_string.c_str());
-  auto result = simple_example.Transform(document);
-
-  // Reporting the errors
-  size_t i = 1;
-  for (const auto& failure : result.GetFailures()) {
-    std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
-              << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
-    i++;
-  }
+  std::cout << buffer.GetString() << std::endl;
 
   return 0;
 }

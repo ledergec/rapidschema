@@ -6,6 +6,7 @@
 #include "rapidschema/object.h"
 #include "rapidschema/value.h"
 #include "rapidschema/range_constraints.h"
+#include "rapidschema/schema/schema_assembler.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
 
@@ -94,5 +95,19 @@ TEST(Int64ConfigValueTest, WhenSerialize_ThenCorrectResult) {
   std::string result = SerializeConfig(node);
   ASSERT_EQ(R"({"value":123})", result);
 }
+
+/////////////////////////// Serialize Schema /////////////////////////////////////////////
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+TEST(Int64ConfigValueTest, WhenSchemaSerialized_ThenCorrectSchema) {
+  Value<int64_t> value;
+
+  schema::SchemaAssembler assembler;
+  auto sub_schema = value.CreateSchema(assembler);
+  ASSERT_TRUE(sub_schema->Is<schema::IntegerSchema>());
+  auto type_schema = sub_schema->GetVariant<schema::IntegerSchema>();
+  ASSERT_FALSE(type_schema.multiple_of.HasValue());
+}
+#endif
 
 }  // namespace rapidschema

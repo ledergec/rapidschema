@@ -33,7 +33,7 @@ class ArrayTest : public Test {
 /////////////////////////// Parse DOM Style /////////////////////////////////////////////
 
 TEST_F(ArrayTest, GivenSuccess_WhenParsingDoubleArray_ThenAllMembersCorrectlySet) {
-  auto result = ParseConfig("[1, 2, 3, 4]", &double_array_);
+  auto result = ParseConfig("[1.0, 2.0, 3.0, 4.0]", &double_array_);
   ASSERT_THAT(result, TransformSucceeded());
   ASSERT_EQ(1.0, double_array_[0].Get());
   ASSERT_EQ(2.0, double_array_[1].Get());
@@ -50,7 +50,7 @@ TEST_F(ArrayTest, GivenSuccess_WhenParsingObjectArray_ThenAllMembersCorrectlySet
 }
 
 TEST_F(ArrayTest, GivenIncorrectType_WhenParsingDoubleArray_ThenFails) {
-  auto result = ParseConfig(R"([1, 2, 3, "4"])", &double_array_);
+  auto result = ParseConfig(R"([1.0, 2.0, 3.0, "4"])", &double_array_);
   ASSERT_THAT(result, TransformFailed("Expected type: double. Actual value was: \"4\"", "[3]"));
 }
 

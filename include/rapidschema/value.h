@@ -15,9 +15,50 @@
 #include "rapidschema/concepts/correct_value_parameters.h"
 #include "rapidschema/config.h"
 #include "rapidschema/result.h"
+#include "rapidschema/schema/schema_assembler_interface.h"
 #include "rapidschema/type_properties.h"
 
 namespace rapidschema {
+
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+namespace internal {
+template<typename T, class Enabled = void>
+struct ValueSchemaCreator;
+
+template<typename T>
+struct ValueSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::STRING>::type> {
+  static std::shared_ptr<schema::StringSchemaInterface> CreateValueSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateStringSchema();
+  }
+};
+
+template<typename T>
+struct ValueSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::INTEGER>::type> {
+  static std::shared_ptr<schema::IntegerSchemaInterface> CreateValueSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateIntegerSchema();
+  }
+};
+
+template<typename T>
+struct ValueSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::NUMBER>::type> {
+  static std::shared_ptr<schema::NumberSchemaInterface> CreateValueSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateNumberSchema();
+  }
+};
+
+template<typename T>
+struct ValueSchemaCreator<T, typename std::enable_if<TypeProperties<T>::GetJsonType() == JsonType::BOOLEAN>::type> {
+  static std::shared_ptr<schema::BooleanSchemaInterface> CreateValueSchema(
+      const schema::SchemaAssemblerInterface& assembler) {
+    return assembler.CreateBooleanSchema();
+  }
+};
+}  // namespace internal
+#endif
 
 template<typename Ch, typename T, template<typename> class ... Constraints>
     RAPIDSCHEMA_REQUIRES((CorrectValueParameters<T, Constraints...>))
@@ -90,6 +131,14 @@ class GenericValue : public GenericConfig<Ch> {
   bool IsRequired() const override {
     return true;
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    auto value_schema = internal::ValueSchemaCreator<T>::CreateValueSchema(assembler);
+    checker_.AddToSchema(value_schema);
+    return value_schema->CreateSubSchema();
+  }
+#endif
 
  protected:
   T t_;

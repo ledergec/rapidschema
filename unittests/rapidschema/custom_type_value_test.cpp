@@ -19,6 +19,10 @@ namespace rapidschema {
 
 template<>
 struct TypeProperties<std::chrono::milliseconds> {
+  static constexpr JsonType GetJsonType() {
+    return JsonType::INTEGER;
+  }
+
   static std::string GetName() {
     return "milliseconds";
   }

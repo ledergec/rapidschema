@@ -8,7 +8,15 @@
 #include "rapidschema/abstract_writer.h"
 #include "rapidschema/result.h"
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+#include "rapidschema/schema/schema_assembler_interface.h"
+#endif
+
 namespace rapidschema {
+
+namespace schema {
+class SubSchema;
+}  // namespace schema
 
 template <typename Ch = char>
 class GenericConfig {
@@ -23,9 +31,20 @@ class GenericConfig {
 
   virtual bool IsRequired() const = 0;
 
+  virtual bool IsPresent() const {
+    return true;
+  }
+
   virtual void Serialize(AbstractWriter<Ch>* writer) const = 0;
 
   virtual void CollectMemory() const {}
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    assert(false);
+    return nullptr;
+  }
+#endif
 };
 
 using Config = GenericConfig<>;

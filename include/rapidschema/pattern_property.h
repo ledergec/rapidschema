@@ -1,7 +1,7 @@
 // Copyright (C) 2019 Christian Ledergerber
 
-#ifndef INCLUDE_PATTERN_PROPERTY_H_
-#define INCLUDE_PATTERN_PROPERTY_H_
+#ifndef INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_
+#define INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_
 
 #include <assert.h>
 
@@ -22,11 +22,19 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
   using CharType = typename PatternPropertyInterface<typename ConfigType::CharType>::CharType;
   using StringType = typename PatternPropertyInterface<typename ConfigType::CharType>::StringType;
 
-  PatternProperty(const StringType& pattern)
-      : pattern_(Regex<CharType>::CreateRegex(pattern)) {}
+  explicit PatternProperty(const StringType& pattern)
+      : pattern_(pattern)
+      , regex_(Regex<CharType>::CreateRegex(pattern)) {}
+
+  explicit PatternProperty(const typename Regex<CharType>::RegexType& pattern)
+      : regex_(pattern) {}
+
+  const StringType & GetPattern() const override {
+    return pattern_;
+  }
 
   bool IsMatchingName(const StringType & name) const override {
-    return Regex<CharType>::IsCompleteMatch(pattern_, name);
+    return Regex<CharType>::IsCompleteMatch(regex_, name);
   }
 
   void Insert(const StringType & name, const ConfigType & config) {
@@ -42,14 +50,17 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     return properties_;
   }
 
-  Result Transform(StringType& name, const rapidjson::Value& document) override {
+  Result Transform(const StringType& name, const rapidjson::Value& document) override {
     assert(IsMatchingName(name));
     ConfigType config;
     auto result = config.Transform(document);
     if (result.Success()) {
       Insert(name, config);
+      return result;
+    } else {
+      result.AddPath(name);
+      return result;
     }
-    return result;
   }
 
   Result Validate() const override {
@@ -69,11 +80,18 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     }
   }
 
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const override {
+    return ConfigType().CreateSchema(assembler);
+  }
+#endif
+
  private:
-  std::basic_regex<CharType> pattern_;
+  StringType pattern_;
+  std::basic_regex<CharType> regex_;
   std::unordered_map<StringType, ConfigType> properties_;
 };
 
 }  // namespace rapidschema
 
-#endif  // INCLUDE_PATTERN_PROPERTY_H_
+#endif  // INCLUDE_RAPIDSCHEMA_PATTERN_PROPERTY_H_

@@ -3,8 +3,9 @@
 cmake_minimum_required (VERSION 3.8)
 project (rapidschema)
 
-option(test "Build all tests." OFF) # Makes boolean 'test' available.
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
+option(RAPIDSCHEMA_WITH_SCHEMA_GENERATION "Build rapidschema including schema generation")
+option(RAPIDSCHEMA_WITH_CONCEPTS "Build rapidschema with gcc and -fconcepts")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
 
@@ -17,6 +18,10 @@ if (RAPIDSCHEMA_CPP_11)
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++11 -DRAPIDSCHEMA_CPP_11")
 else()
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -std=gnu++2a")
+endif()
+
+if (RAPIDSCHEMA_WITH_SCHEMA_GENERATION)
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION")
 endif()
 
 set(RAPIDJSON_BUILD_TESTS "OFF" CACHE STRING "Turn off rapidjson tests to avoid redefinition of gtest target")
@@ -39,16 +44,3 @@ add_subdirectory(extern/fmt)
 add_subdirectory(include)
 add_subdirectory(unittests)
 add_subdirectory(examples)
-
-if (test)
-   if (APPLE)
-      add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
-      add_definitions(-D__GLIBCXX__)
-   endif (APPLE)
-
-   enable_testing()
-
-   # Include the gtest library. gtest_SOURCE_DIR is available due to
-   # 'project(gtest)' above.
-   include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-endif()

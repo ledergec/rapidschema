@@ -117,8 +117,10 @@ class GenericObject : public GenericConfig<Ch> {
 
     writer->StartObject();
     for (const auto& pair : pair_list) {
-      writer->Key(pair.first.c_str());
-      pair.second->Serialize(writer);
+      if (pair.second->IsPresent()) {
+        writer->Key(pair.first.c_str());
+        pair.second->Serialize(writer);
+      }
     }
 
     for (const auto & pattern_property : pattern_properties_cache_) {
@@ -146,6 +148,31 @@ class GenericObject : public GenericConfig<Ch> {
       properties_chache_.clear();
     }
   }
+
+#ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
+  virtual std::shared_ptr<schema::SubSchema> CreateSchema(const schema::SchemaAssemblerInterface & assembler) const {
+    auto pair_list = CreatePropertyMapping();
+    UpdateMemberCache();
+
+    auto object_schema = assembler.CreateObjectSchema();
+    for (const auto pair : pair_list) {
+      object_schema->AddProperty(pair.first, pair.second->CreateSchema(assembler));
+      if (pair.second->IsRequired()) {
+        object_schema->AddRequired(pair.first);
+      }
+    }
+
+    for (const auto pattern_property : pattern_properties_cache_) {
+      object_schema->AddPatternProperty(pattern_property->GetPattern(), pattern_property->CreateSchema(assembler));
+    }
+
+    if (AdditionalPropertiesAllowed() == false) {
+      object_schema->SetAdditionalProperties(false);
+    }
+
+    return object_schema->CreateSubSchema();
+  }
+#endif
 
  protected:
   virtual PropertyMapping CreatePropertyMapping() const {

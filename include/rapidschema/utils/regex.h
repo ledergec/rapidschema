@@ -11,22 +11,38 @@ namespace rapidschema {
 /// http://www.ecma-international.org/publications/standards/Ecma-262.htm. The current implementation relies on the
 /// regex implementation in the stl which is not an exact implemenation of the standard, but a modified version. See
 /// https://en.cppreference.com/w/cpp/regex/ecmascript for reference.
-template<typename CharType>
+template<typename CharType = char>
 class Regex {
  public:
   using RegexType = std::basic_regex<CharType>;
   using StringType = std::basic_string<CharType>;
+
+  bool IsRegex(const StringType& pattern) {
+    try {
+      RegexType regex(pattern);
+    } catch (std::regex_error& error) {
+      return false;
+    }
+    return true;
+  }
 
   static RegexType CreateRegex(const StringType& pattern) {
     try {
       return RegexType(pattern);
     } catch (std::regex_error& error) {
       assert(false);
+      return RegexType(".*");
     }
   }
 
   static bool IsCompleteMatch(const RegexType& regex, const StringType& string) {
     return std::regex_match(string, regex);
+  }
+
+  /// regex matching any string
+  static RegexType AnyRegex() {
+    static auto any_regex = CreateRegex(".*");
+    return any_regex;
   }
 };
 

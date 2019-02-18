@@ -17,6 +17,7 @@ enum struct JsonType {
   OBJECT,
   ARRAY,
   STRING,
+  INTEGER,
   NUMBER,
   BOOLEAN,
   NULLTYPE
@@ -32,7 +33,7 @@ struct TypeProperties<std::basic_string<Ch>> {
   }
 
   static std::string GetName() {
-    return "string";  
+    return "string";
   }
 
   static bool IsType(const rapidjson::Value& value) {
@@ -52,7 +53,7 @@ struct TypeProperties<std::basic_string<Ch>> {
 template<>
 struct TypeProperties<int32_t> {
   static constexpr JsonType GetJsonType() {
-    return JsonType::NUMBER;
+    return JsonType::INTEGER;
   }
 
   static std::string GetName() {
@@ -76,7 +77,7 @@ struct TypeProperties<int32_t> {
 template<>
 struct TypeProperties<uint32_t> {
   static constexpr JsonType GetJsonType() {
-    return JsonType::NUMBER;
+    return JsonType::INTEGER;
   }
 
   static std::string GetName() {
@@ -100,7 +101,7 @@ struct TypeProperties<uint32_t> {
 template<>
 struct TypeProperties<int64_t> {
   static constexpr JsonType GetJsonType() {
-    return JsonType::NUMBER;
+    return JsonType::INTEGER;
   }
 
   static std::string GetName() {
@@ -125,7 +126,7 @@ struct TypeProperties<int64_t> {
 template<>
 struct TypeProperties<uint64_t> {
   static constexpr JsonType GetJsonType() {
-    return JsonType::NUMBER;
+    return JsonType::INTEGER;
   }
 
   static std::string GetName() {
@@ -206,7 +207,7 @@ struct TypeProperties<double> {
   }
 
   static bool IsType(const rapidjson::Value& value) {
-      return value.IsNumber();
+      return value.IsDouble();
   }
 
   static double FromJson(const rapidjson::Value& value) {
