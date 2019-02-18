@@ -8,6 +8,7 @@ namespace rapidschema {
 namespace schema {
 
 BooleanSchema::BooleanSchema() {
+  type = "boolean";
   type.SetExpectedValue("boolean");
 }
 

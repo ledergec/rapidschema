@@ -8,6 +8,7 @@ namespace rapidschema {
 namespace schema {
 
 NumberSchema::NumberSchema() {
+  type = "number";
   type.SetExpectedValue("number");
 }
 

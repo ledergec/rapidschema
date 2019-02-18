@@ -8,6 +8,7 @@ namespace rapidschema {
 namespace schema {
 
 StringSchema::StringSchema() {
+  type = "string";
   type.SetExpectedValue("string");
 }
 

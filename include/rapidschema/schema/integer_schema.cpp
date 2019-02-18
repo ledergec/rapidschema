@@ -8,6 +8,7 @@ namespace rapidschema {
 namespace schema {
 
 IntegerSchema::IntegerSchema() {
+  type = "integer";
   type.SetExpectedValue("integer");
 }
 

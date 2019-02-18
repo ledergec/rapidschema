@@ -25,6 +25,7 @@ PatternPropertiesSchema::PatternPropertyList PatternPropertiesSchema::CreatePatt
 ObjectSchema::ObjectSchema()
   : properties(std::make_shared<OptionalConfig<PropertiesSchema>>())
   , pattern_properties(std::make_shared<OptionalConfig<PatternPropertiesSchema>>()) {
+  type = "object";
   type.SetExpectedValue("object");
 }
 
