@@ -1,6 +1,6 @@
 # Copyright (C) 2019 Christian Ledergerber
 
-if (NOT ${RAPIDSCHEMA_CPP_11})
+if (NOT ${RAPIDSCHEMA_CPP_11} AND ${RAPIDSCHEMA_WITH_SCHEMA_GENERATION})
 
     set(EXAMPLES
         simple_parse
