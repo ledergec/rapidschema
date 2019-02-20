@@ -5,7 +5,7 @@
 #include <gmock/gmock.h>
 
 #include "rapidschema/ostream_operators.h"
-#include "rapidschema/schema/schema.h"
+#include "rapidschema/schema/object_schema.h"
 #include "rapidschema/test_utils.h"
 
 namespace rapidschema {

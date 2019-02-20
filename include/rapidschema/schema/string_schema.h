@@ -5,7 +5,10 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
+#include "rapidschema/optional_config.h"
+#include "rapidschema/value.h"
 #include "rapidschema/schema/string_schema_interface.h"
+#include "rapidschema/schema/type_schema.h"
 
 namespace rapidschema {
 namespace schema {

@@ -6,6 +6,7 @@
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
 #include "rapidschema/schema/boolean_schema_interface.h"
+#include "rapidschema/schema/type_schema.h"
 
 namespace rapidschema {
 namespace schema {

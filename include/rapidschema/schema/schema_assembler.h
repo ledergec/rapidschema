@@ -5,8 +5,14 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
+#include "rapidschema/schema/boolean_schema.h"
+#include "rapidschema/schema/constant_schema.h"
+#include "rapidschema/schema/integer_schema.h"
+#include "rapidschema/schema/number_schema.h"
+#include "rapidschema/schema/object_schema.h"
+#include "rapidschema/schema/one_of_schema.h"
+#include "rapidschema/schema/string_schema.h"
 #include "rapidschema/schema/schema_assembler_interface.h"
-#include "rapidschema/schema/schema.h"
 
 namespace rapidschema {
 namespace schema {

@@ -7,12 +7,13 @@
 
 #include <memory>
 
-#include "rapidschema/array.h"
-#include "rapidschema/no_additional_properties.h"
-#include "rapidschema/object.h"
+#include "rapidschema/schema/boolean_schema.h"
+#include "rapidschema/schema/constant_schema.h"
+#include "rapidschema/schema/integer_schema.h"
+#include "rapidschema/schema/number_schema.h"
+#include "rapidschema/schema/one_of_schema.h"
+#include "rapidschema/schema/string_schema.h"
 #include "rapidschema/one_of.h"
-#include "rapidschema/pattern_property.h"
-#include "rapidschema/optional_config.h"
 
 namespace rapidschema {
 namespace schema {

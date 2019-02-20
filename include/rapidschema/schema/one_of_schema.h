@@ -5,7 +5,17 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
+#include <memory>
+
+#include "rapidschema/array.h"
+#include "rapidschema/one_of.h"
+#include "rapidschema/schema/constant_schema.h"
+#include "rapidschema/schema/integer_schema.h"
+#include "rapidschema/schema/number_schema.h"
+#include "rapidschema/schema/object_schema.h"
 #include "rapidschema/schema/one_of_schema_interface.h"
+#include "rapidschema/schema/string_schema.h"
+#include "rapidschema/object.h"
 
 namespace rapidschema {
 namespace schema {

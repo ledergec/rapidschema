@@ -6,6 +6,9 @@
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
 #include "rapidschema/schema/constant_schema_interface.h"
+#include "rapidschema/no_additional_properties.h"
+#include "rapidschema/object.h"
+#include "rapidschema/value.h"
 
 namespace rapidschema {
 namespace schema {

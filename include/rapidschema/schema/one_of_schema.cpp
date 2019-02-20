@@ -2,7 +2,9 @@
 
 #ifdef RAPIDSCHEMA_WITH_SCHEMA_GENERATION
 
-#include "rapidschema/schema/schema.h"
+#include "one_of_schema.h"
+
+#include "rapidschema/schema/sub_schema.h"
 
 namespace rapidschema {
 namespace schema {

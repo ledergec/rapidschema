@@ -6,8 +6,8 @@
 #include "rapidschema/constant.h"
 #include "rapidschema/object.h"
 #include "rapidschema/test_utils.h"
-#include "rapidschema/schema/schema.h"
 #include "rapidschema/schema/schema_assembler.h"
+#include "rapidschema/schema/sub_schema.h"
 #include "rapidschema/transform_result_matchers.h"
 #include "rapidschema/value.h"
 

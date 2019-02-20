@@ -7,6 +7,7 @@
 #include "rapidschema/value.h"
 #include "rapidschema/range_constraints.h"
 #include "rapidschema/schema/schema_assembler.h"
+#include "rapidschema/schema/sub_schema.h"
 #include "rapidschema/test_utils.h"
 #include "rapidschema/transform_result_matchers.h"
 
