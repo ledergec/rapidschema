@@ -21,4 +21,4 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DRAPIDSCHEMA_CPP_11=ON -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION=ON ..
 
 script:
-  - make -j4 && make test
+  - make -j4 && make test && ./unittests/rapidschema_unittest
