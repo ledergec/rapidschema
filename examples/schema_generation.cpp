@@ -11,6 +11,7 @@
 #include <rapidschema/object.h>
 #include <rapidschema/range_constraints.h>
 #include <rapidschema/schema/schema_assembler.h>
+#include <rapidschema/schema/sub_schema.h>
 #include <rapidschema/string_constraints.h>
 #include <rapidschema/value.h>
 
