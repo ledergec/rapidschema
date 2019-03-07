@@ -6,12 +6,11 @@ notifications:
   email: false
 
 os: linux
+
 dist: xenial
 env:
   - BUILD_TYPE=Debug CPP11=ON
-  - BUILD_TYPE=Debug CPP11=OFF
   - BUILD_TYPE=Release CPP11=ON
-  - BUILD_TYPE=Release CPP11=OFF
 compiler:
   - gcc
   - clang
@@ -19,7 +18,7 @@ compiler:
 before_script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DRAPIDSCHEMA_CPP_11=${CPP11} -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DRAPIDSCHEMA_CPP_11=ON -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION=ON ..
 
 script:
   - make -j4 && make test
