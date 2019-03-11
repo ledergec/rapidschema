@@ -580,8 +580,8 @@ other defects such a missing documentation or broken build files are more than w
 Prerequisites:
 
 Rapidschema makes use of C++17 features such as std::optional and std::variant. Generally, using rapidschema with 
-a C++17 compatible compiler will be smoother due to the improve template support in the language. Compiling rapidschema
-with a C++17 compiler amounts to:
+a C++17 compatible compiler will be smoother due to the improve template support in the language. The following is 
+tested with gcc-7 and clang-5. Compiling rapidschema with a C++17 compiler amounts to:
 
 ~~~~~~~~~~shell
 git clone https://github.com/ledergec/rapidschema.git
@@ -594,8 +594,8 @@ make
 ~~~~~~~~~~
 
 It is possible, however, to use rapidschema with a C++11 compiler. This is implemented using a C++11 compatible 
-implementation of std::optional and other C++17 stl features found in [abseil.io](https://abseil.io/). In order to
-build using the C++11 backport use the following commands:
+implementation of std::optional and other C++17 stl features found in [abseil.io](https://abseil.io/) and is 
+tested with gcc-5 and clang 3.5. In order to build using the C++11 backport use the following commands:
 
 ~~~~~~~~~~shell
 git clone https://github.com/ledergec/rapidschema.git
@@ -613,9 +613,6 @@ abseil within rapidschema.
 Rapidschema makes use of cmake as a build system. Hence integrating it will be straight forward if you are using cmake 
 yourself. However, rapidschema is a header only library and its dependencies either are header only (rapidjson) or have
 a header only mode (libfmt). Only abseil.io needs to be linked to - another reason to use C++17.
-
-Rapidschema has been tested with gcc-8.2 and Apple LLVM version 10.0.0 (clang-1000.10.44.4). For both,
-the C++11 and C++17 version was tested.
 
 If you run into problems when integrating or have remarks on the cmake build scripts contained in the 
 rapidschema source base please let us know.
