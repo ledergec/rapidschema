@@ -1,6 +1,6 @@
 # Copyright (C) 2019 Christian Ledergerber
 
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.5)
 project (rapidschema)
 
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
@@ -10,6 +10,11 @@ option(RAPIDSCHEMA_WITH_CONCEPTS "Build rapidschema with gcc and -fconcepts")
 include(${CMAKE_CURRENT_SOURCE_DIR}/tools/cpplint/cpplint.cmake)
 
 set(RAPIDSCHEMA_COMPILE_FLAGS "-Wall -Werror -Wpedantic -DRAPIDJSON_HAS_STDSTRING")
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+   set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -Wno-unused-command-line-argument")
+endif()
+
 if (${RAPIDSCHEMA_WITH_CONCEPTS})
    set(RAPIDSCHEMA_COMPILE_FLAGS "${RAPIDSCHEMA_COMPILE_FLAGS} -fconcepts -DRAPIDSCHEMA_WITH_CONCEPTS")
 endif()

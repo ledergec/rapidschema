@@ -37,9 +37,27 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON
+    - os: linux
+      addons:
+        sources:
+          - ubuntu-toolchain-r-test llvm-toolchain-precise-3.5
+        apt:
+          packages:
+            - g++-5 clang-3.5
+      env:
+        - MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5" BUILD_TYPE=Debug CPP11=ON SCHEMA_GENERATION=ON
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7 clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON
 
 before_install:
-  - eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL}" && ${CC} --version && ${CXX} --version
 
 before_script:
   - mkdir build
@@ -47,4 +65,4 @@ before_script:
   - cmake -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DRAPIDSCHEMA_CPP_11=${CPP11} -DRAPIDSCHEMA_WITH_SCHEMA_GENERATION=${SCHEMA_GENERATION} ..
 
 script:
-  - make -j4 && make test && ./unittests/rapidschema_unittest
+  - make -j4 && ./unittests/rapidschema_unittest && make test
