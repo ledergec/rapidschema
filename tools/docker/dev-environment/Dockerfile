@@ -25,12 +25,14 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /u
 
 RUN mkdir /home/dev
 
-RUN wget https://download.jetbrains.com/cpp/CLion-2018.3.3.tar.gz && \
-    tar -C /home/dev -zxvf CLion-2018.3.3.tar.gz && \
-    rm CLion-2018.3.3.tar.gz
+ENV CLION_VERSION=2019.1.2
+
+RUN wget https://download.jetbrains.com/cpp/CLion-$CLION_VERSION.tar.gz && \
+    tar -C /home/dev -zxvf CLion-$CLION_VERSION.tar.gz && \
+    rm CLion-$CLION_VERSION.tar.gz
     
 RUN echo '' >> /home/dev/.bashrc && \
-    echo 'alias clion=/home/dev/clion-2018.3.3/bin/clion.sh' >> /home/dev/.bashrc
+    echo 'alias clion=/home/dev/clion-$CLION_VERSION/bin/clion.sh' >> /home/dev/.bashrc
 
 ENTRYPOINT [ "sh", "-c", "echo $HOME" ]
 
