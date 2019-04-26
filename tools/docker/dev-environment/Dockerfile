@@ -6,12 +6,17 @@ RUN apt-get update && \
     apt-get install -y \ 
     	    build-essential \
 	    cmake \
+	    cppcheck \
+	    dia \
+	    doxygen \
 	    emacs \
 	    gcc-8 \
 	    g++-8 \
 	    git \
+	    graphviz \
 	    libgtk2.0-0 \
 	    libxslt1.1 \
+	    mscgen \
 	    python-pip \
 	    sudo \
 	    valgrind \
