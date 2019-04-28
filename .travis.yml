@@ -17,6 +17,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5  # test support for xtensa compiler works, which is a gcc5 derivative
+            - doxygen
       env:
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5" BUILD_TYPE=Debug CPP11=ON SCHEMA_GENERATION=ON
     - os: linux
@@ -26,6 +27,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
+            - doxygen
       env:
         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5" BUILD_TYPE=Debug CPP11=ON SCHEMA_GENERATION=OFF
     - os: linux
@@ -35,15 +37,17 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
+            - doxygen
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON
     - os: linux
       addons:
-        sources:
-          - ubuntu-toolchain-r-test llvm-toolchain-precise-3.5
         apt:
+          sources:
+            - ubuntu-toolchain-r-test llvm-toolchain-precise-3.5
           packages:
             - g++-5 clang-3.5
+            - doxygen
       env:
         - MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5" BUILD_TYPE=Debug CPP11=ON SCHEMA_GENERATION=ON
     - os: linux
@@ -52,11 +56,14 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-7 clang-5.0
+            - g++-7 clang-5.0	
+            - doxygen
       env:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON
 
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y graphviz mscgen dia 
   - eval "${MATRIX_EVAL}" && ${CC} --version && ${CXX} --version
 
 before_script:
@@ -66,3 +73,4 @@ before_script:
 
 script:
   - make -j4 && ./unittests/rapidschema_unittest && make test
+  - make rapidschema_doxygen

@@ -13,3 +13,6 @@
 [submodule "extern/abseil"]
 	path = extern/abseil
 	url = https://github.com/abseil/abseil-cpp.git
+[submodule "extern/cmake-doxygen"]
+	path = extern/cmake-doxygen
+	url = https://github.com/Oleh-Kravchenko/cmake-doxygen.git

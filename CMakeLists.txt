@@ -3,6 +3,10 @@
 cmake_minimum_required (VERSION 3.5)
 project (rapidschema)
 
+find_package(Doxygen
+        REQUIRED dot
+        OPTIONAL_COMPONENTS mscgen dia)
+
 option(RAPIDSCHEMA_CPP_11 "Build rapidschema with cpp 11" OFF)
 option(RAPIDSCHEMA_WITH_SCHEMA_GENERATION "Build rapidschema including schema generation")
 option(RAPIDSCHEMA_WITH_CONCEPTS "Build rapidschema with gcc and -fconcepts")
@@ -41,6 +45,7 @@ include_directories(extern/rapidjson/include)
 include_directories(extern/fmt/include)
 include_directories(include)
 include_directories(unittests)
+include(extern/cmake-doxygen/cmake/cmake-doxygen.cmake)
 
 add_subdirectory(extern/googletest)
 if (RAPIDSCHEMA_CPP_11)
