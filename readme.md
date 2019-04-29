@@ -523,6 +523,10 @@ You specify a schema and it will generate the serialization and deserialization 
 language. Rapidschema aims at providing the C++ binding for json schemas.
 
 
+## API Documentation
+
+There is a [detailed doxygen documentation](https://ledergec.github.io/rapidschema/html/index.html) of the complete API.
+
 ## Performance
 
 Rapidschema was built with performance in mind. Specifically, it is optimized for parsing json without encountering any
