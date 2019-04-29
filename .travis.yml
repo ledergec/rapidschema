@@ -59,7 +59,7 @@ matrix:
             - g++-7 clang-5.0	
             - doxygen
       env:
-        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0" BUILD_TYPE=Debug CPP11=OFF SCHEMA_GENERATION=ON TRAVIS_BUILD_DOCS=TRUE
 
 before_install:
   - sudo apt-get update
@@ -74,3 +74,12 @@ before_script:
 script:
   - make -j4 && ./unittests/rapidschema_unittest && make test
   - make rapidschema_doxygen
+
+after_success:
+  # Generate the docs only if we are on master branch, the travis_build_docs is true and we can use secure variables
+  - >-
+    if [[ "$TRAVIS_BRANCH" = "master" && -n "$TRAVIS_BUILD_DOCS" && "$TRAVIS_PULL_REQUEST" = "false" ]] ; then
+      cd $TRAVIS_BUILD_DIR
+      source .ci/setup-ssh.sh || travis_terminate 1
+      .ci/uploadDocumentation.sh || travis_terminate 1
+    fi
