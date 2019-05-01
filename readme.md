@@ -137,7 +137,7 @@ int main() {
   // Reporting the errors
   size_t i = 1;
   for (const auto & failure : result.GetFailures()) {
-    std::cout << "Error " << i << " is located at " << failure.GetPath() << " and the corresponding message is: "
+    std::cout << "Error " << i << " is located at " << failure.GetPointer() << " and the corresponding message is: "
               << failure.GetMessage() << std::endl;
     i++;
   }
@@ -309,7 +309,7 @@ int main() {
   // Reporting the errors
   size_t i = 1;
   for (const auto& failure : result.GetFailures()) {
-    std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPath()
+    std::cout << "Transform Error " << i << " is located at: \"" << failure.GetPointer()
               << "\" and the corresponding message is: " << failure.GetMessage() << std::endl;
     i++;
   }

@@ -31,7 +31,7 @@ class Array : public GenericConfig<Ch> {
       elements.emplace_back();
       auto tmp = elements.back().Transform(dom_element);
       if (tmp.HasFailures()) {
-        tmp.AddPath(fmt::format("[{}]", count));
+        tmp.PrependTokenToPointer(fmt::format("[{}]", count));
         result.Append(tmp);
       }
       count++;

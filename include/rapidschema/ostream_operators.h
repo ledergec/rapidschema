@@ -12,7 +12,7 @@
 namespace rapidschema {
 
 inline std::ostream& operator<<(std::ostream& stream, const Failure& failure) {
-    stream << "Failure: [message = " << failure.GetMessage() << ", path = " << failure.GetPath() << "]";
+    stream << "Failure: [message = " << failure.GetMessage() << ", path = " << failure.GetPointer() << "]";
     return stream;
 }
 

@@ -29,7 +29,7 @@ MATCHER(TransformSucceeded, "") {
   return arg.Success();
 }
 
-MATCHER_P2(TransformFailed, message, path, "") {
+MATCHER_P2(TransformFailed, message, pointer, "") {
   if (arg.GetFailures().size() != 1) {
     std::cout << "Expected one failure, but was " << arg.GetFailures().size() << std::endl;
     std::cout << arg << std::endl;
@@ -40,9 +40,9 @@ MATCHER_P2(TransformFailed, message, path, "") {
               << arg.GetFailures()[0] << "\"" << std::endl;
     return false;
   }
-  if (arg.GetFailures()[0].GetPath().compare(path) != 0) {
-    std::cout << "Expected path: \"" << path << "\" actual path: \"" << arg.GetFailures()[0].GetPath() << "\"" <<
-    std::endl;
+  if (arg.GetFailures()[0].GetPointer().compare(pointer) != 0) {
+    std::cout << "Expected pointer: \"" << pointer << "\" actual pointer: \"" << arg.GetFailures()[0].GetPointer()
+              << "\"" << std::endl;
     return false;
   }
   return true;

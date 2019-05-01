@@ -35,14 +35,14 @@ class FailureCollection {
     failures_.push_back(other);
   }
 
-  void AddPath(const std::string& path) {
+  void PrependTokenToPointer(const std::string &token) {
     for (auto& failure : failures_) {
-      if (failure.GetPath().empty()) {
-        failure.SetPath(path);
-      } else if (failure.GetPath()[0] == '[') {
-        failure.SetPath(path + failure.GetPath());
+      if (failure.GetPointer().empty()) {
+        failure.SetPointer(token);
+      } else if (failure.GetPointer()[0] == '[') {
+        failure.SetPointer(token + failure.GetPointer());
       } else {
-        failure.SetPath(path + "." + failure.GetPath());
+        failure.SetPointer(token + "." + failure.GetPointer());
       }
     }
   }
@@ -116,9 +116,9 @@ class Result {
     failure_collection_ = internal::Append(failure_collection_, failure);
   }
 
-  void AddPath(const std::string& path) {
+  void PrependTokenToPointer(const std::string &token) {
     if (failure_collection_.has_value()) {
-      failure_collection_.value().AddPath(path);
+      failure_collection_.value().PrependTokenToPointer(token);
     }
   }
 

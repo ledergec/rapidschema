@@ -60,7 +60,7 @@ class GenericObject : public GenericConfig<Ch> {
         auto transform_result =
           const_cast<Config*>(property->second)->Transform(member_it->value);
         if (transform_result.Success() == false) {
-          transform_result.AddPath(property->first);
+          transform_result.PrependTokenToPointer(property->first);
           result.Append(transform_result);
         }
       }
@@ -100,7 +100,7 @@ class GenericObject : public GenericConfig<Ch> {
     Result result;
     for (const auto & pair : properties_chache_) {
       auto validation_result = pair.second->Validate();
-      validation_result.AddPath(pair.first);
+      validation_result.PrependTokenToPointer(pair.first);
       result.Append(validation_result);
     }
 

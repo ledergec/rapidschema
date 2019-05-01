@@ -60,7 +60,7 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
       Insert(name, config);
       return result;
     } else {
-      result.AddPath(name);
+      result.PrependTokenToPointer(name);
       return result;
     }
   }
@@ -69,7 +69,7 @@ class PatternProperty : public PatternPropertyInterface<typename ConfigType::Cha
     Result result;
     for (const auto & pair : properties_) {
       auto validate_result = pair.second.Validate();
-      validate_result.AddPath(pair.first);
+      validate_result.PrependTokenToPointer(pair.first);
       result.Append(validate_result);
     }
     return result;

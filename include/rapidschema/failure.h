@@ -10,31 +10,31 @@ namespace rapidschema {
 struct Failure {
   Failure() = default;
 
-  explicit Failure(const std::string& path, const std::string& mes)
-      : path_(path)
+  Failure(const std::string& pointer, const std::string& mes)
+      : pointer_(pointer)
       , message_(mes) {}
 
   explicit Failure(const std::string& mes)
       : message_(mes) {}
 
-  const std::string& GetPath() const {
-    return path_;
+  const std::string& GetPointer() const {
+    return pointer_;
   }
 
-  const void SetPath(const std::string& path) {
-    path_ = path;
+  const void SetPointer(const std::string &path) {
+    pointer_ = path;
   }
 
   const std::string& GetMessage() const {
     return message_;
   }
 
-  std::string path_;
+  std::string pointer_;
   std::string message_;
 };
 
 inline bool operator==(const Failure& lhs, const Failure& rhs) {
-  return lhs.GetMessage() == rhs.GetMessage() && lhs.GetPath() == rhs.GetPath();
+  return lhs.GetMessage() == rhs.GetMessage() && lhs.GetPointer() == rhs.GetPointer();
 }
 
 }  // namespace rapidschema
