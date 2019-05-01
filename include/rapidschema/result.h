@@ -37,13 +37,7 @@ class FailureCollection {
 
   void PrependTokenToPointer(const std::string &token) {
     for (auto& failure : failures_) {
-      if (failure.GetPointer().empty()) {
-        failure.SetPointer(token);
-      } else if (failure.GetPointer()[0] == '[') {
-        failure.SetPointer(token + failure.GetPointer());
-      } else {
-        failure.SetPointer(token + "." + failure.GetPointer());
-      }
+      failure.PrependTokenToPointer(token);
     }
   }
 

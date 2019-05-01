@@ -21,8 +21,14 @@ struct Failure {
     return pointer_;
   }
 
-  const void SetPointer(const std::string &path) {
-    pointer_ = path;
+  const void PrependTokenToPointer(const std::string &token) {
+    if (pointer_.empty()) {
+      pointer_ = token;
+    } else if (pointer_[0] == '[') {
+      pointer_ = token + pointer_;
+    } else {
+      pointer_ = token + "." + pointer_;
+    }
   }
 
   const std::string& GetMessage() const {
