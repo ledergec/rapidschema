@@ -16,22 +16,22 @@ namespace rapidschema {
 
 TEST(StringConfigValueTest, WhenParsingDomFloat_ThenFails) {
   auto result = TestLeafType<std::string, float>(23.4);
-  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: 23.4", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: 23.4", Pointer()));
 }
 
 TEST(StringConfigValueTest, WhenParsingDomInt_ThenFails) {
   auto result = TestLeafType<std::string, uint32_t>(23);
-  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: 23", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: 23", Pointer()));
 }
 
 TEST(StringConfigValueTest, WhenParsingDomNull_ThenFails) {
   auto result = TestLeafType<std::string, std::nullptr_t>(nullptr);
-  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: null", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: null", Pointer()));
 }
 
 TEST(StringConfigValueTest, WhenParsingDomBool_ThenFails) {
   auto result = TestLeafType<std::string, bool>(false);
-  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: false", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: string. Actual value was: false", Pointer()));
 }
 
 TEST(StringConfigValueTest, GivenNoConstraints_WhenParsingDomString_ThenSuccess) {
@@ -49,7 +49,8 @@ TEST(StringConfigValueTest, GivenMinLengthConstraint_WhenValidatingShortString_T
   value = "ein string";
   auto result = value.Validate();
   ASSERT_THAT(result,
-      TransformFailed("Expected string of length at least 20. Actual: length 10 string: \"ein string\"", ""));
+      TransformFailed("Expected string of length at least 20. Actual: length 10 string: \"ein string\"",
+                      Pointer()));
 }
 
 TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatingShortString_ThenFails) {
@@ -58,7 +59,8 @@ TEST(StringConfigValueTest, GivenMinLengthConstraintUsingMakeValue_WhenValidatin
   value = "ein string";
   auto result = value.Validate();
   ASSERT_THAT(result,
-      TransformFailed("Expected string of length at least 20. Actual: length 10 string: \"ein string\"", ""));
+      TransformFailed("Expected string of length at least 20. Actual: length 10 string: \"ein string\"",
+                      Pointer()));
 }
 
 TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenValidatingLongString_ThenFails) {
@@ -67,7 +69,7 @@ TEST(StringConfigValueTest, GivenMaxLengthConstraint_WhenValidatingLongString_Th
   value = "ein string";
   auto result = value.Validate();
   ASSERT_THAT(result,
-      TransformFailed("Expected string of length at most 2. Actual: length 10 string: \"ein string\"", ""));
+      TransformFailed("Expected string of length at most 2. Actual: length 10 string: \"ein string\"", Pointer()));
 }
 
 

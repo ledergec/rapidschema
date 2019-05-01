@@ -51,12 +51,12 @@ TEST_F(ArrayTest, GivenSuccess_WhenParsingObjectArray_ThenAllMembersCorrectlySet
 
 TEST_F(ArrayTest, GivenIncorrectType_WhenParsingDoubleArray_ThenFails) {
   auto result = ParseConfig(R"([1.0, 2.0, 3.0, "4"])", &double_array_);
-  ASSERT_THAT(result, TransformFailed("Expected type: double. Actual value was: \"4\"", "[3]"));
+  ASSERT_THAT(result, TransformFailed("Expected type: double. Actual value was: \"4\"", Pointer({"3"})));
 }
 
 TEST_F(ArrayTest, GivenIncorrectType_WhenParsingObjectArray_ThenFails) {
   auto result = ParseConfig(R"([{"integerValue": 1}, {"integerValue": 2}, {"integerValue": "3"}])", &object_array_);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: \"3\"", "[2].integerValue"));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: \"3\"", Pointer({"2", "integerValue"})));
 }
 
 /////////////////////////// Serialization /////////////////////////////////////////////

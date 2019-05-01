@@ -27,7 +27,7 @@ TEST(VariantTest, GivenSingleVariantNoConstraints_WhenParsingDomVariant_ThenVari
 TEST(VariantTest, GivenWrongJsonType_WhenParsingDomVariant_ThenVariantFails) {
   Variant<Value<int32_t>> variant;
   auto result = ParseLeaf<std::string>("hallo", &variant);
-  ASSERT_THAT(result, TransformFailed("No type in variant matched. Actual type: string", ""));
+  ASSERT_THAT(result, TransformFailed("No type in variant matched. Actual type: string", Pointer()));
 }
 
 TEST(VariantTest, GivenMultipleVariants_WhenParsingDomVariant_ThenCorrectVariantParsed) {
@@ -51,7 +51,7 @@ TEST(VariantTest, GivenMultipleVariantsWithConstraints_WhenValdiatingVariant_The
 
   auto result = variant.Validate();
   ASSERT_THAT(result, TransformFailed("Expected string of length at most 0. "
-                                      "Actual: length 5 string: \"hallo\"", ""));
+                                      "Actual: length 5 string: \"hallo\"", Pointer()));
 }
 
 TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVariant_ThenConstraintsApplied) {
@@ -65,7 +65,7 @@ TEST(VariantTest, GivenMultipleVariantsCreatedWithMakeVariant_WhenValidatingVari
 
   auto result = variant.Validate();
   ASSERT_THAT(result, TransformFailed("Expected string of length at most 4. "
-                                      "Actual: length 5 string: \"hallo\"", ""));
+                                      "Actual: length 5 string: \"hallo\"", Pointer()));
 }
 
 TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidatingVariant_ThenConstraintsApplied) {
@@ -78,7 +78,7 @@ TEST(VariantTest, GivenMultipleVariantsWithDynamicallySetConstraints_WhenValidat
 
   auto result = variant.Validate();
   ASSERT_THAT(result, TransformFailed("Expected string of length at most 4. "
-                                      "Actual: length 5 string: \"hallo\"", ""));
+                                      "Actual: length 5 string: \"hallo\"", Pointer()));
 }
 
 /////////////////////////// Serialization /////////////////////////////////////////////

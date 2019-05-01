@@ -17,22 +17,22 @@ namespace rapidschema {
 
 TEST(Int64ConfigValueTest, WhenParsingDomFloat_ThenFails) {
   auto result = TestLeafType<int64_t, float>(23.4);
-  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: 23.4", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: 23.4", Pointer()));
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomString_ThenFails) {
   auto result = TestLeafType<int64_t, std::string>("ein string");
-  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: \"ein string\"", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: \"ein string\"", Pointer()));
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomNull_ThenFails) {
   auto result = TestLeafType<int64_t, std::nullptr_t>(nullptr);
-  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: null", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: null", Pointer()));
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomBool_ThenFails) {
   auto result = TestLeafType<int64_t, bool>(false);
-  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: false", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: long int. Actual value was: false", Pointer()));
 }
 
 TEST(Int64ConfigValueTest, WhenParsingDomOutOfLowerRange_ThenFails) {

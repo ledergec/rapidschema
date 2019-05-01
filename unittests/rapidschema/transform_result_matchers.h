@@ -35,12 +35,12 @@ MATCHER_P2(TransformFailed, message, pointer, "") {
     std::cout << arg << std::endl;
     return false;
   }
-  if (arg.GetFailures()[0].GetMessage().compare(message) != 0) {
+  if (arg.GetFailures()[0].GetMessage() != message) {
     std::cout << "Expected message: \"" << message << "\" actual message: \""
               << arg.GetFailures()[0] << "\"" << std::endl;
     return false;
   }
-  if (arg.GetFailures()[0].GetPointer().compare(pointer) != 0) {
+  if (arg.GetFailures()[0].GetPointer() != pointer) {
     std::cout << "Expected pointer: \"" << pointer << "\" actual pointer: \"" << arg.GetFailures()[0].GetPointer()
               << "\"" << std::endl;
     return false;

@@ -7,9 +7,22 @@
 
 #include "rapidschema/failure.h"
 #include "rapidschema/modern_types/optional.h"
+#include "rapidschema/pointer.h"
 #include "rapidschema/result.h"
 
 namespace rapidschema {
+
+inline std::ostream& operator<<(std::ostream& stream, const Pointer& pointer) {
+  const auto& path = pointer.GetPath();
+  if (path.empty()) {
+    stream << "/";
+  } else {
+    for (const auto& token : path) {
+      stream << "/" << token;
+    }
+  }
+  return stream;
+}
 
 inline std::ostream& operator<<(std::ostream& stream, const Failure& failure) {
     stream << "Failure: [message = " << failure.GetMessage() << ", path = " << failure.GetPointer() << "]";

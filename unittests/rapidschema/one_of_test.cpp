@@ -68,7 +68,7 @@ TEST_F(OneOfTest, GivenNoVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessage
 TEST_F(OneOfTest, GivenMultipleVariantMatches_WhenParsingDom_ThenCorrectlyErrorMessages) {
   OneOf<OneOfIntegerTestObject, NoAdditionalProperties<OneOfIntegerTestObject>> example;
   auto result = ParseConfig(R"({"integerValue":112})", &example);
-  ASSERT_THAT(result, TransformFailed("Multiple matches - ambiguous result.", ""));
+  ASSERT_THAT(result, TransformFailed("Multiple matches - ambiguous result.", Pointer()));
 }
 
 /////////////////////////// Validate /////////////////////////////////////////////
@@ -76,7 +76,7 @@ TEST_F(OneOfTest, GivenMultipleVariantMatches_WhenParsingDom_ThenCorrectlyErrorM
 TEST_F(OneOfTest, GivenOutOfRangeValue_WhenValidating_ThenCorrectlyErrorMessage) {
   one_of_.SelectVariant<OneOfIntegerTestObject>();
   auto result = one_of_.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected: >= 100. Actual: 22", "integerValue"));
+  ASSERT_THAT(result, TransformFailed("Expected: >= 100. Actual: 22", Pointer({"integerValue"})));
 }
 
 TEST_F(OneOfTest, GivenInRangeValue_WhenValidating_ThenSuccess) {

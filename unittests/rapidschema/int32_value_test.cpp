@@ -18,34 +18,34 @@ namespace rapidschema {
 
 TEST(Int32ConfigValueTest, WhenParsingDomFloat_ThenFails) {
   auto result = TestLeafType<int32_t, float>(23.4);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: 23.4", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: 23.4", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsingDomString_ThenFails) {
   auto result = TestLeafType<int32_t, std::string>("ein string");
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: \"ein string\"", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: \"ein string\"", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsingDomNull_ThenFails) {
   auto result = TestLeafType<int32_t, std::nullptr_t>(nullptr);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: null", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: null", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsingDomBool_ThenFails) {
   auto result = TestLeafType<int32_t, bool>(false);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: false", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: false", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsingDomOutOfLowerRange_ThenFails) {
   auto out_of_range = static_cast<int64_t>(std::numeric_limits<int32_t>::min()) - 1;
   auto result = TestLeafType<int32_t, int64_t>(out_of_range);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: -2147483649", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: -2147483649", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsingDomOutOfUpperRange_ThenFails) {
   auto out_of_range = static_cast<int64_t>(std::numeric_limits<int32_t>::max()) + 1;
   auto result = TestLeafType<int32_t, int64_t>(out_of_range);
-  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: 2147483648", ""));
+  ASSERT_THAT(result, TransformFailed("Expected type: int. Actual value was: 2147483648", Pointer()));
 }
 
 TEST(Int32ConfigValueTest, WhenParsing23_ThenParsedCorrectly) {

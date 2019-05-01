@@ -59,13 +59,15 @@ TEST_F(ResultTest, WhenEmptyResultAppended_ThenResultUnmodified) {
 TEST_F(ResultTest, WhenPathAddedToEmptyPath_ThenNoDotAdded) {
   Failure expected = failure1_;
   expected.PrependTokenToPointer("path");
+
   result_.PrependTokenToPointer("path");
   ASSERT_THAT(result_.GetFailures(), ElementsAre(expected));
 }
 
 TEST_F(ResultTest, WhenPathAddedToNonEmptyPath_ThenDotAdded) {
   Failure expected = failure1_;
-  expected.PrependTokenToPointer("second.first");
+  expected.PrependTokenToPointer("first");
+  expected.PrependTokenToPointer("second");
 
   result_.PrependTokenToPointer("first");
   result_.PrependTokenToPointer("second");

@@ -85,7 +85,7 @@ class GenericObject : public GenericConfig<Ch> {
     if (found_properties_count < properties_chache_.size()) {
       for (auto& pair : properties_chache_) {
         if (document.HasMember(pair.first.c_str()) == false && pair.second->IsRequired()) {
-          result.Append(Failure(pair.first, "Is missing."));
+          result.Append(Failure(Pointer({pair.first}), "Is missing."));
           continue;
         }
       }

@@ -194,7 +194,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingObject_ThenFailsWithCorrectFail
                 }
                 )", &example_);
 
-  Result expected(Failure("integerValue", "Is missing."));
+  Result expected(Failure(Pointer({"integerValue"}), "Is missing."));
   ASSERT_EQ(expected, result);
 }
 
@@ -206,7 +206,7 @@ TEST_F(ObjectTest, GivenParsingMemberFails_WhenParsingObject_ThenFailsWithCorrec
                 }
                 )", &example_);
 
-  Result expected(Failure("integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
+  Result expected(Failure(Pointer({"integerValue"}), "Expected type: int. Actual value was: \"shouldBeInt\""));
   ASSERT_EQ(expected, result);
 }
 
@@ -255,7 +255,7 @@ TEST_F(ObjectTest, GivenMissingMember_WhenParsingNestedObject_ThenFailsWithCorre
                 }
                 )", &nested_example_);
 
-  Result expected(Failure("example.integerValue", "Is missing."));
+  Result expected(Failure(Pointer({"example", "integerValue"}), "Is missing."));
   ASSERT_EQ(expected, result);
 }
 
@@ -271,7 +271,8 @@ TEST_F(ObjectTest, GivenParsingMemberFails_WhenParsingNestedObject_ThenFailsWith
                 }
                 )", &nested_example_);
 
-  Result expected(Failure("example.integerValue", "Expected type: int. Actual value was: \"shouldBeInt\""));
+  Result expected(Failure(Pointer({"example", "integerValue"}),
+                          "Expected type: int. Actual value was: \"shouldBeInt\""));
   ASSERT_EQ(expected, result);
 }
 
@@ -358,7 +359,7 @@ TEST_F(ObjectTest, GivenMemoryCollected_WhenParsingNestedObject_ThenAllMembersCo
 TEST_F(ObjectTest, WhenValidateFails_ThenErrorsReportedWithCorrectPath) {
   example_.integer_value = 20;
   auto result = example_.Validate();
-  ASSERT_THAT(result, TransformFailed("Expected: <= 4. Actual: 20", "integerValue"));
+  ASSERT_THAT(result, TransformFailed("Expected: <= 4. Actual: 20", Pointer({"integerValue"})));
 }
 
 /////////////////////////// Serialization /////////////////////////////////////////////

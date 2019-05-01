@@ -21,7 +21,7 @@ class Array : public GenericConfig<Ch> {
   Result Transform(const rapidjson::Value& document) override {
     if (document.IsArray() == false) {
       return Result(Failure(fmt::format("Expected array but was: {} ",
-                                                 JsonTypeToString(document.GetType()))));
+                                        JsonTypeToString(document.GetType()))));
     }
 
     Result result;
@@ -31,7 +31,7 @@ class Array : public GenericConfig<Ch> {
       elements.emplace_back();
       auto tmp = elements.back().Transform(dom_element);
       if (tmp.HasFailures()) {
-        tmp.PrependTokenToPointer(fmt::format("[{}]", count));
+        tmp.PrependTokenToPointer(fmt::format("{}", count));
         result.Append(tmp);
       }
       count++;
